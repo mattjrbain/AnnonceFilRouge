@@ -1,0 +1,12 @@
+{
+    "name": "utilisateur/annonce-test",
+    "description": "tests autoloader",
+    "require": {
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Main\\": "src"
+        }
+    }
+}
