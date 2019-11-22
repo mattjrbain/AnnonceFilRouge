@@ -36,14 +36,10 @@ confirmPassword.blur(function () {
 
 $("form").submit(function (event) {
     confirmAlert.append("<strong>Les mots de passe ne correspondent pas.</strong>");
-
-    // checkEmpty($(".toCheck"), event);
     $(".alert").empty();
     $(".toCheck").each(function () {
         checkEmpty(this, event);
     });
     samePassword(event);
-    // checkEmpty($("#pass"), event);
     checkMail($("#mail"), event);
-    // checkPhone($("#phone"), event);
 });
