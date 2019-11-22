@@ -11,6 +11,8 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- FontAwesome Kit   -->
     <script src="https://kit.fontawesome.com/8108dfc9fe.js" crossorigin="anonymous"></script>
+    <!--  Own CSS  -->
+    <link rel="stylesheet" href="../web/css/annonce.css">
 
 </head>
 <body>
@@ -51,23 +53,42 @@
     </nav>
     <div class="container ">
         <div class="row justify-content-center">
-            <div class="col-md-5 card bg-light">
+            <div class="col-md-5 card bg-light mb-3 shadow">
                 <div class="card-block m-3">
                     <form action="">
                         <div class="form-group">
                             <label for="nom">Nom</label>
-                            <input type="text" class="form-control" name="nom" id="nom" aria-describedby="helpId"
+                            <input type="text" class="form-control toCheck" name="nom" id="nom"
+                                   aria-describedby="helpId"
                                    placeholder="">
+                            <div class="alert alert-danger mt-2" role="alert">
+
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="password">Mot de passe</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="">
+                            <input type="password" class="form-control toCheck" name="password" id="password"
+                                   placeholder="">
+                            <div class="alert alert-danger mt-2" role="alert">
+
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="confirmPassword">Confirmer mot de passe</label>
-                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="">
+                            <input type="password" class="form-control toCheck" name="confirmPassword"
+                                   id="confirmPassword" placeholder="">
+                            <div class="alert alert-danger mt-2" role="alert" id="confirmAlert">
+
+                            </div>
                         </div>
-                        <div class="form-group center">
+                        <div class="form-group">
+                            <label for="mail">Email</label>
+                            <input type="email" class="form-control toCheck" name="" id="mail" aria-describedby="emailHelpId"
+                                   placeholder="">
+                            <div class="alert alert-danger mt-2" role="alert">
+                            </div>
+                        </div>
+                        <div class="form-group center mt-3">
                             <button type="submit" class="btn btn-primary">Créez votre compte</button>
                         </div>
                     </form>
@@ -89,5 +110,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script src="../web/js/validation.js"></script>
 </body>
 </html>

@@ -1,0 +1,39 @@
+.alert{
+    display: none;
+}
+
+/*Background hover */
+.bg-yellow:hover{
+    background-color: yellow;
+}
+
+.bg-blue:hover{
+    background-color: dodgerblue;
+}
+.bg-red:hover{
+    background-color: red;
+}
+.bg-violet:hover{
+    background-color: darkviolet;
+}
+.bg-mdviolet:hover{
+    background-color: mediumvioletred;
+}
+.bg-orange:hover{
+    background-color: darkorange;
+}
+.bg-darkblue:hover{
+    background-color: darkblue;
+}
+.bg-lightblue:hover{
+    background-color: deepskyblue;
+}
+.bg-lightyellow:hover{
+    background-color: yellow;
+}
+.bg-lightgreen:hover{
+    background-color: greenyellow;
+}
+.bg-green:hover{
+    background-color: forestgreen;
+}
