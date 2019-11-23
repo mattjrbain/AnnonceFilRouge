@@ -2,7 +2,8 @@
     "name": "utilisateur/annonce-test",
     "description": "tests autoloader",
     "require": {
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "components/jquery": "^3.4"
     },
     "autoload": {
         "psr-4": {
