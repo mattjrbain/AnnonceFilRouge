@@ -11,35 +11,37 @@ function checkMail(selector, event) {
     }
 }
 
-function checkEmpty(selector, event){
-    if ($(selector).val() === ""){
-        $(selector).next().append("<strong>Saisie vide</strong><br>").show();
-        event.preventDefault();
-        return true;
-    }else {
-        $(selector).next().html("").hide();
-        return false;
-    }
-}
+// function checkEmpty(selector, event){
+//     if ($(selector).val() === ""){
+//         $(selector).next().append("<strong>Saisie vide</strong><br>").show();
+//         event.preventDefault();
+//         return true;
+//     }else {
+//         $(selector).next().html("").hide();
+//         return false;
+//     }
+// }
 
-function samePassword(event){
-    if (!checkEmpty(password) && !checkEmpty(confirmPassword) && password.val() !== confirmPassword.val()){
-        confirmAlert.append("<strong>Les mots de passe ne correspondent pas.</strong>").show();
-        event.preventDefault();
-    }
-}
+// function samePassword(event){
+//     if (password.val() !== "" && confirmPassword.val() !== "" && password.val() !== confirmPassword.val()){
+//         confirmAlert.append("<strong>Les mots de passe ne correspondent pas.</strong>").show();
+//         event.preventDefault();
+//     }
+// }
 
 confirmPassword.blur(function () {
     samePassword();
 });
 
+// $(".toCheck").each().blur(function () {
+//     checkEmpty(this);
+// });
 
-$("form").submit(function (event) {
-    confirmAlert.append("<strong>Les mots de passe ne correspondent pas.</strong>");
+$("#signup").submit(function (event) {
     $(".alert").empty();
     $(".toCheck").each(function () {
-        checkEmpty(this, event);
+        checkEmpty(this);
     });
-    samePassword(event);
+    samePassword();
     checkMail($("#mail"), event);
 });

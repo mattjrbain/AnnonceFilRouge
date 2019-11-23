@@ -55,37 +55,38 @@
         <div class="row justify-content-center">
             <div class="col-md-5 card bg-light mb-3 shadow">
                 <div class="card-block m-3">
-                    <form action="">
+                    <form action="../Domain/test.php" method="post" id="signup">
                         <div class="form-group">
                             <label for="nom">Nom</label>
                             <input type="text" class="form-control toCheck" name="nom" id="nom"
                                    aria-describedby="helpId"
                                    placeholder="">
-                            <div class="alert alert-danger mt-2" role="alert">
+                            <div class="alert alert-warning mt-2" role="alert">
 
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group passGroup">
                             <label for="password">Mot de passe</label>
                             <input type="password" class="form-control toCheck" name="password" id="password"
                                    placeholder="">
-                            <div class="alert alert-danger mt-2" role="alert">
+                            <div class="alert alert-warning mt-2" role="alert">
 
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirmer mot de passe</label>
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+                            <label for="confirmPassword" class="mt-2">Confirmer mot de passe</label>
                             <input type="password" class="form-control toCheck" name="confirmPassword"
                                    id="confirmPassword" placeholder="">
-                            <div class="alert alert-danger mt-2" role="alert" id="confirmAlert">
+                            <div class="alert alert-warning mt-2" role="alert" id="confirmAlert">
 
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="mail">Email</label>
-                            <input type="email" class="form-control toCheck" name="" id="mail" aria-describedby="emailHelpId"
+                            <input type="text" class="form-control toCheck" name="mail" id="mail" aria-describedby="emailHelpId"
                                    placeholder="">
-                            <div class="alert alert-danger mt-2" role="alert">
+<!--                            TODO: put back type="email" when necessary -->
+                            <div class="alert alert-warning mt-2" role="alert">
                             </div>
                         </div>
                         <div class="form-group center mt-3">
@@ -110,6 +111,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-<script src="../web/js/validation.js"></script>
+<script src="../web/js/validationBis.js"></script>
 </body>
 </html>
