@@ -28,10 +28,10 @@ try {
     $rub = $rubriqueDAO->getByName("grillepain");
 
     //Creation annonce
-    $annonce = new Annonce($user,$rub,"test samedi 1", "corps test samedi®");
+    $annonce = new Annonce($user,$rub,"test samedi 2", "corps test samedi 2");
 
     //Insertion
-//    print_r($annonceDAO->insert($annonce));
+    print_r($annonceDAO->insert($annonce));
 
     //Update
 //    $annonce = $annonceDAO->getById(20);
