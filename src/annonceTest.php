@@ -17,7 +17,8 @@ $annonceDAO = DAO::get('Annonce');
 $rubriqueDAO = DAO::get('Rubrique');
 //$userDAO = new MySQLUtilisateurDAO();
 $userDAO = DAO::get('Utilisateur');
-
+//TODO: change DB to add mail column to utilisateur
+//TODO: check all lines of test
 
 try {
     //var_dump(DAO::get('Utilisateur'));
@@ -25,18 +26,18 @@ try {
     $user = $userDAO->getByName("Nono");
 
     //Creation rubrique
-    $rub = $rubriqueDAO->getByName("grillepain");
+//    $rub = $rubriqueDAO->getByName("grillepain");
 
     //Creation annonce
-    $annonce = new Annonce($user,$rub,"test samedi 2", "corps test samedi 2");
+//    $annonce = new Annonce($user,$rub,"test dimanche", "corps test dimanche");
 
     //Insertion
-    print_r($annonceDAO->insert($annonce));
+//    print_r($annonceDAO->insert($annonce));
 
     //Update
-//    $annonce = $annonceDAO->getById(20);
-//    $annonce->setUser($user);
-//    echo($annonceDAO->update($annonce));
+    $annonce = $annonceDAO->getById(32);
+    $annonce->setUser($user);
+    echo($annonceDAO->update($annonce));
 
     //Get by Rubrique
 //    $rub = $rubriqueDAO->getByName("grillepain");
@@ -74,7 +75,7 @@ try {
 
     //User///////
     //Insert
-//    $user = new Utilisateur("Nono","Nono");
+//    $user = new Utilisateur("Lili","Lili", "nono@nono.com");
 //    print_r($userDAO->insert($user));
 
     //Identifier

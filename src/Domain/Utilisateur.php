@@ -19,6 +19,10 @@ class Utilisateur extends Entity
      */
     private $mot_de_passe;
     /**
+     * @var string
+     */
+    private $mail;
+    /**
      * @var bool
      */
     private $est_admin;
@@ -29,15 +33,18 @@ class Utilisateur extends Entity
      * @param string $nom
      * @param string $mot_de_passe
      * @param bool $est_admin
+     * @param string $mail
      */
     public function __construct(string $nom = "",
                                 string $mot_de_passe = "",
+                                string $mail = "",
                                 bool $est_admin = false,
                                 int $user_id = -1)
     {
         $this->user_id      = $user_id;
         $this->nom          = $nom;
         $this->mot_de_passe = $mot_de_passe;
+        $this->mail         = $mail;
         $this->est_admin    = $est_admin;
     }
 
@@ -98,6 +105,22 @@ class Utilisateur extends Entity
     public function setEstAdmin(bool $est_admin): void
     {
         $this->est_admin = $est_admin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMail(): string
+    {
+        return $this->mail;
+    }
+
+    /**
+     * @param string $mail
+     */
+    public function setMail(string $mail): void
+    {
+        $this->mail = $mail;
     }
 
 

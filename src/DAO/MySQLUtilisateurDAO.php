@@ -20,11 +20,12 @@ class MySQLUtilisateurDAO extends DAO
         try {
             $this->getCnx()->beginTransaction();
             $stmt = $this->getCnx()->prepare(
-                'INSERT INTO utilisateur(nom, mot_de_passe) 
-                                                        VALUES (:nom, :mdp)');
+                'INSERT INTO utilisateur(nom, mot_de_passe, mail) 
+                                                        VALUES (:nom, :mdp, :mail)');
             $mdp  = password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT);
             $stmt->bindValue(':nom', $utilisateur->getNom());
             $stmt->bindParam(':mdp', $mdp);
+            $stmt->bindParam(':mail', $utilisateur->getMail());
             $stmt->execute();
             $lastId = $this->getCnx()->lastInsertId();
             $this->getCnx()->commit();
