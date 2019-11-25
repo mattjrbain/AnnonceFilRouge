@@ -58,6 +58,13 @@ $("#signup").submit(function (event) {
     if (!checkMail(mail)){
         event.preventDefault();
     }
+});
 
+$("#addAnnonce").submit(function event() {
+    $(".toCheck").each(function () {
+        if (checkEmpty(this)) {
+            event.preventDefault();
+        }
+    });
 });
 

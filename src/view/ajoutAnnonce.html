@@ -11,6 +11,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- FontAwesome Kit   -->
     <script src="https://kit.fontawesome.com/8108dfc9fe.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../web/css/annonce.css">
 
 </head>
 <body>
@@ -50,7 +51,7 @@
         <div class="row justify-content-center">
             <div class="col-md-5 card my-3 bg-light">
                 <div class="card-block m-3">
-                    <form action="">
+                    <form action="" id="addAnnonce">
                         <div class="form-group">
                             <label for="">Rubrique</label>
                             <select class="form-control" name="" id="">
@@ -64,12 +65,18 @@
                         </div>
                         <div class="form-group">
                             <label for="nom">Entête</label>
-                            <input type="text" class="form-control" name="nom" id="nom" aria-describedby="helpId"
+                            <input type="text" class="form-control toCheck" name="nom" id="nom" aria-describedby="helpId"
                                    placeholder="">
+                            <div class="alert alert-warning mt-2" role="alert">
+
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="">Description</label>
-                            <textarea class="form-control" name="" id="" rows="3"></textarea>
+                            <textarea class="form-control toCheck" name="" id="" rows="3"></textarea>
+                            <div class="alert alert-warning mt-2" role="alert">
+
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="">Date de validité</label>
@@ -80,7 +87,7 @@
                             <button type="submit" class="btn btn-primary">Publier</button>
                         </div>
                         <hr>
-                        <a name="ajoutPhoto" id="" class="btn btn-success" href="#" role="button">Ajouter une photo</a>
+                        <a id="ajoutPhoto" class="btn btn-success" href="#" role="button">Ajouter une photo</a>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Upload</span>
@@ -109,5 +116,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script src="../web/js/validationBis.js"></script>
 </body>
 </html>
