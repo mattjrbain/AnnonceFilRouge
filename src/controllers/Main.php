@@ -13,13 +13,21 @@ use Main\view\VueListerRubriques;
 
 class Main
 {
+    /**
+     * @var mixed
+     */
     private $actionGet;
+    /**
+     * @var mixed
+     */
     private $actionPost;
+
     /**
      * Main constructor.
      */
     public function __construct()
     {
+        //$this->request = $request;
         if (!empty($_GET['action'])){
             $this->actionGet = $_GET['action'];
         }elseif (!empty($_POST['action'])){
@@ -62,7 +70,7 @@ class Main
         if (isset($_POST) && !empty($_POST)){
             $rubDao = new MySQLRubriqueDAO();
             $rub= new Rubrique($_POST['libelle']);
-            var_dump($rub);
+            //var_dump($rub);
             try {
                $rubDao->insert($rub);
             }
