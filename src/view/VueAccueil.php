@@ -11,7 +11,10 @@ class VueAccueil
         $links = array();
         $originalUrl = "?action=";
         $afficherRubrique = $originalUrl . "afficherRubriques";
-        $links[] = "<a href=" . $afficherRubrique .">Afficher rubriques</a>";
+        $ajouterRubrique = $originalUrl . "ajouterRubrique";
+        $links[] = "<a href=" . $afficherRubrique .">Afficher rubriques</a><br>";
+        $links[] = "<a href=" . $ajouterRubrique .">Ajouter rubrique</a><br>";
+        $links[] = "<a href=\"/\">Accueil</a><br>";
         return $links;
     }
 }
