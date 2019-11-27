@@ -25,7 +25,5 @@ class VueAjouterRubrique
         </form>
         ";
         echo $form;
-
     }
-
 }

@@ -35,9 +35,9 @@ try {
 //    print_r($annonceDAO->insert($annonce));
 
     //Update
-    $annonce = $annonceDAO->getById(32);
-    $annonce->setUser($user);
-    echo($annonceDAO->update($annonce));
+//    $annonce = $annonceDAO->getById(32);
+//    $annonce->setUser($user);
+//    echo($annonceDAO->update($annonce));
 
     //Get by Rubrique
 //    $rub = $rubriqueDAO->getByName("grillepain");

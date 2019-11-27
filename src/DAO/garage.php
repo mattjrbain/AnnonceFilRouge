@@ -1,5 +1,7 @@
 <?php
 
+// Alternative annonce hydrator
+
 //public function hydrateAnnonce(array $annonces)
 //    {
 //        $annoncesTab = array();

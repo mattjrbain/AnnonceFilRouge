@@ -1,0 +1,32 @@
+{% block header %}
+    <div class="jumbotron text-white bg-dark jumbotron-fluid mb-0">
+        <div class="container">
+            <h1 class="display-3">Annonce.com</h1>
+            <p class="lead">Un Slogan Super</p>
+        </div>
+
+    </div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+        <a class="navbar-brand text-success" href="#">Annonce.com</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+                aria-controls="collapsibleNavId"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Rubriques <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Compte</a>
+                </li>
+            </ul>
+            <a class="mr-3" href="..."><i class="fa fa-user fa-2x text-white" aria-hidden="true"></i></a>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="recherche...">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
+            </form>
+        </div>
+    </nav>
+{% endblock %}

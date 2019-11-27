@@ -7,9 +7,17 @@ namespace Main\controllers;
 use Main\DAO\DAO;
 use Main\DAO\DAOException;
 use Main\DAO\MySQLRubriqueDAO;
+use Main\DAO\MySQLUtilisateurDAO;
 use Main\Domain\Rubrique;
+use Main\Domain\Utilisateur;
 use Main\view\VueAjouterRubrique;
+use Main\view\VueIdentifierUtilisateur;
 use Main\view\VueListerRubriques;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
 
 class Main
 {
@@ -21,6 +29,10 @@ class Main
      * @var mixed
      */
     private $actionPost;
+    /**
+     * @var Environment
+     */
+    private $twig;
 
     /**
      * Main constructor.
@@ -33,6 +45,10 @@ class Main
         }elseif (!empty($_POST['action'])){
             $this->actionPost = $_POST['action'];
         }
+        $loader = new FilesystemLoader(__DIR__."/../view");
+        $this->twig = new Environment($loader, [
+            'cache' => __DIR__."/../view/cache"
+        ]);
     }
 
     public function parseUrl()
@@ -44,6 +60,12 @@ class Main
                     break;
                 case "ajouterRubrique";
                     $this->ajouterRubrique();
+                    break;
+                case "identifierUtilisateur";
+                    $this->identifierUtilisateur();
+                    break;
+                case "testTwig";
+                    $this->testTwig();
                     break;
                 default :
                     echo "Page inexistante";
@@ -70,7 +92,6 @@ class Main
         if (isset($_POST) && !empty($_POST)){
             $rubDao = new MySQLRubriqueDAO();
             $rub= new Rubrique($_POST['libelle']);
-            //var_dump($rub);
             try {
                $rubDao->insert($rub);
             }
@@ -79,6 +100,36 @@ class Main
             }
         }else{
             $view = new VueAjouterRubrique();
+            $view->show();
+        }
+    }
+
+    private function testTwig()
+    {
+        try {
+            echo $this->twig->render('accueil.html.twig');
+        }
+        catch (LoaderError $e) {
+        }
+        catch (RuntimeError $e) {
+        }
+        catch (SyntaxError $e) {
+        }
+    }
+
+    private function identifierUtilisateur()
+    {
+        if (isset($_POST) && !empty($_POST)){
+            $userDAO = new MySQLUtilisateurDAO();
+            $user = new Utilisateur($_POST['name'], $_POST['pass']);
+            try {
+                $userDAO->identifier($user);
+            }
+            catch (DAOException $e) {
+                echo $e->getMessage();
+            }
+        }else{
+            $view = new VueIdentifierUtilisateur();
             $view->show();
         }
     }
