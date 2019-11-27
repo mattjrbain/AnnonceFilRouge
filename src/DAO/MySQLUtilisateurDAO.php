@@ -55,6 +55,9 @@ class MySQLUtilisateurDAO extends DAO
             if ($data = $stmt->fetch()) {
                 if (password_verify($user->getMotDePasse(), $data->getMotDePasse())) {
                     $this->getCnx()->commit();
+                    $_SESSION['user'] = $data->getNom();
+                    $_SESSION['isAdmin'] = $data->isEstAdmin();
+                    var_dump($_SESSION);
                     return $data;//->getUserId();
                 } else {
                     throw new DAOException("Mauvais mot de passe");
