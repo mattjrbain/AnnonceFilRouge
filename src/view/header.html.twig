@@ -1,5 +1,5 @@
 {% block header %}
-    <div class="jumbotron text-white bg-dark jumbotron-fluid mb-0">
+    <div class="jumbotron text-white bg-dark jumbotron-fluid mb-0 ">
         <div class="container">
             <h1 class="display-3">Annonce.com</h1>
             <p class="lead">Un Slogan Super</p>
@@ -22,9 +22,11 @@
                     <a class="nav-link" href="#">Compte</a>
                 </li>
             </ul>
-            <a class="mr-3" href="..."><i class="fa fa-user fa-2x text-white" aria-hidden="true"></i></a>
+            <a class="mr-3" href="..."><i class="fa fa-user fa-2x {#text-white#} myuser" aria-hidden="true"></i></a>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="recherche...">
+                <label>
+                    <input class="form-control mr-sm-2" type="text" placeholder="recherche...">
+                </label>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
             </form>
         </div>

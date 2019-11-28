@@ -32,8 +32,25 @@
     background-color: yellow;
 }
 .bg-lightgreen:hover{
-    background-color: greenyellow;
+    background-color: darkseagreen;
 }
 .bg-green:hover{
     background-color: forestgreen;
 }
+
+.bg-lightgreen:active{
+    background-color: green;
+}
+
+
+/*Font Awesome*/
+.fa-user{
+    color: wheat;
+}
+.fa-user:hover{
+    color: darkgreen;
+}
+.fa-user:active{
+    color: greenyellow;
+}
+
