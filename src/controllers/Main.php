@@ -6,6 +6,7 @@ namespace Main\controllers;
 
 use Main\DAO\DAO;
 use Main\DAO\DAOException;
+use Main\DAO\MySQLAnnonceDAO;
 use Main\DAO\MySQLRubriqueDAO;
 use Main\DAO\MySQLUtilisateurDAO;
 use Main\Domain\Rubrique;
@@ -31,6 +32,10 @@ class Main
      */
     private $actionPost;
     /**
+     * @var mixed
+     */
+    private $param;
+    /**
      * @var Environment
      */
     private $twig;
@@ -46,14 +51,18 @@ class Main
         } elseif (!empty($_POST['action'])) {
             $this->actionPost = $_POST['action'];
         }
-        $loader     = new FilesystemLoader(__DIR__ . "/../view");
+        if (!empty($_GET['param'])){
+            $this->param = $_GET['param'];
+        }
+        $loader     = new FilesystemLoader(dirname(__DIR__) . "\\view");
         $this->twig = new Environment(
             $loader, [
-                'debug' => true
+            'debug' => true
             /*'cache' => __DIR__ . "/../view/cache"*/
         ]);
         $this->twig->addExtension(new DebugExtension());
     }
+
 //TODO: remettre cache après test
 
     public function parseUrl()
@@ -71,6 +80,15 @@ class Main
                     break;
                 case "accueil";
                     $this->accueil();
+                    break;
+                case "annonces";
+                    $this->annoncesByRub($this->param);
+                    break;
+                case "connection";
+                    $this->connection();
+                    break;
+                case "logoff";
+                    $this->logoff();
                     break;
                 default :
                     echo "Page inexistante";
@@ -126,12 +144,6 @@ class Main
         $this->render('accueil.html.twig', ["rubs" => $rubs]);
     }
 
-    public function showRubriquesAction()
-    {
-        $rubs = DAO::get('Rubrique')->getAll();
-        return $rubs;
-    }
-
     public function render($filename, $data = [])
     {
         try {
@@ -149,5 +161,50 @@ class Main
             echo $e->getMessage();
 
         }
+    }
+
+    public function annoncesByRub($rubrique)
+    {
+        //$annonces = DAO::get('Annonce')->getByRub($rubrique);
+        $annoncesDAO = new MySQLAnnonceDAO();
+        try {
+            $rub = DAO::get('Rubrique')->getByName($rubrique);
+            $annonces = $annoncesDAO->getByRub($rub);
+            $this->render('listeAnnoncesVisiteur.html.twig', ["annonces" => $annonces]);
+        }
+        catch (DAOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function showRubriquesAction()
+    {
+        $rubs = DAO::get('Rubrique')->getAll();
+        return $rubs;
+    }
+
+    private function connection()
+    {
+        //unset($_SESSION['errorPass']);
+
+        if (isset($_POST) && !empty($_POST)) {
+            $userDAO = new MySQLUtilisateurDAO();
+            $user    = new Utilisateur($_POST['name'], $_POST['pass']);
+            try {
+                $userDAO->identifier($user);
+                header('Location: ?action=connection');
+            }
+            catch (DAOException $e) {
+                echo $e->getMessage();
+            }
+        } else {
+        $this->render('connection.html.twig', ['session' => $_SESSION, '']);
+        }
+    }
+
+    private function logoff()
+    {
+        session_destroy();
+        header('Location: ?action=connection');
     }
 }

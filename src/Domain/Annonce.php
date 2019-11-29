@@ -52,6 +52,10 @@ class Annonce extends Entity
      */
     private $date_creation;
     /**
+     * @var DateTime
+     */
+    private $date_modif;
+    /**
      * @var int
      */
     private $nb_visites;
@@ -233,6 +237,24 @@ class Annonce extends Entity
     {
         $this->rubrique = $rubrique;
     }
+
+    /**
+     * @param DateTime $date_modif
+     */
+    public function setDateModif(string $date_modif): void
+    {
+        $this->date_modif = DateTime::createFromFormat('Y-m-d H:i:s', $date_modif);
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDateModif(): DateTime
+    {
+        return $this->date_modif;
+    }
+
+
 
 
 }

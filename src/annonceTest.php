@@ -23,7 +23,7 @@ $userDAO = DAO::get('Utilisateur');
 try {
     //var_dump(DAO::get('Utilisateur'));
     //Creation user
-    $user = $userDAO->getByName("Nono");
+//    $user = $userDAO->getByName("Nono");
 
     //Creation rubrique
 //    $rub = $rubriqueDAO->getByName("grillepain");
@@ -40,9 +40,9 @@ try {
 //    echo($annonceDAO->update($annonce));
 
     //Get by Rubrique
-//    $rub = $rubriqueDAO->getByName("grillepain");
-//    $annonces = $annonceDAO->getByRub($rub);
-//    print_r($annonces);
+    $rub = $rubriqueDAO->getByName("auto");
+    $annonces = $annonceDAO->getByRub($rub);
+    print_r($annonces);
 
     //Get by User
 //    $user = $userDAO->getById(16);
