@@ -16,30 +16,37 @@
                             <div class="alert alert-info" role="alert">
                                 <strong>Vous n'êtes pas connecté</strong>
                             </div>
-                            {% if session.errorPass %}
-                                <div class="alert alert-danger" role="alert">
-                                    <strong>Mauvais mot de passe.</strong>
-                                </div>
-                            {% endif %}
-                        <div class="form-group">
-                            <label for="name">Nom</label>
-                            <input type="text" class="form-control" name="name" id="name" aria-describedby="helpId"
-                                   placeholder="">
-                            <div class="alert alert-danger mt-2" style="display: none" id="errNom"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="pass">Mot de passe</label>
-                            <input type="password" class="form-control" name="pass" id="pass" placeholder="">
-                            <div class="alert alert-danger mt-2" style="display: none" id="errPass"></div>
+                        {% if errorPass %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>Mauvais mot de passe.</strong>
+                            </div>
 
-                        </div>
-                        <div class="form-group center">
-                            <button type="submit" class="btn btn-primary" >Se connecter</button>
-                        </div>
+                            <script>
+                                $(".alert").alert();
+                            </script>
+                        {% endif %}
+                            <div class="form-group">
+                                <label for="name">Nom</label>
+                                <input type="text" class="form-control" name="name" id="name" aria-describedby="helpId"
+                                       placeholder="">
+                                <div class="alert alert-danger mt-2" style="display: none" id="errNom"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pass">Mot de passe</label>
+                                <input type="password" class="form-control" name="pass" id="pass" placeholder="">
+                                <div class="alert alert-danger mt-2" style="display: none" id="errPass"></div>
+
+                            </div>
+                            <div class="form-group center">
+                                <button type="submit" class="btn btn-primary">Se connecter</button>
+                            </div>
                         <hr>
-                        <p>Vous n'avez pas de compte ?</p>
-                        <a id="" class="btn btn-success" href="#" role="button">Créer un
-                            compte</a>
+                            <p>Vous n'avez pas de compte ?</p>
+                            <a id="" class="btn btn-success" href="?action=signup" role="button">Créer un
+                                compte</a>
                         {% endif %}
                     </form>
                 </div>

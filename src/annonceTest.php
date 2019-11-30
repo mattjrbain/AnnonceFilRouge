@@ -17,8 +17,8 @@ $annonceDAO = DAO::get('Annonce');
 $rubriqueDAO = DAO::get('Rubrique');
 //$userDAO = new MySQLUtilisateurDAO();
 $userDAO = DAO::get('Utilisateur');
-//TODO: change DB to add mail column to utilisateur
-//TODO: check all lines of test
+
+
 
 try {
     //var_dump(DAO::get('Utilisateur'));

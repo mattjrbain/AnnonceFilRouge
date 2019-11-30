@@ -58,12 +58,11 @@ class MySQLUtilisateurDAO extends DAO
                     $_SESSION['user'] = $data->getNom();
                     $_SESSION['isAdmin'] = $data->isEstAdmin();
                     unset($_SESSION['errorPass']);
-                    var_dump($_SESSION);
                     return $data;//->getUserId();
                 } else {
-                    $_SESSION['errorPass'] = "Mauvais mot de passe";
-                    header('Location: ?action=connection');
-                    //throw new DAOException("Mauvais mot de passe");
+//                    $_SESSION['errorPass'] = "Mauvais mot de passe";
+//                    header('Location: ?action=connection');
+                    throw new DAOException("Mauvais mot de passe");
                 }
             } else {
                 throw new DAOException($user->getNom() . " inexistant.");

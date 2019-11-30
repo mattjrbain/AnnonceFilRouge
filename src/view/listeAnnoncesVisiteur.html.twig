@@ -3,7 +3,7 @@
 {% block body %}
     {% include 'header.html.twig' %}
     <div class="container mb-4">
-        <div class="row ">
+        <div class="row justify-content-center">
             {#                        {{ dump(annonces) }}#}
             {% if annonces is not empty %}
 
@@ -12,6 +12,7 @@
                         <div class="card mb-3 shadow" style="max-width: 540px;">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
+{#                                    TODO: régler image => asset#}
                                     <img src="../web/img/forest-4605204_640.jpg" class="card-img" alt="...">
                                 </div>
                                 <div class="col-md-8">

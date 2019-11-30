@@ -90,6 +90,9 @@ class Main
                 case "logoff";
                     $this->logoff();
                     break;
+                case "signup";
+                    $this->render('signup.html.twig');
+                    break;
                 default :
                     echo "Page inexistante";
             }
@@ -130,7 +133,9 @@ class Main
                 $userDAO->identifier($user);
             }
             catch (DAOException $e) {
-                echo $e->getMessage();
+//                $_SESSION['errorPass'] = "Mauvais mot de passe";
+//                header('Location: ?action=connection');
+            $this->render('connection.html.twig', ["errorPass" => true]);
             }
         } else {
             $view = new VueIdentifierUtilisateur();
@@ -195,7 +200,7 @@ class Main
                 header('Location: ?action=connection');
             }
             catch (DAOException $e) {
-                echo $e->getMessage();
+                $this->render('connection.html.twig', ['session' => $_SESSION, 'errorPass' => true]);
             }
         } else {
         $this->render('connection.html.twig', ['session' => $_SESSION, '']);
