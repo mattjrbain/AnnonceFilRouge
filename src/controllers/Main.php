@@ -112,6 +112,9 @@ class Main
                 case "updateAnnonce";
                     $this->updateAnnonce();
                     break;
+                case "supprimerAnnonce";
+                    $this->supprimerAnnonce();
+                    break;
                 default :
                     echo "Page inexistante";
             }
@@ -249,8 +252,8 @@ class Main
         $user    = DAO::get('Utilisateur')->getByName($this->param);
         $rub     = DAO::get('Rubrique')->getByName($_POST['rubrique']);
         $annonce = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
-        DAO::get('Annonce')->insert($annonce);
-        $this->render("annonceUnique.html.twig", ['session' => $_SESSION, 'annonce' => $annonce]);
+        $retAnnonce = DAO::get('Annonce')->insert($annonce);
+        $this->render("annonceUnique.html.twig", ['session' => $_SESSION, 'annonce' => $retAnnonce]);
         //print_r($_POST);
     }
 
@@ -276,12 +279,32 @@ class Main
             $annonce->setCorps($_POST['corps']);
             $annonce->setDateLimite($_POST['dateLimite']);
             $annonceDAO->update($annonce);
-            $this->render("annonceUnique.html.twig", ['session' => $_SESSION, 'annonce' => $annonce]);
+            $this->render("annonceUnique.html.twig", [
+                'session' => $_SESSION,
+                'annonce' => $annonce,
+                'message' => "L'annonce a bien été modifiée.",
+                'type'    => 'success'
+            ]);
         } catch (DAOException $e) {
             //TODO: set error page
             //TODO: set message "Annonce modifiée avec succès"
             echo $e->getMessage();
         }
 
+    }
+
+    private function supprimerAnnonce()
+    {
+        $annonceDAO = new MySQLAnnonceDAO();
+        $annonce    = $annonceDAO->getById($this->param);
+        $annonceDAO->delete($annonce);
+        $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
+        $annonces = DAO::get('Annonce')->getByUser($user);
+        $this->render("listeAnnoncesPublisher.html.twig", [
+            'session'  => $_SESSION,
+            'annonces' => $annonces,
+            'message'  => "L'annonce a bien été supprimée.",
+            'type'     => 'success'
+        ]);
     }
 }

@@ -4,6 +4,20 @@
     {% include 'header.html.twig' %}
     <div class="container mb-4">
         <div class="row justify-content-center">
+            {% if message %}
+                <div class="col-md-10">
+                    <div class="alert alert-{{type}} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{ message }}</strong>
+                    </div>
+
+                    <script>
+                        $(".alert").alert();
+                    </script>
+                </div>
+            {% endif %}
             <div class="col-md-10">
                 <div class="card mb-3"> <!--style="max-width: 540px;"-->
                     <div class="row no-gutters">

@@ -5,6 +5,20 @@
     <div class="container mb-4">
         <div class="row justify-content-center">
             {#                        {{ dump(annonces) }}#}
+            {% if message %}
+                <div class="col-md-10">
+                    <div class="alert alert-{{type}} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{ message }}</strong>
+                    </div>
+
+                    <script>
+                        $(".alert").alert();
+                    </script>
+                </div>
+            {% endif %}
             {% if annonces %}
                 {% for annonce in annonces %}
                     <div class="col-md-6">
