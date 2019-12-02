@@ -1,0 +1,58 @@
+{% extends 'template.html.twig' %}
+{% block title %}Modifier annonce {{ session.user }}{% endblock %}
+{% block body %}
+    {% include 'header.html.twig' %}
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+            <div class="col-md-5 card my-3 bg-light">
+                <div class="card-block m-3">
+                    <form action="?action=submitAnnonce&param={{ session.user }}" method="post" id="addAnnonce" class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <label for="">Rubrique</label>
+                            <select class="form-control" name="rubrique" id="">
+                                {% for rub in rubs %}
+                                    <option value="{{ rub.libelle }}">{{ rub.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="entete">Entête</label>
+                            <input type="text" class="form-control toCheck" name="entete" id="entete" aria-describedby="helpId"
+                                   placeholder="" required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="corps">Description</label>
+                            <textarea class="form-control toCheck" name="corps" id="corps" rows="3" required></textarea>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="dateLimite">Date de validité</label>
+                            <input type="date"
+                                   class="form-control" name="dateLimite" id="dateLimite" aria-describedby="helpId" placeholder="">
+                        </div>
+                        <div class="form-group center">
+                            <button type="submit" class="btn btn-primary">Publier</button>
+                        </div>
+                        <hr>
+                        <a id="ajoutPhoto" class="btn btn-success" href="#" role="button">Ajouter une photo</a>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Upload</span>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+{% block additionnalJS %}
+    <script src="js/validationAjout.js"></script>
+{% endblock %}

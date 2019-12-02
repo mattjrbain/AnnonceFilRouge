@@ -9,6 +9,7 @@ use Main\DAO\DAOException;
 use Main\DAO\MySQLAnnonceDAO;
 use Main\DAO\MySQLRubriqueDAO;
 use Main\DAO\MySQLUtilisateurDAO;
+use Main\Domain\Annonce;
 use Main\Domain\Rubrique;
 use Main\Domain\Utilisateur;
 use Main\view\VueAjouterRubrique;
@@ -91,7 +92,22 @@ class Main
                     $this->logoff();
                     break;
                 case "signup";
-                    $this->render('signup.html.twig');
+                    $this->render('signup.html.twig', ['session' => $_SESSION] );
+                    break;
+                case "annonceUnique";
+                    $this->annonceUnique();
+                    break;
+                case "annoncesPublisher";
+                    $this->annoncesPublisher();
+                    break;
+                case "ajouterAnnonce";
+                    $this->ajoutAnnonce();
+                    break;
+                case "submitAnnonce";
+                    $this->submitAnnonce();
+                    break;
+                case "modifierAnnonce";
+                    $this->modifierAnnonce();
                     break;
                 default :
                     echo "Page inexistante";
@@ -135,7 +151,7 @@ class Main
             catch (DAOException $e) {
 //                $_SESSION['errorPass'] = "Mauvais mot de passe";
 //                header('Location: ?action=connection');
-            $this->render('connection.html.twig', ["errorPass" => true]);
+            $this->render('connection.html.twig', ['session' => $_SESSION, "errorPass" => true]);
             }
         } else {
             $view = new VueIdentifierUtilisateur();
@@ -146,7 +162,7 @@ class Main
     private function accueil()
     {
         $rubs = DAO::get('Rubrique')->getAll();
-        $this->render('accueil.html.twig', ["rubs" => $rubs]);
+        $this->render('accueil.html.twig', ['session' => $_SESSION, "rubs" => $rubs]);
     }
 
     public function render($filename, $data = [])
@@ -175,7 +191,7 @@ class Main
         try {
             $rub = DAO::get('Rubrique')->getByName($rubrique);
             $annonces = $annoncesDAO->getByRub($rub);
-            $this->render('listeAnnoncesVisiteur.html.twig', ["annonces" => $annonces]);
+            $this->render('listeAnnoncesVisiteur.html.twig', ['session' => $_SESSION, "annonces" => $annonces]);
         }
         catch (DAOException $e) {
             echo $e->getMessage();
@@ -211,5 +227,40 @@ class Main
     {
         session_destroy();
         header('Location: ?action=connection');
+    }
+
+    private function annonceUnique()
+    {
+        $annonce = DAO::get('Annonce')->getById($this->param);
+        $this->render('annonceUnique.html.twig', ['session' => $_SESSION, 'annonce' => $annonce]);
+    }
+
+    private function annoncesPublisher()
+    {
+        $user = DAO::get('Utilisateur')->getByName($this->param);
+        $annonces = DAO::get('Annonce')->getByUser($user);
+        $this->render('listeAnnoncesPublisher.html.twig', ['session' => $_SESSION, 'annonces' => $annonces]);
+    }
+
+    private function ajoutAnnonce()
+    {
+        $rubs = DAO::get('Rubrique')->getAll();
+        $this->render("ajoutAnnonce.html.twig", ['session' => $_SESSION, 'rubs' => $rubs]);
+    }
+
+    private function submitAnnonce()
+    {
+        $user = DAO::get('Utilisateur')->getByName($this->param);
+        $rub = DAO::get('Rubrique')->getByName($_POST['rubrique']);
+        $annonce = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
+        DAO::get('Annonce')->insert($annonce);
+        $this->render("annonceUnique.html.twig");
+        //print_r($_POST);
+    }
+
+    private function modifierAnnonce()
+    {
+        $annonce = DAO::get('Annonce')->getById($this->param);
+        $this->render('modifierAnnonce.html.twig', ['session' => $_SESSION, 'annonce' => $annonce]);
     }
 }

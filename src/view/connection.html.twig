@@ -6,7 +6,7 @@
         <div class="row justify-content-center">
             <div class="col-md-5 card bg-light shadow">
                 <div class="card-block m-3">
-                    <form action="" id="connect" method="post">
+                    <form action="" id="connect" method="post" class="needs-validation" novalidate>
                         {% if session.user %}
                             <div class="alert alert-info" role="alert">
                                 <strong>Bonjour {{ session.user }}, vous êtes connecté</strong>
@@ -31,12 +31,18 @@
                             <div class="form-group">
                                 <label for="name">Nom</label>
                                 <input type="text" class="form-control" name="name" id="name" aria-describedby="helpId"
-                                       placeholder="">
+                                       placeholder="" required>
+                                <div class="invalid-feedback">
+                                    Veuillez saisir votre nom. <br>
+                                </div>
                                 <div class="alert alert-danger mt-2" style="display: none" id="errNom"></div>
                             </div>
                             <div class="form-group">
                                 <label for="pass">Mot de passe</label>
-                                <input type="password" class="form-control" name="pass" id="pass" placeholder="">
+                                <input type="password" class="form-control" name="pass" id="pass" placeholder="" required>
+                                <div class="invalid-feedback">
+                                    Veuillez saisir votre mot de passe. <br>
+                                </div>
                                 <div class="alert alert-danger mt-2" style="display: none" id="errPass"></div>
 
                             </div>
@@ -54,4 +60,7 @@
         </div>
     </div>
 
+{% endblock %}
+{% block additionnalJS %}
+    <script src="js/validationAjout.js"></script>
 {% endblock %}

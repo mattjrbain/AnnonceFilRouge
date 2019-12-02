@@ -21,7 +21,7 @@
                                         <p class="card-text">{{ annonce.corps }}</p>
                                         <p class="card-text"><small class="text-muted">Mise à jour
                                                 le {{ annonce.dateModif|date('d/m/Y') }}</small></p>
-                                        <p><a id="" class="btn btn-primary" href="#" role="button">Consulter</a></p>
+                                        <p><a id="" class="btn btn-primary" href="?action=annonceUnique&param={{ annonce.annonceId }}" role="button">Consulter</a></p>
                                     </div>
                                 </div>
                             </div>

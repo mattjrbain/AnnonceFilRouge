@@ -239,7 +239,7 @@ class Annonce extends Entity
     }
 
     /**
-     * @param DateTime $date_modif
+     * @param string $date_modif
      */
     public function setDateModif(string $date_modif): void
     {
