@@ -259,6 +259,7 @@ class Main
         $rub        = DAO::get('Rubrique')->getByName($_POST['rubrique']);
         $annonce    = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
         $retAnnonce = DAO::get('Annonce')->insert($annonce);
+        $this->upload();
         $this->render("annonceUnique.html.twig", ['session' => $_SESSION, 'annonce' => $retAnnonce]);
         //print_r($_POST);
     }
@@ -326,15 +327,15 @@ class Main
             $userDAO->insert($user);
             $this->render(
                 'signup.html.twig', [
-                'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.'."\n".' Vous pouvez vous connecter.',
-                'type'  => 'success'
+                'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.' . "\n" . ' Vous pouvez vous connecter.',
+                'type'    => 'success'
             ]);
         }
         catch (DAOException $e) {
             $this->render(
                 'signup.html.twig', [
                 'message' => 'Le nom "' . $_POST['nom'] . '" est déjà utilisé.',
-                'type'  => 'warning'
+                'type'    => 'warning'
             ]);
         }
     }
@@ -343,5 +344,26 @@ class Main
     {
         $rubs = DAO::get('Rubrique')->getAll();
         return $rubs;
+    }
+
+    private function upload()
+    {
+
+        // Testons si le fichier a bien été envoyé et s'il n'y a pas d'erreur
+        if (isset($_FILES['photo']) AND $_FILES['photo']['error'] == 0) {
+            // Testons si le fichier n'est pas trop gros
+            if ($_FILES['photo']['size'] <= 1000000) {
+                // Testons si l'extension est autorisée
+                $infosfichier          = pathinfo($_FILES['photo']['name']);
+                $extension_upload      = $infosfichier['extension'];
+                $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+                if (in_array($extension_upload, $extensions_autorisees)) {
+                    // On peut valider le fichier et le stocker définitivement
+                    move_uploaded_file($_FILES['photo']['tmp_name'], 'img/' . basename($_FILES['photo']['name']));
+                    echo "L'envoi a bien été effectué !";
+                }
+            }
+        }
+
     }
 }
