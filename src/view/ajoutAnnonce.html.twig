@@ -6,7 +6,9 @@
         <div class="row justify-content-center">
             <div class="col-md-5 card my-3 bg-light">
                 <div class="card-block m-3">
-                    <form action="?action=submitAnnonce&param={{ session.user }}" method="post" id="addAnnonce" class="needs-validation" novalidate>
+                    <h3 class="card-title text-center">Ecrire une annonce</h3>
+                    <hr>
+                    <form action="?action=submitAnnonce&param={{ session.user }}" method="post" id="addAnnonce" enctype="multipart/form-data" class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="">Rubrique</label>
                             <select class="form-control" name="rubrique" id="">
@@ -35,15 +37,9 @@
                             <button type="submit" class="btn btn-primary">Publier</button>
                         </div>
                         <hr>
-                        <a id="ajoutPhoto" class="btn btn-success" href="#" role="button">Ajouter une photo</a>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Upload</span>
-                            </div>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="inputGroupFile01">
-                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                            </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Example file input</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1">
                         </div>
                     </form>
                 </div>

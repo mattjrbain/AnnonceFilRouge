@@ -3,10 +3,28 @@
 {% block body %}
     {% include 'header.html.twig' %}
     <div class="container mb-4">
+        {% if message %}
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{ message }}</strong>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <script>
+            $(".alert").alert();
+        </script>
         <div class="row justify-content-center">
             <div class="col-md-5 card bg-light mb-3 shadow">
                 <div class="card-block m-3">
-                    <form action="../Domain/test.php" method="post" id="signup" class="needs-validation" novalidate>
+                    <h3 class="card-title text-center">Création de compte</h3>
+                    <hr>
+                    <form action="?action=createAccount" method="post" id="signup" class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="nom">Nom</label>
                             <input type="text" class="form-control toCheck" name="nom" id="nom"
@@ -15,9 +33,9 @@
                             <div class="invalid-feedback">
                                 Veuillez saisir un nom.
                             </div>
-{#                            <div class="alert alert-warning mt-2 signup-alert" role="alert">#}
+                            {#                            <div class="alert alert-warning mt-2 signup-alert" role="alert">#}
 
-{#                            </div>#}
+                            {#                            </div>#}
                         </div>
                         <div class="passGroup">
                             <div class="form-group passGroup">
@@ -40,9 +58,9 @@
                                     Veuillez confirmer le mot de passe. <br>
                                     <span id="confirmAlert"></span>
                                 </div>
-{#                                <div class="alert alert-warning mt-2 signup-alert" role="alert" id="confirmAlert">#}
+                                {#                                <div class="alert alert-warning mt-2 signup-alert" role="alert" id="confirmAlert">#}
 
-{#                                </div>#}
+                                {#                                </div>#}
                             </div>
                         </div>
                         <div class="form-group">

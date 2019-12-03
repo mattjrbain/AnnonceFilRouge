@@ -25,7 +25,7 @@ class MySQLUtilisateurDAO extends DAO
             $mdp  = password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT);
             $stmt->bindValue(':nom', $utilisateur->getNom());
             $stmt->bindParam(':mdp', $mdp);
-            $stmt->bindParam(':mail', $utilisateur->getMail());
+            $stmt->bindValue(':mail', $utilisateur->getMail());
             $stmt->execute();
             $lastId = $this->getCnx()->lastInsertId();
             $this->getCnx()->commit();

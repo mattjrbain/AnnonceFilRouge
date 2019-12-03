@@ -48,9 +48,9 @@
     color: wheat;
 }
 .fa-user:hover{
-    color: darkgreen;
+    color: #D0B27A;
 }
 .fa-user:active{
-    color: greenyellow;
+    color: #FFFAF1;
 }
 
