@@ -2,21 +2,28 @@
 
 Projet "Fil Rouge" de la formation Développeur Web / Web Mobile Afpa 2019 
 
-### Cahier des charges
-Vous êtes chargé de réaliser un système de gestion de petites annonces utilisablees au sein d'une entreprisse ou d"une collectivité et qui s'inspire des sites gratuits de petites annonces.
-Ce système doit principalement permettre de consulter des annonces, d'en déposer, et de les gérer.
+## Cahier des charges
+Le projet consiste à réaliser un système de gestion de petites annonces qui s’inspire des sites gratuits de petites annonces, et qui doit principalement permettre de consulter des annonces, d’en déposer, et de les gérer.
 
-Une annonce est caractérisée par un entête (texte de maximum 80 caractères ), un corps (texte de taille limitéé) et une date limite de validité, une rubrique et l'utilisateur qui l'a déposée.
-Une annonce figure dans une seule rubrique, et une rubrique peut ne pas contenir d'annonce. Une rubrique est caractérisée par son libellé. La gestion des rubriques est confiée à un administrateur de l'application.
-Pour certaines fonctionnalités, le système contrôle l'accès des utilisateurs par nom et mot de passe. Il n'y a pas d'homonyme au sein de l'entreprise ou de la collectivité.
+Une annonce est caractérisée au minimum par un en-tête, un corps et une date limite de validité, une rubrique et l’utilisateur qui l’a déposée. 
+La gestion back-office est confiée à un administrateur de l’application. 
+Pour certaines fonctionnalités, le système contrôle l’accès des utilisateurs.
 
-## Description succinte des fonctionnalités du système
-(les fonctions décrites entre [] sont à réaliser dans un deuxième étape)
+### Catégorie d'utilisateurs: visiteur
+Tout visiteur du système d'annonces peut librement:
+* consulter les annonces publiées, 
+* s’identifier ou créer un compte
 
-### Catégories d'utilisateurs : Utilisateur anonyme (Visiteur)
-Tout visiteur du système d'annonces peut librement consulter toutes les annonces publiées, sans être obligé de s'identifier.
+### Catégorie d'utilisateurs: utilisateur identifié
+Tout utilisateur qui souhaite créer une annonce ou gérer ses annonces doit au préalable s'identifier.
+Les fonctionnalités accessibles à l’utilisateur identifié sont:
+* déposer une annonce,
+* gérer ses propres annonces,
+  * lister ses annonces,
+  * modifier une annonce,
+  * détruire une annonce
 
-#### Consulter les annonces
-La seule fonction autorisée dans ce cas est la consultation d'annonces, elle s'effectue en deux étapes : 
-* l'utilisateur choisit d'abord la rubrique qui l'intéresse (en navigant dans une liste de rubriques)
-* ensuite, l'application
+### Catégorie d'utilisateurs: administrateur
+Tout administrateur a accès à des fonctions spécifiques lui permettant de : 
+* gérer les rubriques
+* gérer les annonces périmées
