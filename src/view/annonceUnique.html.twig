@@ -6,7 +6,7 @@
         <div class="row justify-content-center">
             {% if message %}
                 <div class="col-md-10">
-                    <div class="alert alert-{{type}} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -21,8 +21,13 @@
             <div class="col-md-10">
                 <div class="card mb-3"> <!--style="max-width: 540px;"-->
                     <div class="row no-gutters">
-                        <div class="col-md-4 " >
-                            <img src="img/forest-4605204_640.jpg" class="card-img" alt="..." style="max-height: 500px">
+                        <div class="col-md-4 ">
+                            {#                            <img src="img/forest-4605204_640.jpg" class="card-img" alt="..." style="max-height: 500px">#}
+                            {% if annonce.imgSrc %}
+                                <img src="{{ annonce.imgSrc }}" class="card-img" alt="..." style="max-height: 500px">
+                            {% else %}
+                                <img src="img/600px-No_image_available.svg.png" class="card-img" alt="..." style="max-height: 500px">
+                            {% endif %}
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">

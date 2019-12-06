@@ -257,9 +257,9 @@ class Main
     {
         $user       = DAO::get('Utilisateur')->getByName($this->param);
         $rub        = DAO::get('Rubrique')->getByName($_POST['rubrique']);
-        $annonce    = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
+        $img = $this->upload();
+        $annonce    = new Annonce($user, $rub, $_POST['entete'], $_POST['corps'], $img);
         $retAnnonce = DAO::get('Annonce')->insert($annonce);
-        $this->upload();
         $this->render("annonceUnique.html.twig", ['session' => $_SESSION, 'annonce' => $retAnnonce]);
         //print_r($_POST);
     }
@@ -306,17 +306,29 @@ class Main
     private function supprimerAnnonce()
     {
         $annonceDAO = new MySQLAnnonceDAO();
-        $annonce    = $annonceDAO->getById($this->param);
-        $annonceDAO->delete($annonce);
-        $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
-        $annonces = DAO::get('Annonce')->getByUser($user);
-        $this->render(
-            "listeAnnoncesPublisher.html.twig", [
-            'session'  => $_SESSION,
-            'annonces' => $annonces,
-            'message'  => "L'annonce a bien été supprimée.",
-            'type'     => 'success'
-        ]);
+        try {
+            $annonce = $annonceDAO->getById($this->param);
+            $annonceDAO->delete($annonce);
+            $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
+            $annonces = DAO::get('Annonce')->getByUser($user);
+            $this->render(
+                "listeAnnoncesPublisher.html.twig", [
+                'session'  => $_SESSION,
+                'annonces' => $annonces,
+                'message'  => "L'annonce a bien été supprimée.",
+                'type'     => 'success'
+            ]);
+        } catch (DAOException $e) {
+            $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
+            $annonces = DAO::get('Annonce')->getByUser($user);
+            $this->render(
+                "listeAnnoncesPublisher.html.twig", [
+                'session'  => $_SESSION,
+                'annonces' => $annonces,
+                'message'  => "Un problème est survenu. L'annonce n'a pas été supprimée.",
+                'type'     => 'danger'
+            ]);
+        }
     }
 
     private function createAccount()
@@ -342,13 +354,15 @@ class Main
 
     public function showRubriquesAction()
     {
-        $rubs = DAO::get('Rubrique')->getAll();
-        return $rubs;
+        return DAO::get('Rubrique')->getAll();
     }
 
+    /**
+     * @return string
+     */
     private function upload()
     {
-
+        // Source : OpenClassrooms
         // Testons si le fichier a bien été envoyé et s'il n'y a pas d'erreur
         if (isset($_FILES['photo']) AND $_FILES['photo']['error'] == 0) {
             // Testons si le fichier n'est pas trop gros
@@ -360,10 +374,12 @@ class Main
                 if (in_array($extension_upload, $extensions_autorisees)) {
                     // On peut valider le fichier et le stocker définitivement
                     move_uploaded_file($_FILES['photo']['tmp_name'], 'img/' . basename($_FILES['photo']['name']));
-                    echo "L'envoi a bien été effectué !";
+//                    echo "L'envoi a bien été effectué !";
+                    return 'img/' . basename($_FILES['photo']['name']);
                 }
             }
         }
+        return null;
 
     }
 }

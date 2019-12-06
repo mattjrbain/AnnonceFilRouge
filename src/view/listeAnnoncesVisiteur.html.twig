@@ -13,7 +13,12 @@
                             <div class="row no-gutters">
                                 <div class="col-md-4">
 {#                                    TODO: régler image => asset#}
-                                    <img src="../web/img/forest-4605204_640.jpg" class="card-img" alt="...">
+{#                                    <img src="../web/img/forest-4605204_640.jpg" class="card-img" alt="...">#}
+                                    {% if annonce.imgSrc %}
+                                        <img src="{{ annonce.imgSrc }}" class="card-img" alt="..." style="max-height: 500px">
+                                    {% else %}
+                                        <img src="img/600px-No_image_available.svg.png" class="card-img" alt="..." style="max-height: 500px">
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">

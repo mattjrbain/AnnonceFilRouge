@@ -68,8 +68,8 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                  ->beginTransaction();
             $stmt     = $this->getCnx()
                              ->prepare(
-                                 'INSERT INTO annonce (user_id, rubrique_id, en_tete, corps, date_creation, date_modif, date_limite) 
-                                                            VALUES (:user_id, :rubrique_id, :en_tete, :corps, :date_creation, :date_modif, :date_limite)');
+                                 'INSERT INTO annonce (user_id, rubrique_id, en_tete, corps, image_src, date_creation, date_modif, date_limite) 
+                                                            VALUES (:user_id, :rubrique_id, :en_tete, :corps, :image_src, :date_creation, :date_modif, :date_limite)');
             $now      = new DateTime();
             $nowclone = clone $now;
             $limite   = $nowclone->add(new DateInterval('P' . self::VALIDITE_MAX_PHP . 'D'));
@@ -80,6 +80,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                                                      ->getRubriqueId());
             $stmt->bindValue(':en_tete', $annonce->getEnTete());
             $stmt->bindValue(':corps', $annonce->getCorps());
+            $stmt->bindValue(':image_src', $annonce->getImgSrc());
             $stmt->bindValue(':date_creation', $now->format('Y-m-d H:i:s'), PDO::PARAM_STR);
             $stmt->bindValue(':date_modif', $now->format('Y-m-d H:i:s'), PDO::PARAM_STR);
             $stmt->bindValue(':date_limite', $limite->format('Y-m-d H:i:s'), PDO::PARAM_STR);

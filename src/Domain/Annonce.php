@@ -63,6 +63,10 @@ class Annonce extends Entity
 //     * @var MySQLAnnonceDAO
 //     */
 //    private $dao;
+    /**
+     * @var string
+     */
+    private $imgSrc;
 
     /**
      * Annonce constructor.
@@ -70,6 +74,7 @@ class Annonce extends Entity
      * @param Rubrique|null $rubrique
      * @param string $en_tete
      * @param string $corps
+     * @param string $imgSrc
      * @param DateTime $date_creation
      * @param int $annonce_id
      */
@@ -77,14 +82,15 @@ class Annonce extends Entity
         Utilisateur $user = null,
         Rubrique $rubrique = null,
         string $en_tete = "",
-        string $corps = "", DateTime $date_creation = null, int $annonce_id = -1)
+        string $corps = "", string $imgSrc = "", DateTime $date_creation = null, int $annonce_id = -1)
     {
         $this->user          = $user;
         $this->rubrique      = $rubrique;
-        $this->annonce_id    = $annonce_id;
         $this->en_tete       = $en_tete;
         $this->corps         = $corps;
+        $this->imgSrc        = $imgSrc;
         $this->date_creation = $date_creation;
+        $this->annonce_id    = $annonce_id;
         //$this->dao           = new MySQLAnnonceDAO();
     }
 
@@ -252,6 +258,22 @@ class Annonce extends Entity
     public function getDateModif(): DateTime
     {
         return $this->date_modif;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImgSrc()
+    {
+        return $this->imgSrc;
+    }
+
+    /**
+     * @param mixed $imgSrc
+     */
+    public function setImageSrc( $imgSrc): void
+    {
+        $this->imgSrc = $imgSrc;
     }
 
 
