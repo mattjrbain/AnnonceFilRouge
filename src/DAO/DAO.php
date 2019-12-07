@@ -11,6 +11,9 @@ abstract class DAO
 {
     CONST TIMEZONE = 'Europe/Paris';
 
+    /**
+     * @var PDO
+     */
     protected $cnx;
 
     /**
@@ -35,6 +38,10 @@ abstract class DAO
         return $this->cnx;
     }
 
+    /**
+     * @param $className
+     * @return DAO
+     */
     public static function get($className)
     {
         $class =  __NAMESPACE__ . '\\MySQL' . $className . 'DAO';

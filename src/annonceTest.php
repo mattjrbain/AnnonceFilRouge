@@ -12,11 +12,13 @@ use Main\Domain\Annonce;
 use Main\Domain\Rubrique;
 use Main\Domain\Utilisateur;
 
-$annonceDAO = DAO::get('Annonce');
-//$rubriqueDAO = new MySQLRubriqueDAO();
-$rubriqueDAO = DAO::get('Rubrique');
-//$userDAO = new MySQLUtilisateurDAO();
-$userDAO = DAO::get('Utilisateur');
+//$annonceDAO = DAO::get('Annonce');
+$annonceDAO = new MySQLAnnonceDAO();
+
+$rubriqueDAO = new MySQLRubriqueDAO();
+//$rubriqueDAO = DAO::get('Rubrique');
+$userDAO = new MySQLUtilisateurDAO();
+//$userDAO = DAO::get('Utilisateur');
 
 
 
@@ -24,6 +26,8 @@ try {
     //var_dump(DAO::get('Utilisateur'));
     //Creation user
 //    $user = $userDAO->getByName("Nono");
+    $annonce = $annonceDAO->getById(55);
+    var_dump($annonce);
 
     //Creation rubrique
 //    $rub = $rubriqueDAO->getByName("grillepain");
@@ -40,9 +44,9 @@ try {
 //    echo($annonceDAO->update($annonce));
 
     //Get by Rubrique
-    $rub = $rubriqueDAO->getByName("auto");
-    $annonces = $annonceDAO->getByRub($rub);
-    print_r($annonces);
+//    $rub = $rubriqueDAO->getByName("auto");
+//    $annonces = $annonceDAO->getByRub($rub);
+//    print_r($annonces);
 
     //Get by User
 //    $user = $userDAO->getById(16);

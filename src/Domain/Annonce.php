@@ -64,9 +64,9 @@ class Annonce extends Entity
 //     */
 //    private $dao;
     /**
-     * @var string
+     * @var array
      */
-    private $imgSrc;
+    private $imgs;
 
     /**
      * Annonce constructor.
@@ -74,7 +74,7 @@ class Annonce extends Entity
      * @param Rubrique|null $rubrique
      * @param string $en_tete
      * @param string $corps
-     * @param string $imgSrc
+     * @param array $imgs
      * @param DateTime $date_creation
      * @param int $annonce_id
      */
@@ -82,15 +82,18 @@ class Annonce extends Entity
         Utilisateur $user = null,
         Rubrique $rubrique = null,
         string $en_tete = "",
-        string $corps = "", string $imgSrc = "", DateTime $date_creation = null, int $annonce_id = -1)
+        string $corps = "",
+        array $imgs = array(),
+        DateTime $date_creation = null,
+        int $annonce_id = -1)
     {
         $this->user          = $user;
         $this->rubrique      = $rubrique;
         $this->en_tete       = $en_tete;
         $this->corps         = $corps;
-        $this->imgSrc        = $imgSrc;
         $this->date_creation = $date_creation;
         $this->annonce_id    = $annonce_id;
+        $this->imgs          = $imgs;
         //$this->dao           = new MySQLAnnonceDAO();
     }
 
@@ -263,20 +266,18 @@ class Annonce extends Entity
     /**
      * @return mixed
      */
-    public function getImgSrc()
+    public function getImgs()
     {
-        return $this->imgSrc;
+        return $this->imgs;
     }
 
     /**
-     * @param mixed $imgSrc
+     * @param array $imgs
      */
-    public function setImageSrc( $imgSrc): void
+    public function setImages(array $imgs): void
     {
-        $this->imgSrc = $imgSrc;
+        $this->imgs = $imgs;
     }
-
-
 
 
 }

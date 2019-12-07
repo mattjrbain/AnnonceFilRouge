@@ -37,10 +37,11 @@
                             <button type="submit" class="btn btn-primary">Publier</button>
                         </div>
                         <hr>
-                        <div class="form-group">
-                            <label for="photo">Example file input</label>
-                            <input type="file" class="form-control-file" id="photo" name="photo">
+                        <div class="form-group" id="divAjoutImage">
+                            <label for="photo">Ajouter une image</label>
+                            <input type="file" class="form-control-file" id="photo" name="photo0" value="">
                         </div>
+                        <button type="button" class="btn btn-info" id="ajoutImage">Ajouter une autre image</button>
                     </form>
                 </div>
             </div>
@@ -51,4 +52,19 @@
 {% endblock %}
 {% block additionnalJS %}
     <script src="js/validationAjout.js"></script>
+    <script>
+        let compteurImage = 1;
+        // if (compteurImage < 4) {
+        //     $("#ajoutImage").click(function () {
+        //         $("#divAjoutImage").append('<input type="file" class="form-control-file" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
+        //         compteurImage++;
+        //     });
+        // }
+        $("#ajoutImage").click(function () {
+            if (compteurImage < 4){
+                $("#divAjoutImage").append('<input type="file" class="form-control-file" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
+                compteurImage++;
+            }
+        })
+    </script>
 {% endblock %}
