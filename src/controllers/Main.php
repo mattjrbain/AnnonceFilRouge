@@ -363,6 +363,7 @@ class Main
     /**
      * @param $annonceId
      * @return array
+     * @throws DAOException
      */
     private function upload($annonceId)
     {

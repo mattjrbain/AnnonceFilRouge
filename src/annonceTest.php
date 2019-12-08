@@ -25,8 +25,8 @@ $userDAO = new MySQLUtilisateurDAO();
 try {
     //var_dump(DAO::get('Utilisateur'));
     //Creation user
-//    $user = $userDAO->getByName("Nono");
-    $annonce = $annonceDAO->getById(55);
+//    $user = $userDAO->getByName("Lili");
+    $annonce = $annonceDAO->getById(45);
     var_dump($annonce);
 
     //Creation rubrique
@@ -39,7 +39,7 @@ try {
 //    print_r($annonceDAO->insert($annonce));
 
     //Update
-//    $annonce = $annonceDAO->getById(32);
+//    $annonce = $annonceDAO->getById(55);
 //    $annonce->setUser($user);
 //    echo($annonceDAO->update($annonce));
 

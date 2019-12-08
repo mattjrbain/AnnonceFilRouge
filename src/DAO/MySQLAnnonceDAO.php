@@ -68,8 +68,8 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                  ->beginTransaction();
             $stmt     = $this->getCnx()
                              ->prepare(
-                                 'INSERT INTO annonce (user_id, rubrique_id, en_tete, corps, image_src, date_creation, date_modif, date_limite) 
-                                                            VALUES (:user_id, :rubrique_id, :en_tete, :corps, :image_src, :date_creation, :date_modif, :date_limite)');
+                                 'INSERT INTO annonce (user_id, rubrique_id, en_tete, corps, date_creation, date_modif, date_limite) 
+                                                            VALUES (:user_id, :rubrique_id, :en_tete, :corps, :date_creation, :date_modif, :date_limite)');
             $now      = new DateTime();
             $nowclone = clone $now;
             $limite   = $nowclone->add(new DateInterval('P' . self::VALIDITE_MAX_PHP . 'D'));
@@ -80,7 +80,6 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                                                      ->getRubriqueId());
             $stmt->bindValue(':en_tete', $annonce->getEnTete());
             $stmt->bindValue(':corps', $annonce->getCorps());
-            $stmt->bindValue(':image_src', $annonce->getImgs());
             $stmt->bindValue(':date_creation', $now->format('Y-m-d H:i:s'), PDO::PARAM_STR);
             $stmt->bindValue(':date_modif', $now->format('Y-m-d H:i:s'), PDO::PARAM_STR);
             $stmt->bindValue(':date_limite', $limite->format('Y-m-d H:i:s'), PDO::PARAM_STR);
@@ -127,14 +126,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->getCnx()
                  ->commit();
-            $user = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['est_admin'], $data['user_id']);
-            $rub = new Rubrique($data['libelle'], $data['r_id']);
-            $imgs = explode(',', $data['images']);
-            $dateCrea = DateTime::createFromFormat('Y-m-d H:i:s', $data['crea']);
-            $annonce = new Annonce($user, $rub, $data['en_tete'], $data['corps'], $imgs, $dateCrea, $data['a_id']);
-            $annonce->setDateLimite($data['dlimit']);
-            $annonce->setDateModif($data['modif']);
-            return $annonce;
+            return $this->annonceFromArray($data);
         } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
@@ -198,19 +190,21 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
      * @return int
      * @throws DAOException
      */
-    public function update(Entity $entity)//$id, $entete, $corps
+    public function update(Annonce $entity)//$id, $entete, $corps
     {
         try {
             $this->getCnx()
                  ->beginTransaction();
             $stmt = $this->getCnx()
                          ->prepare(
-                             'UPDATE annonce 
-                            SET rubrique_id = :rubrique_id, 
-                                en_tete = :entete,
-                                corps = :corps,
-                                date_modif = :date_modif
-                            WHERE annonce_id = :id');
+                             'UPDATE annonce, image i
+                                        LEFT JOIN annonce a ON i.annonce_id = a.annonce_id
+                                        SET a.rubrique_id = :rubrique_id,
+                                            a.en_tete = :entete,
+                                            a.corps = :corps,
+                                            a.date_modif = :date_modif,
+                                            i.image_src = :image_src
+                                        WHERE annonce.annonce_id = :id');
             $now  = new DateTime();
             $now->setTimezone(new DateTimeZone(self::TIMEZONE));
             $stmt->bindValue(':rubrique_id', $entity->getRubrique()
@@ -219,6 +213,9 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $stmt->bindValue(':corps', $entity->getCorps());
             $stmt->bindValue(':id', $entity->getAnnonceId());
             $stmt->bindValue(':date_modif', $now->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+            foreach ($entity->getImgs() as $img) {
+                $stmt->bindParam(':image_src', $img);
+            }
             $stmt->execute();
             $count = $stmt->rowCount();
             $this->getCnx()
@@ -272,20 +269,36 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
         try {
             $this->getCnx()
                  ->beginTransaction();
+//            $stmt = $this->getCnx()->prepare('SELECT * FROM annonce WHERE annonce_id = :id');
             $stmt = $this->getCnx()
-                         ->prepare('SELECT * FROM annonce WHERE user_id = :userId');
+                         ->prepare('SELECT a.annonce_id as a_id, a.en_tete, a.corps, a.date_creation as crea, 
+                                                        a.date_modif as modif, a.date_limite as dlimit, a.visites as visit,
+                                                        group_concat(image_src) AS images,
+                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin,
+                                                        r.rubrique_id as r_id, libelle
+                                                FROM annonce AS a
+                                                LEFT JOIN image i ON a.annonce_id = i.annonce_id
+                                                INNER JOIN utilisateur u ON a.user_id = u.user_id
+                                                INNER JOIN rubrique r ON a.rubrique_id = r.rubrique_id
+                                                WHERE a.user_id = :userId
+                                                GROUP BY a.annonce_id');
             $stmt->bindValue(':userId', $utilisateur->getUserId());
             $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $data = $stmt->fetchAll();
+            $datas = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $this->getCnx()
                  ->commit();
-            return $this->hydrateAnnonce($data);
+            $annonces = array();
+            foreach ($datas as $data) {
+                $annonce    = $this->annonceFromArray($data);
+                $annonces[] = $annonce;
+            }
+            return $annonces;
         } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
         }
+
     }
 
     /**
@@ -299,14 +312,30 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $this->getCnx()
                  ->beginTransaction();
             $stmt = $this->getCnx()
-                         ->prepare('SELECT * FROM annonce WHERE rubrique_id = :rubId');
+                         ->prepare('SELECT a.annonce_id as a_id, a.en_tete, a.corps, a.date_creation as crea, 
+                                                        a.date_modif as modif, a.date_limite as dlimit, a.visites as visit,
+                                                        group_concat(image_src) AS images,
+                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin,
+                                                        r.rubrique_id as r_id, libelle
+                                                FROM annonce AS a
+                                                LEFT JOIN image i ON a.annonce_id = i.annonce_id
+                                                INNER JOIN utilisateur u ON a.user_id = u.user_id
+                                                INNER JOIN rubrique r ON a.rubrique_id = r.rubrique_id
+                                                WHERE a.rubrique_id = :rubId
+                                                GROUP BY a.annonce_id');
+
             $stmt->bindValue(':rubId', $rub->getRubriqueId());
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $data = $stmt->fetchAll();
+            $datas = $stmt->fetchAll();
             $this->getCnx()
                  ->commit();
-            return $this->hydrateAnnonce($data);
+            $annonces = array();
+            foreach ($datas as $data) {
+                $annonce    = $this->annonceFromArray($data);
+                $annonces[] = $annonce;
+            }
+            return $annonces;
         } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
@@ -363,6 +392,22 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                  ->rollBack();
             throw new DAOException($e->getMessage());
         }
+    }
+
+    /**
+     * @param array $data
+     * @return Annonce
+     */
+    public function annonceFromArray(array $data)
+    {
+        $user     = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['est_admin'], $data['user_id']);
+        $rub      = new Rubrique($data['libelle'], $data['r_id']);
+        $imgs     = explode(',', $data['images']);
+        $dateCrea = DateTime::createFromFormat('Y-m-d H:i:s', $data['crea']);
+        $annonce  = new Annonce($user, $rub, $data['en_tete'], $data['corps'], $imgs, $dateCrea, $data['a_id']);
+        $annonce->setDateLimite($data['dlimit']);
+        $annonce->setDateModif($data['modif']);
+        return $annonce;
     }
 
 

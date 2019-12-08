@@ -26,8 +26,8 @@
                             <div class="row no-gutters">
                                 <div class="col-md-4">
 {#                                    <img src="../web/img/forest-4605204_640.jpg" class="card-img img-fluid" alt="...">#}
-                                    {% if annonce.imgSrc %}
-                                        <img src="{{ annonce.imgSrc }}" class="card-img img-fluid" alt="..." style="max-height: 500px">
+                                    {% if annonce.imgs|first %}
+                                        <img src="{{ annonce.imgs|first }}" class="card-img img-fluid" alt="..." style="max-height: 500px">
                                     {% else %}
                                         <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid" alt="..." style="max-height: 500px">
                                     {% endif %}

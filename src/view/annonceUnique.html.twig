@@ -19,14 +19,30 @@
                 </div>
             {% endif %}
             <div class="col-md-10">
+
                 <div class="card mb-3"> <!--style="max-width: 540px;"-->
                     <div class="row no-gutters">
                         <div class="col-md-4 ">
                             {#                            <img src="img/forest-4605204_640.jpg" class="card-img img-fluid" alt="..." style="max-height: 500px">#}
-                            {% if annonce.imgSrc %}
-                                <img src="{{ annonce.imgSrc }}" class="card-img img-fluid" alt="..." style="max-height: 500px">
+                            {% if annonce.imgs %}
+                                <div id="carouselExampleControls" class="carousel slide card-img img-fluid h-100"
+                                     data-ride="carousel">
+
+                                    {% for img in annonce.imgs %}
+                                        {% if img %}
+                                            <div class="carousel-item {% if loop.index0 == 0 %}active{% endif %} ">
+                                                <img class="d-block w-100" src="{{ img }}" alt="Second slide">
+                                            </div>
+                                        {% else %}
+                                            <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid"
+                                                 alt="Pas d'image" style="max-height: 500px">
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {#                                <img src="{{ annonce.imgSrc }}" class="card-img img-fluid" alt="..." style="max-height: 500px">#}
                             {% else %}
-                                <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid" alt="..." style="max-height: 500px">
+                                <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid"
+                                     alt="Pas d'image" style="max-height: 500px">
                             {% endif %}
                         </div>
                         <div class="col-md-8">
