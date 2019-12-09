@@ -62,8 +62,8 @@ try {
 
     //Rubrique//////
     //Insert
-//    $rub = new Rubrique("grillepain");
-//    print_r($rubriqueDAO->insert($rub));
+    $rub = new Rubrique("grillepain");
+    print_r($rubriqueDAO->insert($rub));
 
     //Delete
 //    $rub = $rubriqueDAO->getByName("sexe");
@@ -87,9 +87,9 @@ try {
 //    print_r($userDAO->identifier($user));
 }
 catch (DAOException $e) {
-    echo $e->getMessage();
+    $this->render('404.html.twig', ['message' => $e->getMessage()]);
 } catch (Exception $e) {
-    echo $e->getMessage();
+    $this->render('404.html.twig', ['message' => $e->getMessage()]);
 } catch (Error $error){
     echo $error->getMessage();
 }

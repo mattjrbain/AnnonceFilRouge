@@ -5,6 +5,7 @@ namespace Main\DAO;
 
 
 use Exception;
+use Main\Domain\Annonce;
 use Main\Domain\Entity;
 use Main\Domain\Image;
 use PDO;
@@ -46,10 +47,10 @@ class MySQLImageDAO extends DAO
             $stmt = $this->getCnx()->prepare('SELECT * FROM image WHERE image_id = :id');
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Image');
-            $data = $stmt->fetch();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $data = $stmt->fetchAll();
             $this->getCnx()->commit();
-            return $data;
+            return $this->hydrateImage($data)[0];
         }
         catch (Exception $e) {
             $this->getCnx()->rollBack();
@@ -103,5 +104,46 @@ class MySQLImageDAO extends DAO
             $this->getCnx()->rollBack();
             throw new DAOException($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * @param Annonce $annonce
+     * @return array
+     * @throws DAOException
+     */
+    public function getByAnnonce(Annonce $annonce)
+    {
+        try {
+            $this->getCnx()->beginTransaction();
+            $stmt = $this->getCnx()->prepare('SELECT * FROM image WHERE annonce_id = :id');
+            $stmt->bindValue(':id', $annonce->getAnnonceId());
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $data = $stmt->fetchAll();
+            $this->getCnx()->commit();
+            return $this->hydrateImage($data);
+        }
+        catch (Exception $e) {
+            $this->getCnx()->rollBack();
+            throw new DAOException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function hydrateImage(array $images)
+    {
+        $imagesTab = array();
+        foreach ($images as $datum) {
+            $image = new Image();
+            foreach ($datum as $key => $value) {
+                $key    = ucwords($key, "_");
+                $key    = preg_replace("/_/", "", $key);
+                $method = "set" . $key;
+                if (method_exists($image, $method)) {
+                    $image->$method($value);
+                }
+            }
+            $imagesTab[] = $image;
+        }
+        return $imagesTab;
     }
 }

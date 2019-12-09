@@ -122,6 +122,9 @@ class Main
                 case "createAccount";
                     $this->createAccount();
                     break;
+                case "supprimerImage";
+                    $this->supprimerImage();
+                    break;
                 default :
                     echo "Page inexistante";
             }
@@ -143,8 +146,9 @@ class Main
             $rub    = new Rubrique($_POST['libelle']);
             try {
                 $rubDao->insert($rub);
-            } catch (DAOException $e) {
-                echo $e->getMessage();
+            }
+            catch (DAOException $e) {
+                $this->render('404.html.twig', ['message' => $e->getMessage()]);
             }
         } else {
             $view = new VueAjouterRubrique();
@@ -159,7 +163,8 @@ class Main
             $user    = new Utilisateur($_POST['name'], $_POST['pass']);
             try {
                 $userDAO->identifier($user);
-            } catch (DAOException $e) {
+            }
+            catch (DAOException $e) {
 //                $_SESSION['errorPass'] = "Mauvais mot de passe";
 //                header('Location: ?action=connection');
                 $this->render('connection.html.twig', ['session' => $_SESSION, "errorPass" => true]);
@@ -175,13 +180,16 @@ class Main
         try {
             $view = $this->twig->load($filename);
             echo $view->render($data);
-        } catch (LoaderError $e) {
-            echo $e->getMessage();
-        } catch (RuntimeError $e) {
-            echo $e->getMessage();
+        }
+        catch (LoaderError $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
+        }
+        catch (RuntimeError $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
-        } catch (SyntaxError $e) {
-            echo $e->getMessage();
+        }
+        catch (SyntaxError $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
         }
     }
@@ -200,8 +208,9 @@ class Main
             $rub      = DAO::get('Rubrique')->getByName($rubrique);
             $annonces = $annoncesDAO->getByRub($rub);
             $this->render('listeAnnoncesVisiteur.html.twig', ['session' => $_SESSION, "annonces" => $annonces]);
-        } catch (DAOException $e) {
-            echo $e->getMessage();
+        }
+        catch (DAOException $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
     }
 
@@ -215,7 +224,8 @@ class Main
             try {
                 $userDAO->identifier($user);
                 header('Location: ?action=connection');
-            } catch (DAOException $e) {
+            }
+            catch (DAOException $e) {
                 $this->render('connection.html.twig', ['session' => $_SESSION, 'errorPass' => true]);
             }
         } else {
@@ -250,34 +260,79 @@ class Main
 
     private function submitAnnonce()
     {
-        $user       = DAO::get('Utilisateur')->getByName($this->param);
+        $user = DAO::get('Utilisateur')->getByName($this->param);
 //        $userDAO = new MySQLUtilisateurDAO();
 //        $user = $userDAO->getByName($this->param);
-        $rub        = DAO::get('Rubrique')->getByName($_POST['rubrique']);
-        $annonce    = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
+        $rub     = DAO::get('Rubrique')->getByName($_POST['rubrique']);
+        $annonce = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
 //        $retAnnonce = DAO::get('Annonce')->insert($annonce);
         $annonceDAO = new MySQLAnnonceDAO();
         try {
             $retAnnonce = $annonceDAO->insert($annonce);
-            $img = $this->upload($retAnnonce->getAnnonceId());
+            $img        = $this->upload($retAnnonce->getAnnonceId());
             $retAnnonce->setImages($img);
-            var_dump($retAnnonce);
-            $this->render("annonceUnique.html.twig", ['session' => $_SESSION, 'annonce' => $retAnnonce]);
-        } catch (DAOException $e) {
-            echo $e->getMessage();
+//            var_dump($retAnnonce);
+            $this->render(
+                "annonceUnique.html.twig", [
+                'session' => $_SESSION,
+                'annonce' => $retAnnonce,
+                'message' => 'Votre annonce a bien été enregistrée !',
+                'type'    => 'success'
+            ]);
+        }
+        catch (DAOException $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
         //print_r($_POST);
+    }
+
+    /**
+     * @param $annonceId
+     * @return array
+     * @throws DAOException
+     */
+    private function upload($annonceId)
+    {
+        $pictures = array();
+        // Source : OpenClassrooms
+        // Testons si le fichier a bien été envoyé et s'il n'y a pas d'erreur
+        for ($i = 0; $i < count($_FILES); $i++) {
+            if (isset($_FILES['photo' . $i]) AND $_FILES['photo' . $i]['error'] == 0) {
+                // Testons si le fichier n'est pas trop gros
+                if ($_FILES['photo' . $i]['size'] <= 1000000) {
+                    // Testons si l'extension est autorisée
+                    $infosfichier          = pathinfo($_FILES['photo' . $i]['name']);
+                    $extension_upload      = $infosfichier['extension'];
+                    $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+                    if (in_array($extension_upload, $extensions_autorisees)) {
+                        // On peut valider le fichier et le stocker définitivement
+                        move_uploaded_file($_FILES['photo' . $i]['tmp_name'], 'img/' . basename($_FILES['photo' . $i]['name']));
+                        //                    echo "L'envoi a bien été effectué !";
+//                        return 'img/' . basename($_FILES['photo'. $i]['name']);
+                        $pictures[] = new Image('img/' . basename($_FILES['photo' . $i]['name']), $annonceId);
+                    }
+                }
+            }
+        }
+        $imgDAO = new MySQLImageDAO();
+        foreach ($pictures as $picture) {
+            $imgDAO->insert($picture);
+        }
+        return $pictures;
+
     }
 
     private function modifierAnnonce()
     {
         $annonce = DAO::get('Annonce')->getById($this->param);
         $rubs    = DAO::get('Rubrique')->getAll();
+        $images  = DAO::get('Image')->getByAnnonce($annonce);
         $this->render(
             'modifierAnnonce.html.twig', [
             'session' => $_SESSION,
             'annonce' => $annonce,
-            'rubs'    => $rubs
+            'rubs'    => $rubs,
+            'images'  => $images
         ]);
     }
 
@@ -285,6 +340,7 @@ class Main
     {
         try {
             $annonceDAO = new MySQLAnnonceDAO();
+            $imageDAO = new MySQLImageDAO();
             $annonce    = $annonceDAO->getById($this->param);
             $rubrique   = DAO::get('Rubrique')->getByName($_POST['rubrique']);
             $annonce->setRubrique($rubrique);
@@ -292,6 +348,8 @@ class Main
             $annonce->setCorps($_POST['corps']);
             $annonce->setDateLimite($_POST['dateLimite']);
             $annonceDAO->update($annonce);
+            $img        = $this->upload($this->param);
+//            $retAnnonce->setImages($img);
             $this->render(
                 "annonceUnique.html.twig", [
                 'session' => $_SESSION,
@@ -299,10 +357,11 @@ class Main
                 'message' => "L'annonce a bien été modifiée.",
                 'type'    => 'success'
             ]);
-        } catch (DAOException $e) {
+        }
+        catch (DAOException $e) {
             //TODO: set error page
             //TODO: set message "Annonce modifiée avec succès"
-            echo $e->getMessage();
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
 
     }
@@ -322,7 +381,8 @@ class Main
                 'message'  => "L'annonce a bien été supprimée.",
                 'type'     => 'success'
             ]);
-        } catch (DAOException $e) {
+        }
+        catch (DAOException $e) {
             $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
             $annonces = DAO::get('Annonce')->getByUser($user);
             $this->render(
@@ -346,7 +406,8 @@ class Main
                 'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.' . "\n" . ' Vous pouvez vous connecter.',
                 'type'    => 'success'
             ]);
-        } catch (DAOException $e) {
+        }
+        catch (DAOException $e) {
             $this->render(
                 'signup.html.twig', [
                 'message' => 'Le nom "' . $_POST['nom'] . '" est déjà utilisé.',
@@ -360,44 +421,28 @@ class Main
         return DAO::get('Rubrique')->getAll();
     }
 
-    /**
-     * @param $annonceId
-     * @return array
-     * @throws DAOException
-     */
-    private function upload($annonceId)
+    private function supprimerImage()
     {
-//        var_dump($_FILES);
-//        foreach ($_FILES as $FILE) {
-//            var_dump($FILE);
-//        }
-//        die();
-        $pictures = array();
-        // Source : OpenClassrooms
-        // Testons si le fichier a bien été envoyé et s'il n'y a pas d'erreur
-        for ($i = 0; $i < count($_FILES); $i++) {
-            if (isset($_FILES['photo' . $i]) AND $_FILES['photo' . $i]['error'] == 0) {
-                // Testons si le fichier n'est pas trop gros
-                if ($_FILES['photo' . $i]['size'] <= 1000000) {
-                    // Testons si l'extension est autorisée
-                    $infosfichier          = pathinfo($_FILES['photo' . $i]['name']);
-                    $extension_upload      = $infosfichier['extension'];
-                    $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
-                    if (in_array($extension_upload, $extensions_autorisees)) {
-                        // On peut valider le fichier et le stocker définitivement
-                        move_uploaded_file($_FILES['photo' . $i]['tmp_name'], 'img/' . basename($_FILES['photo' . $i]['name']));
-                        //                    echo "L'envoi a bien été effectué !";
-//                        return 'img/' . basename($_FILES['photo'. $i]['name']);
-                        $pictures[] = new Image('img/' . basename($_FILES['photo' . $i]['name']), $annonceId) ;
-                    }
-                }
-            }
+        try {
+            $imageDAO = new MySQLImageDAO();
+            $image    = $imageDAO->getById($this->param);
+            $imageDAO->delete($image);
+            $annonce = DAO::get('Annonce')->getById($image->getAnnonceId());
+            $rubs    = DAO::get('Rubrique')->getAll();
+            $images  = DAO::get('Image')->getByAnnonce($annonce);
+            $this->render(
+                'modifierAnnonce.html.twig', [
+                'session' => $_SESSION,
+                'annonce' => $annonce,
+                'rubs'    => $rubs,
+                'images'  => $images,
+                'message' => "L'image a bien été supprimée .",
+                'type'    => 'success'
+            ]);
         }
-        $imgDAO = new MySQLImageDAO();
-        foreach ($pictures as $picture) {
-            $imgDAO->insert($picture);
-        }
-        return $pictures;
+        catch (DAOException $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
+        }
     }
 }

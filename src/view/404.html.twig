@@ -1,0 +1,28 @@
+{% extends 'template.html.twig' %}
+{% block title %}Erreur 404"{% endblock %}
+{% block body %}
+    {% include 'header.html.twig' %}
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="display-1">404</h1>
+                <a id="" class="btn btn-primary" href="?action=accueil" role="button">Retour accueil</a>
+            </div>
+            {% if message %}
+                <div class="col-md-10">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{ message }}</strong>
+                    </div>
+
+                    <script>
+                        $(".alert").alert();
+                    </script>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

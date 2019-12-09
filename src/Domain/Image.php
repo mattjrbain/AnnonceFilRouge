@@ -80,6 +80,11 @@ class Image extends Entity
         $this->imageId = $imageId;
     }
 
+    public function __toString()
+    {
+        return $this->getImageSrc();
+    }
+
 
 
 

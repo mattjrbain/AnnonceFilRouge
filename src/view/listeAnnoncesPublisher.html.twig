@@ -7,7 +7,7 @@
             {#                        {{ dump(annonces) }}#}
             {% if message %}
                 <div class="col-md-10">
-                    <div class="alert alert-{{type}} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -21,39 +21,47 @@
             {% endif %}
             {% if annonces %}
                 {% for annonce in annonces %}
+{#                    {{ dump(annonce.annonceId) }}#}
                     <div class="col-md-6">
                         <div class="card mb-3 bg-light shadow" style="max-width: 540px;">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
-{#                                    <img src="../web/img/forest-4605204_640.jpg" class="card-img img-fluid" alt="...">#}
+                                    {#                                    <img src="../web/img/forest-4605204_640.jpg" class="card-img img-fluid" alt="...">#}
                                     {% if annonce.imgs|first %}
-                                        <img src="{{ annonce.imgs|first }}" class="card-img img-fluid" alt="..." style="max-height: 500px">
+                                        <img src="{{ annonce.imgs|first }}" class="card-img img-fluid" alt="..."
+                                             style="max-height: 500px">
                                     {% else %}
-                                        <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid" alt="..." style="max-height: 500px">
+                                        <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid"
+                                             alt="..." style="max-height: 500px">
                                     {% endif %}
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ annonce.entete }}</h5>
-{#                                        <p class="card-text">{{ annonce.corps }}</p>#}
+                                        {#                                        <p class="card-text">{{ annonce.corps }}</p>#}
                                         <p class="card-text"><small class="text-muted">Mise à jour
                                                 le {{ annonce.dateModif|date('d/m/Y') }}</small>
                                         </p>
                                         <p>
-                                            <a id="" class="btn btn-info" href="?action=modifierAnnonce&param={{ annonce.annonceId }}" role="button">Modifier</a>
+                                            <a id="" class="btn btn-info"
+                                               href="?action=modifierAnnonce&param={{ annonce.annonceId }}"
+                                               role="button">Modifier</a>
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#exampleModalCenterTest{{ annonce.annonceId }}">
                                                 Supprimer
                                             </button>
                                         </p>
+                                        <div class="modal fade" id="exampleModalCenterTest{{ annonce.annonceId }}" tabindex="-1" role="dialog"
+                                             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
-                                            <!-- Modal -->
-                                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLongTitle">Suppression annonce</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">Suppression
+                                                            annonce</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
@@ -61,14 +69,20 @@
                                                         Voulez-vous supprimer l'annonce "{{ annonce.entete }}" ?
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                        <a id="" class="btn btn-danger" href="?action=supprimerAnnonce&param={{ annonce.annonceId }}" role="button">Supprimer</a>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Annuler
+                                                        </button>
+                                                        <a id="" class="btn btn-danger"
+                                                           href="?action=supprimerAnnonce&param={{ annonce.annonceId }}"
+                                                           role="button">Supprimer</a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-{#                                            <a id="" class="btn btn-danger" href="?action=supprimerAnnonce&param={{ annonce.annonceId }}" role="button">Supprimer</a>#}
+                                        <!-- Modal -->
+
+                                        {#                                            <a id="" class="btn btn-danger" href="?action=supprimerAnnonce&param={{ annonce.annonceId }}" role="button">Supprimer</a>#}
                                     </div>
                                 </div>
                             </div>

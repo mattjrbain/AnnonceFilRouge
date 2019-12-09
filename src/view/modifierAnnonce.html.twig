@@ -4,7 +4,21 @@
     {% include 'header.html.twig' %}
     <div class="container mb-4">
         <div class="row justify-content-center">
-            <div class="col-md-5 card my-3 bg-light">
+            {% if message %}
+                <div class="col-md-10">
+                    <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{ message }}</strong>
+                    </div>
+
+                    <script>
+                        $(".alert").alert();
+                    </script>
+                </div>
+            {% endif %}
+            <div class="col-md-5 card my-3 bg-light shadow">
                 <div class="card-block m-3">
                     <h3 class="card-title text-center">Modifier annonce</h3>
                     <hr>
@@ -41,15 +55,65 @@
                             <button type="submit" class="btn btn-primary">Publier</button>
                         </div>
                         <hr>
-                        <a id="ajoutPhoto" class="btn btn-success" href="#" role="button">Ajouter une photo</a>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Upload</span>
+                        {#                                                {{ dump(images) }}#}
+                        <div class="form-group ">
+                            {% for image in images %}
+                                <div class="card mb-3 photo">
+                                    <div class="row">
+                                        <div class="col-lg-7">
+                                            <img src="{{ image.imageSrc }}" class="card-img img-fluid" alt="..."
+                                                 style="max-height: 500px">
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ image.imageSrc }}</h5>
+                                                <p>
+                                                    <a type="button" class="btn btn-danger" data-toggle="modal"
+                                                       data-target="#exampleModalCenter{{ image.imageId }}">
+                                                        Supprimer
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModalCenter{{ image.imageId }}"
+                                             tabindex="-1" role="dialog"
+                                             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">
+                                                            Suppression
+                                                            annonce</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Voulez-vous supprimer l'image "{{ image.imageSrc }}" ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Annuler
+                                                        </button>
+                                                        <a id="" class="btn btn-danger"
+                                                           href="?action=supprimerImage&param={{ image.imageId }}"
+                                                           role="button">Supprimer</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {#                            <hr>#}
+                            <div class="form-group" id="divAjoutImage">
+                                <label for="photo">Ajouter une image</label>
+                                <input type="file" class="form-control-file photo" id="photo" name="photo0" value="">
                             </div>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="inputGroupFile01">
-                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                            </div>
+                            <button type="button" class="btn btn-info" id="ajoutImage">Ajouter une autre image</button>
                         </div>
                     </form>
                 </div>
@@ -61,4 +125,5 @@
 {% endblock %}
 {% block additionnalJS %}
     <script src="js/validationAjout.js"></script>
+    <script src="js/ajoutImage.js"></script>
 {% endblock %}

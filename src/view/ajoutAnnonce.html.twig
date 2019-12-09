@@ -39,7 +39,7 @@
                         <hr>
                         <div class="form-group" id="divAjoutImage">
                             <label for="photo">Ajouter une image</label>
-                            <input type="file" class="form-control-file" id="photo" name="photo0" value="">
+                            <input type="file" class="form-control-file photo" id="photo" name="photo0" value="">
                         </div>
                         <button type="button" class="btn btn-info" id="ajoutImage">Ajouter une autre image</button>
                     </form>
@@ -53,7 +53,9 @@
 {% block additionnalJS %}
     <script src="js/validationAjout.js"></script>
     <script>
-        let compteurImage = 1;
+        // let compteurImage = 1;
+        let compteurImage = $(".photo").length;
+
         // if (compteurImage < 4) {
         //     $("#ajoutImage").click(function () {
         //         $("#divAjoutImage").append('<input type="file" class="form-control-file" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
@@ -62,7 +64,7 @@
         // }
         $("#ajoutImage").click(function () {
             if (compteurImage < 4){
-                $("#divAjoutImage").append('<input type="file" class="form-control-file" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
+                $("#divAjoutImage").append('<input type="file" class="form-control-file photo" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
                 compteurImage++;
             }
         })
