@@ -75,6 +75,7 @@ class Annonce extends Entity
      * @param string $en_tete
      * @param string $corps
      * @param array $imgs
+     * @param int|null $nb_visites
      * @param DateTime $date_creation
      * @param int $annonce_id
      */
@@ -84,6 +85,7 @@ class Annonce extends Entity
         string $en_tete = "",
         string $corps = "",
         array $imgs = array(),
+        int $nb_visites = null,
         DateTime $date_creation = null,
         int $annonce_id = -1)
     {
@@ -94,6 +96,7 @@ class Annonce extends Entity
         $this->date_creation = $date_creation;
         $this->annonce_id    = $annonce_id;
         $this->imgs          = $imgs;
+        $this->nb_visites    = $nb_visites;
         //$this->dao           = new MySQLAnnonceDAO();
     }
 
@@ -224,19 +227,19 @@ class Annonce extends Entity
     }
 
     /**
-     * @return Rubrique
-     */
-    public function getRubrique(): Rubrique
-    {
-        return $this->rubrique;
-    }
-
-    /**
      * @param Utilisateur $user
      */
     public function setUser(Utilisateur $user): void
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return Rubrique
+     */
+    public function getRubrique(): Rubrique
+    {
+        return $this->rubrique;
     }
 
     /**
@@ -248,19 +251,19 @@ class Annonce extends Entity
     }
 
     /**
-     * @param string $date_modif
-     */
-    public function setDateModif(string $date_modif): void
-    {
-        $this->date_modif = DateTime::createFromFormat('Y-m-d H:i:s', $date_modif);
-    }
-
-    /**
      * @return DateTime
      */
     public function getDateModif(): DateTime
     {
         return $this->date_modif;
+    }
+
+    /**
+     * @param string $date_modif
+     */
+    public function setDateModif(string $date_modif): void
+    {
+        $this->date_modif = DateTime::createFromFormat('Y-m-d H:i:s', $date_modif);
     }
 
     /**

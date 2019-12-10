@@ -149,7 +149,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
         $rub      = new Rubrique($data['libelle'], $data['r_id']);
         $imgs     = explode(',', $data['images']);
         $dateCrea = DateTime::createFromFormat('Y-m-d H:i:s', $data['crea']);
-        $annonce  = new Annonce($user, $rub, $data['en_tete'], $data['corps'], $imgs, $dateCrea, $data['a_id']);
+        $annonce  = new Annonce($user, $rub, $data['en_tete'], $data['corps'], $imgs, $data['visit'], $dateCrea, $data['a_id']);
         $annonce->setDateLimite($data['dlimit']);
         $annonce->setDateModif($data['modif']);
         return $annonce;
@@ -212,7 +212,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
      * @return int
      * @throws DAOException
      */
-    public function update(Annonce $entity)//$id, $entete, $corps
+    public function update(Entity $entity)//$id, $entete, $corps
     {
         try {
             $this->getCnx()
@@ -249,6 +249,35 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             throw new DAOException($e->getMessage());
         }
 
+    }
+
+    /**
+     * @param Annonce $annonce
+     * @return int
+     * @throws DAOException
+     */
+    public function updateVisite(Annonce $annonce)
+    {
+        try {
+            $this->getCnx()
+                 ->beginTransaction();
+            $stmt = $this->getCnx()
+                         ->prepare(
+                             'UPDATE annonce
+                                        SET visites = visites + 1
+                                        WHERE annonce_id = :id');
+            $stmt->bindValue(':id', $annonce->getAnnonceId());//            foreach ($entity->getImgs() as $img) {
+            $stmt->execute();
+            $count = $stmt->rowCount();
+            $this->getCnx()
+                 ->commit();
+            return $count;
+        }
+        catch (Exception $e) {
+            $this->getCnx()
+                 ->rollBack();
+            throw new DAOException($e->getMessage());
+        }
     }
 
     /**

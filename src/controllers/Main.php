@@ -241,8 +241,15 @@ class Main
 
     private function annonceUnique()
     {
-        $annonce = DAO::get('Annonce')->getById($this->param);
-        $this->render('annonceUnique.html.twig', ['session' => $_SESSION, 'annonce' => $annonce]);
+        $annonceDAO = new MySQLAnnonceDAO();
+        try {
+            $annonce = $annonceDAO->getById($this->param);
+            $annonceDAO->updateVisite($annonce);
+            $this->render('annonceUnique.html.twig', ['session' => $_SESSION, 'annonce' => $annonce]);
+        }
+        catch (DAOException $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
+        }
     }
 
     private function annoncesPublisher()
@@ -348,8 +355,9 @@ class Main
             $annonce->setCorps($_POST['corps']);
             $annonce->setDateLimite($_POST['dateLimite']);
             $annonceDAO->update($annonce);
-            $img        = $this->upload($this->param);
-//            $retAnnonce->setImages($img);
+            $this->upload($this->param);
+            $imgs = $imageDAO->getByAnnonce($annonce);
+            $annonce->setImages($imgs);
             $this->render(
                 "annonceUnique.html.twig", [
                 'session' => $_SESSION,
