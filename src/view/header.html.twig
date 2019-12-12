@@ -29,6 +29,11 @@
                         <a class="nav-link" href="?action=ajouterAnnonce&param={{ session.user }}">Ajouter annonce</a>
                     </li>
                 {% endif %}
+                {% if session.isAdmin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="?action=admin">Administrateur</a>
+                    </li>
+                {% endif %}
             </ul>
             <a class="mr-3" href="?action=connection"><i class="fa fa-user fa-2x {#text-white#} myuser" aria-hidden="true"></i></a>
 {#            <form class="form-inline my-2 my-lg-0">#}

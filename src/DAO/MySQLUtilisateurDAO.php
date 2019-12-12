@@ -62,7 +62,7 @@ class MySQLUtilisateurDAO extends DAO
                 } else {
 //                    $_SESSION['errorPass'] = "Mauvais mot de passe";
 //                    header('Location: ?action=connection');
-                    throw new DAOException("Mauvais mot de passe");
+                    throw new DAOException("Nom d'utilisateur ou mot de passe erroné.");
                 }
             } else {
                 throw new DAOException($user->getNom() . " inexistant.");
@@ -113,6 +113,22 @@ class MySQLUtilisateurDAO extends DAO
             $user = $stmt->fetch();
             $this->getCnx()->commit();
             return $user;
+        }
+        catch (Exception $e) {
+            $this->getCnx()->rollBack();
+            throw new DAOException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function getAll()
+    {
+        try {
+            $this->getCnx()->beginTransaction();
+            $stmt = $this->getCnx()->query('SELECT * FROM utilisateur');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+            $data = $stmt->fetchAll();
+            $this->getCnx()->commit();
+            return $data;
         }
         catch (Exception $e) {
             $this->getCnx()->rollBack();

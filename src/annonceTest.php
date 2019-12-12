@@ -26,8 +26,8 @@ try {
     //var_dump(DAO::get('Utilisateur'));
     //Creation user
 //    $user = $userDAO->getByName("Lili");
-    $annonce = $annonceDAO->getById(45);
-    var_dump($annonce);
+//    $annonce = $annonceDAO->getById(45);
+//    var_dump($annonce);
 
     //Creation rubrique
 //    $rub = $rubriqueDAO->getByName("grillepain");
@@ -62,8 +62,8 @@ try {
 
     //Rubrique//////
     //Insert
-    $rub = new Rubrique("grillepain");
-    print_r($rubriqueDAO->insert($rub));
+//    $rub = new Rubrique("grillepain");
+//    print_r($rubriqueDAO->insert($rub));
 
     //Delete
 //    $rub = $rubriqueDAO->getByName("sexe");
@@ -79,8 +79,8 @@ try {
 
     //User///////
     //Insert
-//    $user = new Utilisateur("Lili","Lili", "nono@nono.com");
-//    print_r($userDAO->insert($user));
+    $user = new Utilisateur("moi","moi", "moi@nono.com", 1);
+    print_r($userDAO->insert($user));
 
     //Identifier
 //    $user = new Utilisateur("Non", "Nono");

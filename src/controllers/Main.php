@@ -125,6 +125,9 @@ class Main
                 case "supprimerImage";
                     $this->supprimerImage();
                     break;
+                case "admin";
+                    $this->admin();
+                    break;
                 default :
                     echo "Page inexistante";
             }
@@ -167,7 +170,7 @@ class Main
             catch (DAOException $e) {
 //                $_SESSION['errorPass'] = "Mauvais mot de passe";
 //                header('Location: ?action=connection');
-                $this->render('connection.html.twig', ['session' => $_SESSION, "errorPass" => true]);
+                $this->render('connection.html.twig', [/*'session' => $_SESSION, */"errorPass" => true]);
             }
         } else {
             $view = new VueIdentifierUtilisateur();
@@ -197,7 +200,7 @@ class Main
     public function accueil()
     {
         $rubs = DAO::get('Rubrique')->getAll();
-        $this->render('accueil.html.twig', ['session' => $_SESSION, "rubs" => $rubs]);
+        $this->render('accueil.html.twig', [/*'session' => $_SESSION, */"rubs" => $rubs]);
     }
 
     public function annoncesByRub($rubrique)
@@ -207,7 +210,7 @@ class Main
         try {
             $rub      = DAO::get('Rubrique')->getByName($rubrique);
             $annonces = $annoncesDAO->getByRub($rub);
-            $this->render('listeAnnoncesVisiteur.html.twig', ['session' => $_SESSION, "annonces" => $annonces]);
+            $this->render('listeAnnoncesVisiteur.html.twig', [/*'session' => $_SESSION, */"annonces" => $annonces]);
         }
         catch (DAOException $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
@@ -226,10 +229,10 @@ class Main
                 header('Location: ?action=connection');
             }
             catch (DAOException $e) {
-                $this->render('connection.html.twig', ['session' => $_SESSION, 'errorPass' => true]);
+                $this->render('connection.html.twig', [/*'session' => $_SESSION, */'errorPass' => true]);
             }
         } else {
-            $this->render('connection.html.twig', ['session' => $_SESSION, '']);
+            $this->render('connection.html.twig', [/*'session' => $_SESSION, */'']);
         }
     }
 
@@ -245,7 +248,7 @@ class Main
         try {
             $annonce = $annonceDAO->getById($this->param);
             $annonceDAO->updateVisite($annonce);
-            $this->render('annonceUnique.html.twig', ['session' => $_SESSION, 'annonce' => $annonce]);
+            $this->render('annonceUnique.html.twig', [/*'session' => $_SESSION, */'annonce' => $annonce]);
         }
         catch (DAOException $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
@@ -256,13 +259,13 @@ class Main
     {
         $user     = DAO::get('Utilisateur')->getByName($this->param);
         $annonces = DAO::get('Annonce')->getByUser($user);
-        $this->render('listeAnnoncesPublisher.html.twig', ['session' => $_SESSION, 'annonces' => $annonces]);
+        $this->render('listeAnnoncesPublisher.html.twig', [/*'session' => $_SESSION, */'annonces' => $annonces]);
     }
 
     private function ajoutAnnonce()
     {
         $rubs = DAO::get('Rubrique')->getAll();
-        $this->render("ajoutAnnonce.html.twig", ['session' => $_SESSION, 'rubs' => $rubs]);
+        $this->render("ajoutAnnonce.html.twig", [/*'session' => $_SESSION, */'rubs' => $rubs]);
     }
 
     private function submitAnnonce()
@@ -451,6 +454,27 @@ class Main
         catch (DAOException $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
+        }
+    }
+
+    private function admin()
+    {
+        if ($_SESSION['isAdmin']){
+            $rubDAO = new MySQLRubriqueDAO();
+            $userDAO = new MySQLUtilisateurDAO();
+            try {
+                $rubriques = $rubDAO->getAll();
+                $users = $userDAO->getAll();
+                $this->render('admin.html.twig', [
+                    'rubriques' => $rubriques,
+                    'users' => $users
+                ]);
+            }
+            catch (DAOException $e) {
+                $this->render('404.html.twig',['message' => $e->getMessage()]);
+            }
+        }else{
+            $this->render('404.html.twig', ['message' => 'Vous devez être administrateur pour allez ici >:(']);
         }
     }
 }
