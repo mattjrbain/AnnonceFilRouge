@@ -63,7 +63,7 @@
 {#                        </div>#}
 {#                    </div>#}
 {#                </div>#}
-                <div class="card mb-3">
+                <div class="card mb-3 shadow">
                     {% if annonce.imgs %}
                         <div id="carouselExampleControls" class="carousel slide card-img-top"
                              data-ride="carousel" style="overflow: hidden">
@@ -89,13 +89,13 @@
                                 <span class="sr-only">Next</span>
                             </a>
                         </div>
-                        <img src="{{ annonce.imgSrc }}" class="card-img img-fluid" alt="..." style="max-height: 500px">
+{#                        <img src="{{ annonce.imgSrc }}" class="card-img img-fluid" alt="..." style="max-height: 500px">#}
                     {% else %}
                         <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid"
                              alt="Pas d'image" style="max-height: 500px">
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ annonce.entete }}</h5>
+                        <h5 class="card-title text-capitalize">{{ annonce.entete }}</h5>
                         <p class="card-text">{{ annonce.corps }}</p>
                         <p class="card-text"><small class="text-muted">Mise à jour le {{ annonce.dateModif|date('d/m/Y') }}, visité {{ annonce.nbVisites }} fois</small></p>
                     </div>
