@@ -26,7 +26,7 @@
     background-color: darkblue;
 }
 .bg-lightblue:hover{
-    background-color: deepskyblue;
+    background-color: #74bec9;
 }
 .bg-lightyellow:hover{
     background-color: yellow;
@@ -38,8 +38,8 @@
     background-color: forestgreen;
 }
 
-.bg-lightgreen:active{
-    background-color: green;
+.bg-lightblue:active{
+    background-color: darkblue;
 }
 
 
@@ -52,5 +52,9 @@
 }
 .fa-user:active{
     color: #FFFAF1;
+}
+
+.card-img-top{
+    object-fit: cover;
 }
 

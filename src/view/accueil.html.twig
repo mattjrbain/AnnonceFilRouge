@@ -8,16 +8,14 @@
 
             {% for rub in rubs %}
                 <div class="col-lg-3 col-md-4 mt-3 ">
-                    <div class="card text-center shadow h-100 bg-lightgreen">
+                    <div class="card text-center shadow h-100 bg-lightblue" style="min-width: 225px">
                         <!--                <img class="card-img-top" src="holder.js/100px180/" alt="">-->
                         {#                    <h2><i class="fas fa-car-side fa-3x mt-2"></i></h2>#}
-                        <div class="card-body">
-                            <h1 class="card-title">{{ rub.libelle }}</h1>
-                            <p class="card-text">
-                                <a id="" class="btn btn-primary stretched-link"
-                                   href="?action=annonces&param={{ rub.libelle }}"
-                                   role="button">Consulter</a>
-                            </p>
+                        <div class="card-body d-flex flex-column">
+                            <h1 class="card-text text-break text-capitalize ">{{ rub.libelle }}</h1>
+                            <a id="" class="btn btn-primary stretched-link mt-auto"
+                               href="?action=annonces&param={{ rub.libelle }}"
+                               role="button">Consulter</a>
                         </div>
                     </div>
                 </div>
