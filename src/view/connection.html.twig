@@ -1,7 +1,10 @@
 {% extends 'template.html.twig' %}
 {% block title %}Connection {{ rub.libelle }}{% endblock %}
 {% block body %}
-    {% include 'header.html.twig' %}
+    {% embed 'header.html.twig' %}
+        {% block connectActive %}active{% endblock %}
+    {% endembed %}
+
     <div class="container mb-4">
         <div class="row justify-content-center">
             <div class="card col-md-5  bg-light shadow">

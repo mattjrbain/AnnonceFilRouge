@@ -3,6 +3,9 @@
 {% block body %}
     {% include 'header.html.twig' %}
     <div class="container mb-4">
+        <div class="row justify-content-center mb-2">
+            <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary">Page précédente</a>
+        </div>
         <div class="row justify-content-center">
             {% if message %}
                 <div class="col-md-10">

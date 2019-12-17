@@ -1,0 +1,147 @@
+{% extends 'template.html.twig' %}
+{% block title %}Administration{% endblock %}
+{% block body %}
+    {% block additionnalCSS %}
+        <link rel="stylesheet" href="css/admin.css">
+    {% endblock %}
+
+    {#    {% embed 'header.html.twig' %}#}
+    {#        {% block adminActive %}active{% endblock %}#}
+    {#    {% endembed %}#}
+    <nav class="navbar navbar-dark sticky-top bg-dark {#flex-md-nowrap p-0#}">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="?action=accueil">Annonces.com</a>
+        {#        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">#}
+        <form class="form-inline" method="post" action="?action=ajouterRubrique">
+            <label class="sr-only" for="libelle">Nom de rubrique</label>
+            <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Ajouter rubrique</div>
+                </div>
+                <input type="text" class="form-control" id="libelle" name="libelle"
+                       placeholder="Nom de rubrique">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Ajouter</button>
+        </form>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="?action=logoff">Déconnexion</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="row h-100">
+
+            <div class="col-md-10">
+                <div class="row mt-2">
+                    {% if message %}
+                        <div class="col-md-12">
+                            <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>{{ message }}</strong>
+                            </div>
+
+                            <script>
+                                $(".alert").alert();
+                            </script>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="row ">
+
+                    {% for rub in rubriques %}
+                        <div class="col-xl-3 col-lg-4 col-sm-6 col-xs-12 mt-3 ">
+                            <div class="card text-center shadow h-100 " style="min-width: 225px">
+                                <!--                <img class="card-img-top" src="holder.js/100px180/" alt="">-->
+                                {#                    <h2><i class="fas fa-car-side fa-3x mt-2"></i></h2>#}
+                                <div class="card-body d-flex flex-column">
+                                    <h1 class="card-text text-break text-capitalize ">{{ rub.libelle }}</h1>
+                                    <div class="mt-auto">
+                                        <button class="btn btn-info  btn-block "
+                                           href="?action=updateRub&param={{ rub.rubriqueId }}"
+                                           role="button" data-toggle="modal"
+                                                data-target="#modalMod{{ rub.rubriqueId }}">Modifier</button>
+                                        <br>
+                                        <button class="btn btn-danger btn-block"
+                                           role="button" data-toggle="modal"
+                                                data-target="#modalSuppr{{ rub.rubriqueId }}">Supprimer</button>
+                                    </div>
+                                    {# Modal suppression rubrique #}
+                                    <div class="modal fade" id="modalSuppr{{ rub.rubriqueId }}" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Suppression
+                                                        rubrique</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Voulez-vous supprimer la rubrique "{{ rub.libelle }}" ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Annuler
+                                                    </button>
+                                                    <a id="" class="btn btn-danger"
+                                                       href="?action=deleteRub&param={{ rub.rubriqueId }}"
+                                                       role="button">Supprimer</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# Modal modification rubrique #}
+                                    <div class="modal fade" id="modalMod{{ rub.rubriqueId }}" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Modification
+                                                        rubrique "{{ rub.libelle }}"</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="?action=updateRub&param={{ rub.libelle }}" method="post">
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="libelle"></label>
+                                                            <input type="text"
+                                                                   class="form-control" name="libelle" id="libelle" value="{{ rub.libelle }}"
+                                                                   aria-describedby="helpId" placeholder="">
+                                                            <small id="helpId" class="form-text text-muted">Veuillez saisir le nouveau libellé.</small>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Annuler
+                                                        </button>
+{#                                                        <a id="" class="btn btn-danger"#}
+{#                                                           href="?action=deleteRub&param={{ rub.rubriqueId }}"#}
+{#                                                           role="button">Supprimer</a>#}
+                                                        <button type="submit" class="btn btn-primary">Modifier</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

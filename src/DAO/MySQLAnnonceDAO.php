@@ -30,6 +30,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
 
     /**
      * MySQLAnnonceDAO constructor.
+     * @throws Exception
      */
     public function __construct()
     {
@@ -155,28 +156,28 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
         return $annonce;
     }
 
-    /**
-     * @param array $annonces
-     * @return Annonce[]
-     * @throws Exception
-     */
-    public function hydrateAnnonce(array $annonces)
-    {
-        $annoncesTab = array();
-        foreach ($annonces as $datum) {
-            $annonce = new Annonce();
-            foreach ($datum as $key => $value) {
-                $key    = ucwords($key, "_");
-                $key    = preg_replace("/_/", "", $key);
-                $method = "set" . $key;
-                if (method_exists($annonce, $method)) {
-                    $annonce->$method($value);
-                }
-            }
-            $annoncesTab[] = $annonce;
-        }
-        return $annoncesTab;
-    }
+//    /**
+//     * @param array $annonces
+//     * @return Annonce[]
+//     * @throws Exception
+//     */
+//    public function hydrateAnnonce(array $annonces)
+//    {
+//        $annoncesTab = array();
+//        foreach ($annonces as $datum) {
+//            $annonce = new Annonce();
+//            foreach ($datum as $key => $value) {
+//                $key    = ucwords($key, "_");
+//                $key    = preg_replace("/_/", "", $key);
+//                $method = "set" . $key;
+//                if (method_exists($annonce, $method)) {
+//                    $annonce->$method($value);
+//                }
+//            }
+//            $annoncesTab[] = $annonce;
+//        }
+//        return $annoncesTab;
+//    }
 
     /**
      * @param Entity $annonce

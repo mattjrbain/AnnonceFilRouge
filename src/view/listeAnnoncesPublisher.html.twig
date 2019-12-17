@@ -1,7 +1,9 @@
 {% extends 'template.html.twig' %}
 {% block title %}Annonces {{ session.user }}{% endblock %}
 {% block body %}
-    {% include 'header.html.twig' %}
+    {% embed 'header.html.twig' %}
+        {% block annPublishActive %}active{% endblock %}
+    {% endembed %}
     <div class="container mb-4">
         <div class="row justify-content-center">
             {#                        {{ dump(annonces) }}#}
@@ -89,6 +91,10 @@
                         </div>
                     </div>
                 {% endfor %}
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <strong>Vous n'avez pas encore publié d'annonce.</strong>
+                </div>
             {% endif %}
 
         </div>
