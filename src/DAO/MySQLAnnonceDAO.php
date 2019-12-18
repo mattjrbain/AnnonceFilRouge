@@ -146,7 +146,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
      */
     public function annonceFromArray(array $data)
     {
-        $user     = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['est_admin'], $data['user_id']);
+        $user     = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['confirmation_token'],$data['created_at'],$data['est_admin'], $data['user_id']);
         $rub      = new Rubrique($data['libelle'], $data['r_id']);
         $imgs     = explode(',', $data['images']);
         $dateCrea = DateTime::createFromFormat('Y-m-d H:i:s', $data['crea']);
