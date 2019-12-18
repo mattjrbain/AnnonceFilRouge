@@ -45,11 +45,11 @@
                                                 le {{ annonce.dateModif|date('d/m/Y') }}</small>
                                         </p>
                                         <p>
-                                            <a id="" class="btn btn-info"
+                                            <a id="" class="btn btn-info shadow-sm"
                                                href="?action=modifierAnnonce&param={{ annonce.annonceId }}"
                                                role="button">Modifier</a>
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                            <button type="button" class="btn btn-danger shadow-sm" data-toggle="modal"
                                                     data-target="#exampleModalCenterTest{{ annonce.annonceId }}">
                                                 Supprimer
                                             </button>
@@ -71,10 +71,10 @@
                                                         Voulez-vous supprimer l'annonce "{{ annonce.entete }}" ?
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
+                                                        <button type="button" class="btn btn-secondary shadow-sm"
                                                                 data-dismiss="modal">Annuler
                                                         </button>
-                                                        <a id="" class="btn btn-danger"
+                                                        <a id="" class="btn btn-danger shadow-sm"
                                                            href="?action=supprimerAnnonce&param={{ annonce.annonceId }}"
                                                            role="button">Supprimer</a>
                                                     </div>

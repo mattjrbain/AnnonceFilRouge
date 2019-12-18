@@ -52,7 +52,7 @@
                                    value="{{ annonce.dateLimite|date("Y-m-d") }}">
                         </div>
                         <div class="form-group center">
-                            <button type="submit" class="btn btn-primary">Publier</button>
+                            <button type="submit" class="btn btn-primary shadow-sm">Publier</button>
                         </div>
                         <hr>
                         {#                                                {{ dump(images) }}#}
@@ -68,7 +68,7 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ image.imageSrc }}</h5>
                                                 <p>
-                                                    <a type="button" class="btn btn-danger" data-toggle="modal"
+                                                    <a type="button" class="btn btn-danger shadow-sm" data-toggle="modal"
                                                        data-target="#exampleModalCenter{{ image.imageId }}">
                                                         Supprimer
                                                     </a>
@@ -94,10 +94,10 @@
                                                         Voulez-vous supprimer l'image "{{ image.imageSrc }}" ?
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
+                                                        <button type="button" class="btn btn-secondary shadow-sm"
                                                                 data-dismiss="modal">Annuler
                                                         </button>
-                                                        <a id="" class="btn btn-danger"
+                                                        <a id="" class="btn btn-danger shadow-sm"
                                                            href="?action=supprimerImage&param={{ image.imageId }}"
                                                            role="button">Supprimer</a>
                                                     </div>
@@ -113,7 +113,7 @@
                                 <label for="photo">Ajouter une image</label>
                                 <input type="file" class="form-control-file photo" id="photo" name="photo0" value="">
                             </div>
-                            <button type="button" class="btn btn-info" id="ajoutImage">Ajouter une autre image</button>
+                            <button type="button" class="btn btn-info shadow-sm" id="ajoutImage">Ajouter une autre image</button>
                         </div>
                     </form>
                 </div>

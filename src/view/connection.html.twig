@@ -16,7 +16,7 @@
                             <div class="alert alert-info" role="alert">
                                 <strong>Bonjour {{ session.user }}, vous êtes connecté</strong>
                             </div>
-                            <a class="btn btn-danger" href="?action=logoff">Se Déconnecter</a>
+                            <a class="btn btn-danger shadow-sm" href="?action=logoff">Se Déconnecter</a>
                         {% else %}
                             <div class="alert alert-info" role="alert">
                                 <strong>Vous n'êtes pas connecté</strong>
@@ -53,11 +53,11 @@
 
                             </div>
                             <div class="form-group center">
-                                <button type="submit" class="btn btn-primary">Se connecter</button>
+                                <button type="submit" class="btn btn-primary shadow-sm">Se connecter</button>
                             </div>
                         <hr>
                             <p>Vous n'avez pas de compte ?</p>
-                            <a id="" class="btn btn-success" href="?action=signup" role="button">Créer un
+                            <a id="" class="btn btn-success shadow-sm" href="?action=signup" role="button">Créer un
                                 compte</a>
                         {% endif %}
                     </form>

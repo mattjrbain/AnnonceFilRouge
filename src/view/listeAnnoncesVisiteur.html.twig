@@ -7,7 +7,7 @@
             <h2>Annonces "{{ rub }}"</h2>
         </div>
         <div class="row justify-content-center mb-2 sticky-top">
-            <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary">Page précédente</a>
+            <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary shadow-sm">Page précédente</a>
         </div>
         <div class="row justify-content-center">
             {#                        {{ dump(annonces) }}#}
@@ -28,7 +28,7 @@
                                 <h5 class="card-title">{{ annonce.entete }}</h5>
                                 <p class="card-text"><small class="text-muted">Mise à jour
                                         le {{ annonce.dateModif|date('d/m/Y') }}</small></p>
-                                <a id="" class="btn btn-primary mt-auto stretched-link{#align-self-end #}"
+                                <a id="" class="btn btn-primary mt-auto stretched-link shadow-sm{#align-self-end #}"
                                    href="?action=annonceUnique&param={{ annonce.annonceId }}"
                                    role="button">Consulter</a>
                             </div>

@@ -4,6 +4,8 @@
 namespace Main\Domain;
 
 
+use DateTime;
+
 class Utilisateur extends Entity
 {
     /**
@@ -26,26 +28,48 @@ class Utilisateur extends Entity
      * @var bool
      */
     private $est_admin;
+    /**
+     * @var string
+     */
+    private $confirmation_token;
+    /**
+     * @var DateTime|null
+     */
+    private $confirmed_at;
+    /**
+     * @var DateTime|null
+     */
+    private $created_at;
 
     /**
      * Utilisateur constructor.
-     * @param int $user_id
      * @param string $nom
      * @param string $mot_de_passe
-     * @param bool $est_admin
      * @param string $mail
+     * @param DateTime|null $created_at
+     * @param string $confirmation_token
+     * @param DateTime|null $confirmed_at
+     * @param bool $est_admin
+     * @param int $user_id
      */
-    public function __construct(string $nom = "",
-                                string $mot_de_passe = "",
-                                string $mail = "",
-                                bool $est_admin = false,
-                                int $user_id = -1)
+    public function __construct(
+        string $nom = "",
+        string $mot_de_passe = "",
+        string $mail = "",
+        string $confirmation_token = "",
+        DateTime $created_at = null,
+        DateTime $confirmed_at = null,
+        bool $est_admin = false,
+        int $user_id = -1)
     {
-        $this->user_id      = $user_id;
-        $this->nom          = $nom;
-        $this->mot_de_passe = $mot_de_passe;
-        $this->mail         = $mail;
-        $this->est_admin    = $est_admin;
+        $this->user_id            = $user_id;
+        $this->nom                = $nom;
+        $this->mot_de_passe       = $mot_de_passe;
+        $this->mail               = $mail;
+        $this->confirmation_token = $confirmation_token;
+        $this->est_admin          = $est_admin;
+        $this->confirmed_at       = $confirmed_at;
+        $this->created_at         = $created_at;
     }
 
 
@@ -122,6 +146,49 @@ class Utilisateur extends Entity
     {
         $this->mail = $mail;
     }
+
+    /**
+     * @return string
+     */
+    public function getConfirmationToken(): string
+    {
+        return $this->confirmation_token;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getConfirmedAt(): ?DateTime
+    {
+        return $this->confirmed_at;
+    }
+
+    /**
+     * @param DateTime|null $confirmed_at
+     */
+    public function setConfirmedAt(?DateTime $confirmed_at): void
+    {
+        $this->confirmed_at = $confirmed_at/*DateTime::createFromFormat('Y-m-d H:i:s', $confirmed_at)*/
+        ;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param string $created_at
+     */
+    public function setCreatedAt(string $created_at): void
+    {
+        $this->created_at = DateTime::createFromFormat('Y-m-d H:i:s', $created_at);
+    }
+
+
 
 
 }

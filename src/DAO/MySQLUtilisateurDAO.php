@@ -4,6 +4,7 @@
 namespace Main\DAO;
 
 
+use DateTime;
 use Exception;
 use Main\Domain\Utilisateur;
 use PDO;
@@ -12,7 +13,7 @@ class MySQLUtilisateurDAO extends DAO
 {
     /**
      * @param Utilisateur $utilisateur
-     * @return string last insert id
+     * @return Utilisateur
      * @throws DAOException
      */
     public function insert(Utilisateur $utilisateur)
@@ -20,18 +21,51 @@ class MySQLUtilisateurDAO extends DAO
         try {
             $this->getCnx()->beginTransaction();
             $stmt = $this->getCnx()->prepare(
-                'INSERT INTO utilisateur(nom, mot_de_passe, mail) 
-                                                        VALUES (:nom, :mdp, :mail)');
+                'INSERT INTO utilisateur(nom, mot_de_passe, mail, created_at, confirmation_token) 
+                                                        VALUES (:nom, :mdp, :mail, :created_at, :confirmation_token)');
+            $now = new DateTime();
             $mdp  = password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT);
             $stmt->bindValue(':nom', $utilisateur->getNom());
             $stmt->bindParam(':mdp', $mdp);
             $stmt->bindValue(':mail', $utilisateur->getMail());
+            $stmt->bindValue(':created_at', $now->format('Y-m-d H:i:s'));
+            $stmt->bindValue(':confirmation_token', $utilisateur->getConfirmationToken());
             $stmt->execute();
             $lastId = $this->getCnx()->lastInsertId();
             $this->getCnx()->commit();
             return $this->getById($lastId);
         }
         catch (Exception $e) {
+            $this->getCnx()->rollBack();
+            throw new DAOException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param Utilisateur $utilisateur
+     * @return int
+     * @throws DAOException
+     */
+    public function update(Utilisateur $utilisateur)
+    {
+        try {
+            $this->getCnx()->beginTransaction();
+            $stmt = $this->getCnx()->prepare(
+                'UPDATE utilisateur 
+                            SET nom = :nom,
+                                mail = :mail,
+                                confirmed_at = :confirmed_at
+                                                        WHERE user_id = :id');
+            $stmt->bindValue(':nom', $utilisateur->getNom());
+            $stmt->bindValue(':mail', $utilisateur->getMail());
+            $stmt->bindValue(':confirmed_at', $utilisateur->getConfirmedAt()->format('Y-m-d H:i:s'));
+            $stmt->bindValue(':id', $utilisateur->getUserId());
+            $stmt->execute();
+            $count = $stmt->rowCount();
+            $this->getCnx()->commit();
+            return $count;
+        }
+        catch (DAOException $e) {
             $this->getCnx()->rollBack();
             throw new DAOException($e->getMessage(), $e->getCode());
         }
@@ -99,7 +133,7 @@ class MySQLUtilisateurDAO extends DAO
 
     /**
      * @param int $id
-     * @return mixed
+     * @return Utilisateur
      * @throws DAOException
      */
     public function getById(int $id)

@@ -20,7 +20,7 @@
                 <input type="text" class="form-control" id="libelle" name="libelle"
                        placeholder="Nom de rubrique">
             </div>
-            <button type="submit" class="btn btn-primary mb-2">Ajouter</button>
+            <button type="submit" class="btn btn-primary mb-2 shadow-sm">Ajouter</button>
         </form>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
@@ -58,12 +58,11 @@
                                 <div class="card-body d-flex flex-column">
                                     <h1 class="card-text text-break text-capitalize ">{{ rub.libelle }}</h1>
                                     <div class="mt-auto">
-                                        <button class="btn btn-info  btn-block "
-                                           href="?action=updateRub&param={{ rub.rubriqueId }}"
+                                        <button class="btn btn-info btn-block shadow-sm"
                                            role="button" data-toggle="modal"
                                                 data-target="#modalMod{{ rub.rubriqueId }}">Modifier</button>
                                         <br>
-                                        <button class="btn btn-danger btn-block"
+                                        <button class="btn btn-danger btn-block shadow-sm"
                                            role="button" data-toggle="modal"
                                                 data-target="#modalSuppr{{ rub.rubriqueId }}">Supprimer</button>
                                     </div>
@@ -76,7 +75,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLongTitle">Suppression
                                                         rubrique</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
+                                                    <button type="button" class="close shadow-sm" data-dismiss="modal"
                                                             aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
@@ -85,10 +84,10 @@
                                                     Voulez-vous supprimer la rubrique "{{ rub.libelle }}" ?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
+                                                    <button type="button" class="btn btn-secondary shadow-sm"
                                                             data-dismiss="modal">Annuler
                                                     </button>
-                                                    <a id="" class="btn btn-danger"
+                                                    <a id="" class="btn btn-danger shadow-sm"
                                                        href="?action=deleteRub&param={{ rub.rubriqueId }}"
                                                        role="button">Supprimer</a>
                                                 </div>
@@ -121,13 +120,13 @@
 
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
+                                                        <button type="button" class="btn btn-secondary shadow-sm"
                                                                 data-dismiss="modal">Annuler
                                                         </button>
 {#                                                        <a id="" class="btn btn-danger"#}
 {#                                                           href="?action=deleteRub&param={{ rub.rubriqueId }}"#}
 {#                                                           role="button">Supprimer</a>#}
-                                                        <button type="submit" class="btn btn-primary">Modifier</button>
+                                                        <button type="submit" class="btn btn-primary shadow-sm">Modifier</button>
                                                     </div>
                                                 </form>
                                             </div>

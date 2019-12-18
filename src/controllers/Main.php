@@ -4,6 +4,8 @@
 namespace Main\controllers;
 
 
+use DateInterval;
+use DateTime;
 use Exception;
 use Main\DAO\DAO;
 use Main\DAO\DAOException;
@@ -139,6 +141,9 @@ class Main
                     break;
                 case "updateRub";
                     $this->updateRub();
+                    break;
+                case "confirm";
+                    $this->confirm();
                     break;
                 default :
                     echo "Page inexistante";
@@ -435,19 +440,19 @@ class Main
         $annonceDAO = new MySQLAnnonceDAO();
         try {
             $annonce = $annonceDAO->getById($this->param);
-            if ($annonce->getUser()->getNom() == isset($_SESSION['user'])){
-            $annonceDAO->delete($annonce);
-            $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
-            $annonces = DAO::get('Annonce')->getByUser($user);
-            $this->render(
-                "listeAnnoncesPublisher.html.twig", [
-                'session'  => $_SESSION,
-                'annonces' => $annonces,
-                'message'  => "L'annonce a bien été supprimée.",
-                'type'     => 'success'
-            ]);
+            if ($annonce->getUser()->getNom() == isset($_SESSION['user'])) {
+                $annonceDAO->delete($annonce);
+                $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
+                $annonces = DAO::get('Annonce')->getByUser($user);
+                $this->render(
+                    "listeAnnoncesPublisher.html.twig", [
+                    'session'  => $_SESSION,
+                    'annonces' => $annonces,
+                    'message'  => "L'annonce a bien été supprimée.",
+                    'type'     => 'success'
+                ]);
 
-            }else{
+            } else {
                 $this->render('404.html.twig', ['message' => 'Vous devez être le détenteur de cette annonce pour la modifier.']);
             }
         }
@@ -466,13 +471,18 @@ class Main
 
     private function createAccount()
     {
-        $user    = new Utilisateur($_POST['nom'], $_POST['password'], $_POST['mail']);
-        $userDAO = new MySQLUtilisateurDAO();
+        $confirmation_token = uniqid();
+        $user               = new Utilisateur($_POST['nom'], $_POST['password'], $_POST['mail'], $confirmation_token);
+        $userDAO            = new MySQLUtilisateurDAO();
         try {
-            $userDAO->insert($user);
+            $inserted = $userDAO->insert($user);
+            $userId = $inserted->getUserId();
+            $link     = "<a href=\"http://annoncesfilrouge/?action=confirm&param=$confirmation_token&userId=$userId\">ce lien</a>";
+
+            mail($user->getMail(), "Confirmez votre adresse", "Pour fiinaliser la création de votre compte, merci de cliquer sur $link :  ");
             $this->render(
                 'signup.html.twig', [
-                'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.' . "\n" . ' Vous pouvez vous connecter.',
+                'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.' . "\n" . ' Un mail de confirmation vous a été envoyé.',
                 'type'    => 'success'
             ]);
         }
@@ -483,6 +493,33 @@ class Main
                 'type'    => 'warning'
             ]);
         }
+    }
+
+    private function confirm()
+    {
+        $userDAO = new MySQLUtilisateurDAO();
+        try {
+            $user = $userDAO->getById($_GET['userId']);
+            if ($this->param == $user->getConfirmationToken()){
+                if ($user->getConfirmedAt() > $user->getCreatedAt()->add(new DateInterval('P2D'))) {
+                    $user->setConfirmedAt(new DateTime());
+                    $userDAO->update($user);
+                    $this->render(
+                        'signup.html.twig', [
+                        'message' => 'Bienvenue, ' . $user->getNom() . ', votre email est bien confirmé.' . "\n" . ' Vous pouvez maintenant vous connecter.',
+                        'type'    => 'success'
+                    ]);
+                } else {
+                    $this->render('404.html.twig', ['message' => 'Ce lien est périmé.']);
+                }
+            }else{
+                $this->render('404.html.twig', ['message' => 'Ceci n\'est pas le bon lien.']);
+            }
+        }
+        catch (Exception $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
+        }
+
     }
 
     private function supprimerImage()
@@ -532,11 +569,6 @@ class Main
         }
     }
 
-    public function showRubriquesAction()
-    {
-        return DAO::get('Rubrique')->getAll();
-    }
-
     /**
      * @throws Exception
      */
@@ -554,8 +586,8 @@ class Main
                     'admin.html.twig', [
                     'rubriques' => $rubriques,
                     'users'     => $users,
-                    'message' => "La rubrique a bien été supprimée .",
-                    'type'    => 'success'
+                    'message'   => "La rubrique a bien été supprimée .",
+                    'type'      => 'success'
                 ]);
             }
             catch (Exception $e) {
@@ -574,8 +606,8 @@ class Main
             $rubDAO  = new MySQLRubriqueDAO();
             $userDAO = new MySQLUtilisateurDAO();
             try {
-                $users     = $userDAO->getAll();
-                $rub = $rubDAO->getByName($this->param);
+                $users = $userDAO->getAll();
+                $rub   = $rubDAO->getByName($this->param);
                 $rub->setLibelle($_POST['libelle']);
                 $rubDAO->update($rub);
                 $rubriques = $rubDAO->getAll();
@@ -583,8 +615,8 @@ class Main
                     'admin.html.twig', [
                     'rubriques' => $rubriques,
                     'users'     => $users,
-                    'message' => "La rubrique a bien été modifiée .",
-                    'type'    => 'success'
+                    'message'   => "La rubrique a bien été modifiée .",
+                    'type'      => 'success'
                 ]);
             }
             catch (DAOException $e) {
@@ -595,5 +627,13 @@ class Main
             $this->render('404.html.twig', ['message' => 'Vous devez être administrateur pour allez ici >:(']);
         }
     }
+
+
+
+    public function showRubriquesAction()
+    {
+        return DAO::get('Rubrique')->getAll();
+    }
+
 
 }
