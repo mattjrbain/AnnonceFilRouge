@@ -281,7 +281,7 @@ class Main
                 header('Location: ?action=connection');
             }
             catch (DAOException $e) {
-                $this->render('connection.html.twig', [/*'session' => $_SESSION, */ 'errorPass' => true]);
+                $this->render('connection.html.twig', [/*'session' => $_SESSION, */ 'errorPass' => true, 'message' => $e->getMessage()]);
             }
         } else {
             $this->render('connection.html.twig', [/*'session' => $_SESSION, */ '']);
@@ -501,7 +501,10 @@ class Main
         try {
             $user = $userDAO->getById($_GET['userId']);
             if ($this->param == $user->getConfirmationToken()){
-                if ($user->getConfirmedAt() > $user->getCreatedAt()->add(new DateInterval('P2D'))) {
+                $confirm = new DateTime();
+                $obsoleteDate = $user->getCreatedAt()->add(new DateInterval('P2D'));
+//                if ($user->getConfirmedAt() > $user->getCreatedAt()->add(new DateInterval('P2D'))) {
+                if ($confirm < $obsoleteDate) {
                     $user->setConfirmedAt(new DateTime());
                     $userDAO->update($user);
                     $this->render(

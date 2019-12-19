@@ -56,20 +56,21 @@ class Utilisateur extends Entity
         string $nom = "",
         string $mot_de_passe = "",
         string $mail = "",
-        string $confirmation_token = "",
+        string $confirmation_token = null,
         DateTime $created_at = null,
-        DateTime $confirmed_at = null,
         bool $est_admin = false,
-        int $user_id = -1)
+        int $user_id = -1,
+        DateTime $confirmed_at = null
+        )
     {
         $this->user_id            = $user_id;
         $this->nom                = $nom;
         $this->mot_de_passe       = $mot_de_passe;
         $this->mail               = $mail;
         $this->confirmation_token = $confirmation_token;
+        $this->created_at         = $created_at;
         $this->est_admin          = $est_admin;
         $this->confirmed_at       = $confirmed_at;
-        $this->created_at         = $created_at;
     }
 
 
@@ -156,11 +157,11 @@ class Utilisateur extends Entity
     }
 
     /**
-     * @return DateTime|null
+     * @return mixed
      */
-    public function getConfirmedAt(): ?DateTime
+    public function getConfirmedAt()
     {
-        return $this->confirmed_at;
+        return DateTime::createFromFormat('Y-m-d H:i:s', $this->confirmed_at) ;
     }
 
     /**
@@ -177,7 +178,7 @@ class Utilisateur extends Entity
      */
     public function getCreatedAt(): ?DateTime
     {
-        return $this->created_at;
+        return DateTime::createFromFormat('Y-m-d H:i:s', $this->created_at);
     }
 
     /**

@@ -6,44 +6,67 @@
     {% endembed %}
     <div class="container mb-4">
         <div class="row justify-content-center">
-            <div class="col-md-5 card my-3 bg-light shadow">
+            <div class="col-md-10 card my-3 bg-light shadow">
                 <div class="card-block m-3">
                     <h3 class="card-title text-center">Ecrire une annonce</h3>
                     <hr>
-                    <form action="?action=submitAnnonce&param={{ session.user }}" method="post" id="addAnnonce" enctype="multipart/form-data" class="needs-validation" novalidate>
-                        <div class="form-group">
-                            <label for="">Rubrique</label>
-                            <select class="form-control" name="rubrique" id="">
-                                {% for rub in rubs %}
-                                    <option value="{{ rub.libelle }}">{{ rub.libelle }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="entete">Entête</label>
-                            <input type="text" class="form-control toCheck" name="entete" id="entete" aria-describedby="helpId"
-                                   placeholder="" required>
+                    <form action="?action=submitAnnonce&param={{ session.user }}" method="post" id="addAnnonce"
+                          enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Rubrique</label>
+                                    <select class="form-control" name="rubrique" id="">
+                                        {% for rub in rubs %}
+                                            <option value="{{ rub.libelle }}">{{ rub.libelle }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="entete">Entête</label>
+                                    <input type="text" class="form-control toCheck" name="entete" id="entete"
+                                           aria-describedby="helpId"
+                                           placeholder="" required>
 
-                        </div>
-                        <div class="form-group">
-                            <label for="corps">Description</label>
-                            <textarea class="form-control toCheck" name="corps" id="corps" rows="3" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="corps">Description</label>
+                                    <textarea class="form-control toCheck" name="corps" id="corps" rows="3"
+                                              required></textarea>
 
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateLimite">Date de validité</label>
+                                    <input type="date"
+                                           class="form-control" name="dateLimite" id="dateLimite"
+                                           aria-describedby="helpId"
+                                           placeholder="">
+                                </div>
+                                <div class="form-group center">
+                                    <button type="submit" class="btn btn-primary shadow-sm">Publier</button>
+                                </div>
+                            </div>
+                            {#                            <hr>#}
+                            {#                        <div class="form-group" id="divAjoutImage">#}
+                            {#                            <label for="photo">Ajouter une image</label>#}
+                            {#                            <img id="preview0" />#}
+                            {#                            <input data-preview=".preview" type="file" class="form-control-file photo" id="photo" name="photo0" value="">#}
+                            {#                        </div>#}
+                            {#                        <button type="button" class="btn btn-info shadow-sm" id="ajoutImage">Ajouter une autre image</button>#}
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-sm-12 imgUp">
+                                        <div class="imagePreview"></div>
+                                        <label class="btn btn-primary">
+                                            Télécharger<input type="file" class="uploadFile img-fluid photo" value="Upload Photo" name="photo0"
+                                                         style="width: 0;height: 0;overflow: hidden;">
+                                        </label>
+                                        <i class="fa fa-times del"></i>
+                                    </div><!-- col-2 -->
+                                    <i class="fa fa-plus imgAdd"></i>
+                                </div>
+                            </div><!-- row -->
                         </div>
-                        <div class="form-group">
-                            <label for="dateLimite">Date de validité</label>
-                            <input type="date"
-                                   class="form-control" name="dateLimite" id="dateLimite" aria-describedby="helpId" placeholder="">
-                        </div>
-                        <div class="form-group center">
-                            <button type="submit" class="btn btn-primary shadow-sm">Publier</button>
-                        </div>
-                        <hr>
-                        <div class="form-group" id="divAjoutImage">
-                            <label for="photo">Ajouter une image</label>
-                            <input type="file" class="form-control-file photo" id="photo" name="photo0" value="">
-                        </div>
-                        <button type="button" class="btn btn-info shadow-sm" id="ajoutImage">Ajouter une autre image</button>
                     </form>
                 </div>
             </div>
@@ -53,22 +76,57 @@
 
 {% endblock %}
 {% block additionnalJS %}
+    {#   https://codepen.io/shubhamc_007/pen/zNJWPM   #}
     <script src="js/validationAjout.js"></script>
     <script>
         // let compteurImage = 1;
-        let compteurImage = $(".photo").length;
-
-        // if (compteurImage < 4) {
-        //     $("#ajoutImage").click(function () {
-        //         $("#divAjoutImage").append('<input type="file" class="form-control-file" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
+        // let compteurImage = $(".photo").length;
+        // $("#ajoutImage").click(function () {
+        //     if (compteurImage < 4){
+        //         $("#divAjoutImage").append('<img id="preview'+ compteurImage +'" /><input data-preview=".preview" type="file" class="form-control-file photo" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
         //         compteurImage++;
-        //     });
-        // }
-        $("#ajoutImage").click(function () {
-            if (compteurImage < 4){
-                $("#divAjoutImage").append('<input type="file" class="form-control-file photo" id="photo' + compteurImage +'" name="photo' + compteurImage +'">');
+        //     }
+        //     $(function() {
+        //         $("input[data-preview]").change(function() {
+        //             let input	= $(this);
+        //             let oFReader	= new FileReader();
+        //             oFReader.readAsDataURL(this.files[0]);
+        //             oFReader.onload	= function(oFREvent) {
+        //                 $('#preview'+compteurImage).attr('src', oFREvent.target.result);
+        //             };
+        //         });
+        //     })
+        // });
+
+        let compteurImage = $(".photo").length;
+        $(".imgAdd").click(function () {
+            if (compteurImage < 3) {
+                $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-12 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Télécharger<input type="file" class="uploadFile img" value="Upload Photo" name="photo'+ compteurImage +'" style="width:0;height:0;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
                 compteurImage++;
             }
-        })
+        });
+        $(document).on("click", "i.del", function () {
+            $(this).parent().remove();
+            compteurImage--;
+        });
+        $(function () {
+            $(document).on("change", ".uploadFile", function () {
+                let uploadFile = $(this);
+                let files = !!this.files ? this.files : [];
+                if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+
+                if (/^image/.test(files[0].type)) { // only image file
+                    let reader = new FileReader(); // instance of the FileReader
+                    reader.readAsDataURL(files[0]); // read the local file
+
+                    reader.onloadend = function () { // set image data as background of div
+                        //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
+                        uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url(" + this.result + ")");
+                    }
+                }
+
+            });
+        });
+
     </script>
 {% endblock %}

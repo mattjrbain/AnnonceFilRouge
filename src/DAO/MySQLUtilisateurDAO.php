@@ -88,11 +88,17 @@ class MySQLUtilisateurDAO extends DAO
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
             if ($data = $stmt->fetch()) {
                 if (password_verify($user->getMotDePasse(), $data->getMotDePasse())) {
-                    $this->getCnx()->commit();
-                    $_SESSION['user'] = $data->getNom();
-                    $_SESSION['isAdmin'] = $data->isEstAdmin();
-                    unset($_SESSION['errorPass']);
-                    return $data;//->getUserId();
+                    $confirm = $data->getConfirmedAt();
+                    if ($data->getConfirmedAt() != null || $data->getConfirmedAt() != false) {
+                        $this->getCnx()->commit();
+                        $_SESSION['user']    = $data->getNom();
+                        $_SESSION['isAdmin'] = $data->isEstAdmin();
+                        unset($_SESSION['errorPass']);
+                        return $data;//->getUserId();
+                    } else {
+                        throw new DAOException("Vous n'avez pas confirmé votre adresse mail. Votre compte n'est pas encore activé.");
+
+                    }
                 } else {
 //                    $_SESSION['errorPass'] = "Mauvais mot de passe";
 //                    header('Location: ?action=connection');
@@ -114,7 +120,7 @@ class MySQLUtilisateurDAO extends DAO
      * @throws DAOException
      */
     public function getByName(string $name)
-    {
+    {//todo: make userDAO again considering dates
         try {
             $this->getCnx()->beginTransaction();
             $stmt = $this->getCnx()->prepare('SELECT * FROM utilisateur WHERE nom = :nom');

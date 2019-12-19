@@ -119,7 +119,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                              'SELECT a.annonce_id as a_id, a.en_tete, a.corps, a.date_creation as crea, 
                                                         a.date_modif as modif, a.date_limite as dlimit, a.visites as visit,
                                                         group_concat(image_src) AS images,
-                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin,
+                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin, confirmation_token, created_at,
                                                         r.rubrique_id as r_id, libelle
                                                 FROM annonce AS a
                                                 INNER JOIN image i ON a.annonce_id = i.annonce_id
@@ -328,7 +328,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                              'SELECT a.annonce_id as a_id, a.en_tete, a.corps, a.date_creation as crea, 
                                                         a.date_modif as modif, a.date_limite as dlimit, a.visites as visit,
                                                         group_concat(image_src) AS images,
-                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin,
+                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin,  confirmation_token, created_at,
                                                         r.rubrique_id as r_id, libelle
                                                 FROM annonce AS a
                                                 LEFT JOIN image i ON a.annonce_id = i.annonce_id
@@ -371,7 +371,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                              'SELECT a.annonce_id as a_id, a.en_tete, a.corps, a.date_creation as crea, 
                                                         a.date_modif as modif, a.date_limite as dlimit, a.visites as visit,
                                                         group_concat(image_src) AS images,
-                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin,
+                                                        u.user_id, nom, mot_de_passe as mdp, mail, confirmation_token, created_at, est_admin,
                                                         r.rubrique_id as r_id, libelle
                                                 FROM annonce AS a
                                                 LEFT JOIN image i ON a.annonce_id = i.annonce_id
