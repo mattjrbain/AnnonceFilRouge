@@ -79,14 +79,19 @@ try {
 
     //User///////
     //Insert
-    $user = new Utilisateur("moi","moi", "moi@nono.com", 1);
-    print_r($userDAO->insert($user));
+//    $user = new Utilisateur("moi","moi", "moi@nono.com", 1);
+//    print_r($userDAO->insert($user));
+
+    //GetBy
+//    $user = $userDAO->getByName('lala');
+    $user = $userDAO->getById(15);
+    var_dump($user->getCreatedAt());
 
     //Identifier
 //    $user = new Utilisateur("Non", "Nono");
 //    print_r($userDAO->identifier($user));
 }
-catch (DAOException $e) {
+catch (Throwable /*DAOException*/ $e) {
     $this->render('404.html.twig', ['message' => $e->getMessage()]);
 } catch (Exception $e) {
     $this->render('404.html.twig', ['message' => $e->getMessage()]);

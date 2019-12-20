@@ -21,6 +21,7 @@ use Main\Domain\Utilisateur;
 //use Main\view\VueAjouterRubrique;
 //use Main\view\VueIdentifierUtilisateur;
 //use Main\view\VueListerRubriques;
+use Throwable;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -201,7 +202,7 @@ class Main
                         'users'     => $users
                     ]);
                 }
-                catch (DAOException $e) {
+                catch (/*DAOException*/ Throwable $e) {
                     $this->render('404.html.twig', ['message' => $e->getMessage()]);
                 }
             } else {
@@ -260,7 +261,7 @@ class Main
             $annonces = $annoncesDAO->getByRub($rub);
             $this->render('listeAnnoncesVisiteur.html.twig', ["annonces" => $annonces, "rub" => $rubrique]);
         }
-        catch (DAOException $e) {
+        catch (/*DAOException*/Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
     }
@@ -280,7 +281,7 @@ class Main
                 $userDAO->identifier($user);
                 header('Location: ?action=connection');
             }
-            catch (DAOException $e) {
+            catch (/*DAOException*/Throwable $e) {
                 $this->render('connection.html.twig', [/*'session' => $_SESSION, */ 'errorPass' => true, 'message' => $e->getMessage()]);
             }
         } else {
@@ -308,7 +309,7 @@ class Main
             $annonceDAO->updateVisite($annonce);
             $this->render('annonceUnique.html.twig', [/*'session' => $_SESSION, */ 'annonce' => $annonce]);
         }
-        catch (DAOException $e) {
+        catch (/*DAOException*/Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
     }
@@ -348,7 +349,7 @@ class Main
                 'type'    => 'success'
             ]);
         }
-        catch (DAOException $e) {
+        catch (/*DAOException*/Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
         //print_r($_POST);
@@ -456,7 +457,7 @@ class Main
                 $this->render('404.html.twig', ['message' => 'Vous devez être le détenteur de cette annonce pour la modifier.']);
             }
         }
-        catch (DAOException $e) {
+        catch (/*DAOException*/Throwable $e) {
             $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
             $annonces = DAO::get('Annonce')->getByUser($user);
             $this->render(
@@ -477,7 +478,7 @@ class Main
         try {
             $inserted = $userDAO->insert($user);
             $userId = $inserted->getUserId();
-            $link     = "<a href=\"http://annoncesfilrouge/?action=confirm&param=$confirmation_token&userId=$userId\">ce lien</a>";
+            $link     = "<a href=\"http://annonces/?action=confirm&param=$confirmation_token&userId=$userId\">ce lien</a>";
 
             mail($user->getMail(), "Confirmez votre adresse", "Pour fiinaliser la création de votre compte, merci de cliquer sur $link :  ");
             $this->render(
@@ -486,7 +487,7 @@ class Main
                 'type'    => 'success'
             ]);
         }
-        catch (DAOException $e) {
+        catch (/*DAOException*/Throwable $e) {
             $this->render(
                 'signup.html.twig', [
                 'message' => 'Le nom "' . $_POST['nom'] . '" est déjà utilisé.',
@@ -544,7 +545,7 @@ class Main
                 'type'    => 'success'
             ]);
         }
-        catch (DAOException $e) {
+        catch (/*DAOException*/Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
         }
@@ -564,7 +565,7 @@ class Main
                     'users'     => $users
                 ]);
             }
-            catch (DAOException $e) {
+            catch (/*DAOException*/Throwable $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
             }
         } else {
@@ -622,7 +623,7 @@ class Main
                     'type'      => 'success'
                 ]);
             }
-            catch (DAOException $e) {
+            catch (/*DAOException*/Throwable $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
             }
 

@@ -110,34 +110,6 @@ class Annonce extends Entity
     }
 
     /**
-     * @param int $annonce_id
-     */
-    public function setAnnonceId(int $annonce_id): void
-    {
-        $this->annonce_id = $annonce_id;
-    }
-
-    /**
-     * !!!Sets user from user id , does not set user id !!!
-     *
-     * @param int $userId
-     */
-    public function setUserId(int $userId): void
-    {
-        $this->user = DAO::get('Utilisateur')->getById($userId);
-    }
-
-    /**
-     * !!! Sets "rubrique" from its id !!!
-     *
-     * @param int $rubriqueId
-     */
-    public function setRubriqueId(int $rubriqueId): void
-    {
-        $this->rubrique = DAO::get('Rubrique')->getById($rubriqueId);
-    }
-
-    /**
      * @return string
      */
     public function getEnTete(): string

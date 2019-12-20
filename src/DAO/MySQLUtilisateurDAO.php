@@ -65,7 +65,7 @@ class MySQLUtilisateurDAO extends DAO
             $this->getCnx()->commit();
             return $count;
         }
-        catch (DAOException $e) {
+        catch (Exception $e) {
             $this->getCnx()->rollBack();
             throw new DAOException($e->getMessage(), $e->getCode());
         }
@@ -85,10 +85,10 @@ class MySQLUtilisateurDAO extends DAO
                                                         WHERE nom = :nom');
             $stmt->bindValue(':nom', $user->getNom());
             $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
-            if ($data = $stmt->fetch()) {
+//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            if ($data = $this->userFromArray($stmt->fetch())) {
                 if (password_verify($user->getMotDePasse(), $data->getMotDePasse())) {
-                    $confirm = $data->getConfirmedAt();
                     if ($data->getConfirmedAt() != null || $data->getConfirmedAt() != false) {
                         $this->getCnx()->commit();
                         $_SESSION['user']    = $data->getNom();
@@ -126,15 +126,24 @@ class MySQLUtilisateurDAO extends DAO
             $stmt = $this->getCnx()->prepare('SELECT * FROM utilisateur WHERE nom = :nom');
             $stmt->bindParam(':nom', $name);
             $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $user = $stmt->fetch();
             $this->getCnx()->commit();
-            return $user;
+            return $this->userFromArray($user);
         }
         catch (Exception $e) {
             $this->getCnx()->rollBack();
             throw new DAOException($e->getMessage(), $e->getCode());
         }
+    }
+
+    public function userFromArray(array $data)
+    {
+        $created_at = DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']) ?? null;
+        $confirmed_at = $data['confirmed_at'] ? DateTime::createFromFormat('Y-m-d H:i:s', $data['confirmed_at']) : null;
+        return new Utilisateur($data['nom'], $data['mot_de_passe'], $data['mail'], $data['confirmation_token'],
+                               $created_at, $data['est_admin'], $data['user_id'], $confirmed_at);
     }
 
     /**
@@ -149,10 +158,11 @@ class MySQLUtilisateurDAO extends DAO
             $stmt = $this->getCnx()->prepare('SELECT * FROM utilisateur WHERE user_id = :id');
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $user = $stmt->fetch();
             $this->getCnx()->commit();
-            return $user;
+            return $this->userFromArray($user);
         }
         catch (Exception $e) {
             $this->getCnx()->rollBack();

@@ -146,7 +146,11 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
      */
     public function annonceFromArray(array $data)
     {
-        $user     = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['confirmation_token'],$data['created_at'],$data['est_admin'], $data['user_id']);
+        //todo: à modifier quand tous les users sont crées correctement
+//        $created_at = DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']) ?? null;
+        $created_at = $data['created_at'] ? DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']) : null;
+//        $confirmed_at = $data['confirmed_at'] ? DateTime::createFromFormat('Y-m-d H:i:s', $data['confirmed_at']) : null;
+        $user     = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['confirmation_token'],$created_at,$data['est_admin'], $data['user_id']/*, $confirmed_at*/);
         $rub      = new Rubrique($data['libelle'], $data['r_id']);
         $imgs     = explode(',', $data['images']);
         $dateCrea = DateTime::createFromFormat('Y-m-d H:i:s', $data['crea']);
@@ -155,29 +159,6 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
         $annonce->setDateModif($data['modif']);
         return $annonce;
     }
-
-//    /**
-//     * @param array $annonces
-//     * @return Annonce[]
-//     * @throws Exception
-//     */
-//    public function hydrateAnnonce(array $annonces)
-//    {
-//        $annoncesTab = array();
-//        foreach ($annonces as $datum) {
-//            $annonce = new Annonce();
-//            foreach ($datum as $key => $value) {
-//                $key    = ucwords($key, "_");
-//                $key    = preg_replace("/_/", "", $key);
-//                $method = "set" . $key;
-//                if (method_exists($annonce, $method)) {
-//                    $annonce->$method($value);
-//                }
-//            }
-//            $annoncesTab[] = $annonce;
-//        }
-//        return $annoncesTab;
-//    }
 
     /**
      * @param Entity $annonce
@@ -209,11 +190,11 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
     }
 
     /**
-     * @param Entity $entity
+     * @param Annonce $entity
      * @return int
      * @throws DAOException
      */
-    public function update(Entity $entity)//$id, $entete, $corps
+    public function update(Annonce $entity)//$id, $entete, $corps
     {
         try {
             $this->getCnx()
@@ -452,6 +433,27 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             throw new DAOException($e->getMessage());
         }
     }
-
+//    /**
+//     * @param array $annonces
+//     * @return Annonce[]
+//     * @throws Exception
+//     */
+//    public function hydrateAnnonce(array $annonces)
+//    {
+//        $annoncesTab = array();
+//        foreach ($annonces as $datum) {
+//            $annonce = new Annonce();
+//            foreach ($datum as $key => $value) {
+//                $key    = ucwords($key, "_");
+//                $key    = preg_replace("/_/", "", $key);
+//                $method = "set" . $key;
+//                if (method_exists($annonce, $method)) {
+//                    $annonce->$method($value);
+//                }
+//            }
+//            $annoncesTab[] = $annonce;
+//        }
+//        return $annoncesTab;
+//    }
 
 }

@@ -157,20 +157,19 @@ class Utilisateur extends Entity
     }
 
     /**
-     * @return mixed
+     * @return DateTime|null
      */
-    public function getConfirmedAt()
+    public function getConfirmedAt(): ?DateTime
     {
-        return DateTime::createFromFormat('Y-m-d H:i:s', $this->confirmed_at) ;
+        return $this->confirmed_at;
     }
 
     /**
-     * @param DateTime|null $confirmed_at
+     * @param DateTime $confirmed_at
      */
-    public function setConfirmedAt(?DateTime $confirmed_at): void
+    public function setConfirmedAt(DateTime $confirmed_at): void
     {
-        $this->confirmed_at = $confirmed_at/*DateTime::createFromFormat('Y-m-d H:i:s', $confirmed_at)*/
-        ;
+        $this->confirmed_at = $confirmed_at;
     }
 
     /**
@@ -178,7 +177,7 @@ class Utilisateur extends Entity
      */
     public function getCreatedAt(): ?DateTime
     {
-        return DateTime::createFromFormat('Y-m-d H:i:s', $this->created_at);
+        return $this->created_at;
     }
 
     /**
