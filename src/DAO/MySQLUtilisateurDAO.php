@@ -175,10 +175,17 @@ class MySQLUtilisateurDAO extends DAO
         try {
             $this->getCnx()->beginTransaction();
             $stmt = $this->getCnx()->query('SELECT * FROM utilisateur');
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $data = $stmt->fetchAll();
             $this->getCnx()->commit();
-            return $data;
+//            return $data;
+            $users = array();
+            foreach ($data as $datum) {
+                $users[] = $this->userFromArray($datum);
+            }
+            return $users;
+
         }
         catch (Exception $e) {
             $this->getCnx()->rollBack();

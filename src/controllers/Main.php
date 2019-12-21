@@ -83,15 +83,9 @@ class Main
     {
         if (!empty($this->actionGet)) {
             switch ($this->actionGet) {
-//                case "afficherRubriques";
-//                    $this->afficherRubriques();
-//                    break;
                 case "ajouterRubrique";
                     $this->ajouterRubrique();
                     break;
-//                case "identifierUtilisateur";
-//                    $this->identifierUtilisateur();
-//                    break;
                 case "accueil";
                     $this->accueil();
                     break;
@@ -152,36 +146,6 @@ class Main
         } else $this->accueil();
     }
 
-//    /**
-//     *
-//     */
-//    public function afficherRubriques()
-//    {
-//        $rubs = DAO::get('Rubrique')->getAll();
-//        $view = new VueListerRubriques();
-//        $view->setContenu($rubs);
-//        $view->show();
-//    }
-//
-
-//    private function identifierUtilisateur()
-//    {
-//        if (isset($_POST) && !empty($_POST)) {
-//            $userDAO = new MySQLUtilisateurDAO();
-//            $user    = new Utilisateur($_POST['name'], $_POST['pass']);
-//            try {
-//                $userDAO->identifier($user);
-//            }
-//            catch (DAOException $e) {
-////                $_SESSION['errorPass'] = "Mauvais mot de passe";
-////                header('Location: ?action=connection');
-//                $this->render('connection.html.twig', [/*'session' => $_SESSION, */"errorPass" => true]);
-//            }
-//        } else {
-//            $view = new VueIdentifierUtilisateur();
-//            $view->show();
-//        }
-//    }
 
     private function ajouterRubrique()
     {
@@ -480,7 +444,7 @@ class Main
             $userId = $inserted->getUserId();
             $link     = "<a href=\"http://annonces/?action=confirm&param=$confirmation_token&userId=$userId\">ce lien</a>";
 
-            mail($user->getMail(), "Confirmez votre adresse", "Pour fiinaliser la création de votre compte, merci de cliquer sur $link :  ");
+            mail($user->getMail(), "Confirmez votre adresse", "Pour terminer la création de votre compte, merci de cliquer sur $link :  ");
             $this->render(
                 'signup.html.twig', [
                 'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.' . "\n" . ' Un mail de confirmation vous a été envoyé.',

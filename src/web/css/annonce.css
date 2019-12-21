@@ -3,37 +3,26 @@
 }
 
 /*Background hover */
-.bg-yellow:hover{
-    background-color: yellow;
-}
 
-.bg-blue:hover{
-    background-color: dodgerblue;
-}
-.bg-red:hover{
-    background-color: red;
-}
-.bg-violet:hover{
-    background-color: darkviolet;
-}
-.bg-mdviolet:hover{
-    background-color: mediumvioletred;
-}
-.bg-orange:hover{
-    background-color: darkorange;
-}
+/*noinspection CssUnusedSymbol*/
 .bg-darkblue:hover{
     background-color: darkblue;
 }
 .bg-lightblue:hover{
     background-color: #74bec9;
 }
+
+/*noinspection CssUnusedSymbol*/
 .bg-lightyellow:hover{
     background-color: yellow;
 }
+
+/*noinspection CssUnusedSymbol*/
 .bg-lightgreen:hover{
     background-color: darkseagreen;
 }
+
+/*noinspection CssUnusedSymbol*/
 .bg-green:hover{
     background-color: forestgreen;
 }
