@@ -84,18 +84,14 @@ try {
 
     //GetBy
 //    $user = $userDAO->getByName('lala');
-    $user = $userDAO->getById(15);
-    var_dump($user->getCreatedAt());
+    $users = $userDAO->getByName('kiki');
+    var_dump($users);
 
     //Identifier
 //    $user = new Utilisateur("Non", "Nono");
 //    print_r($userDAO->identifier($user));
 }
 catch (Throwable /*DAOException*/ $e) {
-    $this->render('404.html.twig', ['message' => $e->getMessage()]);
-} catch (Exception $e) {
-    $this->render('404.html.twig', ['message' => $e->getMessage()]);
-} catch (Error $error){
-    echo $error->getMessage();
+    echo $e->getMessage();
 }
 

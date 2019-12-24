@@ -40,6 +40,14 @@ class Utilisateur extends Entity
      * @var DateTime|null
      */
     private $created_at;
+    /**
+     * @var string
+     */
+    private $reset_token;
+    /**
+     * @var DateTime|null
+     */
+    private $reset_at;
 
     /**
      * Utilisateur constructor.
@@ -112,7 +120,7 @@ class Utilisateur extends Entity
      */
     public function setMotDePasse(string $mot_de_passe): void
     {
-        $this->mot_de_passe = $mot_de_passe;
+        $this->mot_de_passe = password_hash($mot_de_passe, PASSWORD_BCRYPT);
     }
 
 
@@ -156,20 +164,18 @@ class Utilisateur extends Entity
         return $this->confirmation_token;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getConfirmedAt(): ?DateTime
+    //todo: fix so that never false
+    public function getConfirmedAt()/*: ?DateTime*/
     {
         return $this->confirmed_at;
     }
 
     /**
-     * @param DateTime $confirmed_at
+     * @param string $confirmed_at
      */
-    public function setConfirmedAt(DateTime $confirmed_at): void
+    public function setConfirmedAt(?string $confirmed_at): void
     {
-        $this->confirmed_at = $confirmed_at;
+        $this->confirmed_at = DateTime::createFromFormat('Y-m-d H:i:s', $confirmed_at);
     }
 
     /**
@@ -187,6 +193,55 @@ class Utilisateur extends Entity
     {
         $this->created_at = DateTime::createFromFormat('Y-m-d H:i:s', $created_at);
     }
+
+    /**
+     * @return string
+     */
+    public function getResetToken(): string
+    {
+        return $this->reset_token;
+    }
+
+    /**
+     * @param string $reset_token
+     */
+    public function setResetToken(?string $reset_token): void
+    {
+        $this->reset_token = $reset_token;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getResetAt(): ?DateTime
+    {
+        return $this->reset_at;
+    }
+
+    /**
+     * @param string|null $reset_at
+     */
+    public function setResetAt(?string $reset_at): void
+    {
+        $this->reset_at = DateTime::createFromFormat('Y-m-d H:i:s', $reset_at);
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function setUserId(int $user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+
+    /**
+     * @param string $confirmation_token
+     */
+    public function setConfirmationToken(string $confirmation_token): void
+    {
+        $this->confirmation_token = $confirmation_token;
+    }
+
 
 
 

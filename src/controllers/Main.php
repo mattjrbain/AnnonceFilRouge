@@ -140,6 +140,18 @@ class Main
                 case "confirm";
                     $this->confirm();
                     break;
+                case "reinitialiser";
+                    $this->reinitialiser();
+                    break;
+                case "resetRequest";
+                    $this->resetRequest();
+                    break;
+                case "confirmReset";
+                    $this->confirmResetForm();
+                    break;
+                case "updatePassword";
+                    $this->updatePassword();
+                    break;
                 default :
                     echo "Page inexistante";
             }
@@ -165,8 +177,7 @@ class Main
                         'rubriques' => $rubriques,
                         'users'     => $users
                     ]);
-                }
-                catch (/*DAOException*/ Throwable $e) {
+                } catch (/*DAOException*/ Throwable $e) {
                     $this->render('404.html.twig', ['message' => $e->getMessage()]);
                 }
             } else {
@@ -189,15 +200,12 @@ class Main
         try {
             $view = $this->twig->load($filename);
             echo $view->render($data);
-        }
-        catch (LoaderError $e) {
+        } catch (LoaderError $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
-        }
-        catch (RuntimeError $e) {
+        } catch (RuntimeError $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
-        }
-        catch (SyntaxError $e) {
+        } catch (SyntaxError $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
         }
@@ -224,8 +232,7 @@ class Main
             $rub      = DAO::get('Rubrique')->getByName($rubrique);
             $annonces = $annoncesDAO->getByRub($rub);
             $this->render('listeAnnoncesVisiteur.html.twig', ["annonces" => $annonces, "rub" => $rubrique]);
-        }
-        catch (/*DAOException*/Throwable $e) {
+        } catch (/*DAOException*/ Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
     }
@@ -244,8 +251,7 @@ class Main
             try {
                 $userDAO->identifier($user);
                 header('Location: ?action=connection');
-            }
-            catch (/*DAOException*/Throwable $e) {
+            } catch (/*DAOException*/ Throwable $e) {
                 $this->render('connection.html.twig', [/*'session' => $_SESSION, */ 'errorPass' => true, 'message' => $e->getMessage()]);
             }
         } else {
@@ -272,8 +278,7 @@ class Main
             $annonce = $annonceDAO->getById($this->param);
             $annonceDAO->updateVisite($annonce);
             $this->render('annonceUnique.html.twig', [/*'session' => $_SESSION, */ 'annonce' => $annonce]);
-        }
-        catch (/*DAOException*/Throwable $e) {
+        } catch (/*DAOException*/ Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
     }
@@ -312,8 +317,7 @@ class Main
                 'message' => 'Votre annonce a bien été enregistrée !',
                 'type'    => 'success'
             ]);
-        }
-        catch (/*DAOException*/Throwable $e) {
+        } catch (/*DAOException*/ Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
         //print_r($_POST);
@@ -391,8 +395,7 @@ class Main
                 'message' => "L'annonce a bien été modifiée.",
                 'type'    => 'success'
             ]);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             //TODO: set error page
             //TODO: set message "Annonce modifiée avec succès"
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
@@ -420,8 +423,7 @@ class Main
             } else {
                 $this->render('404.html.twig', ['message' => 'Vous devez être le détenteur de cette annonce pour la modifier.']);
             }
-        }
-        catch (/*DAOException*/Throwable $e) {
+        } catch (/*DAOException*/ Throwable $e) {
             $user     = DAO::get('Utilisateur')->getByName($_SESSION['user']);
             $annonces = DAO::get('Annonce')->getByUser($user);
             $this->render(
@@ -441,7 +443,7 @@ class Main
         $userDAO            = new MySQLUtilisateurDAO();
         try {
             $inserted = $userDAO->insert($user);
-            $userId = $inserted->getUserId();
+            $userId   = $inserted->getUserId();
             $link     = "<a href=\"http://annonces/?action=confirm&param=$confirmation_token&userId=$userId\">ce lien</a>";
 
             mail($user->getMail(), "Confirmez votre adresse", "Pour terminer la création de votre compte, merci de cliquer sur $link :  ");
@@ -450,8 +452,7 @@ class Main
                 'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.' . "\n" . ' Un mail de confirmation vous a été envoyé.',
                 'type'    => 'success'
             ]);
-        }
-        catch (/*DAOException*/Throwable $e) {
+        } catch (/*DAOException*/ Throwable $e) {
             $this->render(
                 'signup.html.twig', [
                 'message' => 'Le nom "' . $_POST['nom'] . '" est déjà utilisé.',
@@ -465,8 +466,8 @@ class Main
         $userDAO = new MySQLUtilisateurDAO();
         try {
             $user = $userDAO->getById($_GET['userId']);
-            if ($this->param == $user->getConfirmationToken()){
-                $confirm = new DateTime();
+            if ($this->param == $user->getConfirmationToken()) {
+                $confirm      = new DateTime();
                 $obsoleteDate = $user->getCreatedAt()->add(new DateInterval('P2D'));
 //                if ($user->getConfirmedAt() > $user->getCreatedAt()->add(new DateInterval('P2D'))) {
                 if ($confirm < $obsoleteDate) {
@@ -480,11 +481,10 @@ class Main
                 } else {
                     $this->render('404.html.twig', ['message' => 'Ce lien est périmé.']);
                 }
-            }else{
+            } else {
                 $this->render('404.html.twig', ['message' => 'Ceci n\'est pas le bon lien.']);
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
 
@@ -508,8 +508,7 @@ class Main
                 'message' => "L'image a bien été supprimée .",
                 'type'    => 'success'
             ]);
-        }
-        catch (/*DAOException*/Throwable $e) {
+        } catch (/*DAOException*/ Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
         }
@@ -528,8 +527,7 @@ class Main
                     'rubriques' => $rubriques,
                     'users'     => $users
                 ]);
-            }
-            catch (/*DAOException*/Throwable $e) {
+            } catch (/*DAOException*/ Throwable $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
             }
         } else {
@@ -557,8 +555,7 @@ class Main
                     'message'   => "La rubrique a bien été supprimée .",
                     'type'      => 'success'
                 ]);
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
             }
 
@@ -586,8 +583,7 @@ class Main
                     'message'   => "La rubrique a bien été modifiée .",
                     'type'      => 'success'
                 ]);
-            }
-            catch (/*DAOException*/Throwable $e) {
+            } catch (/*DAOException*/ Throwable $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
             }
 
@@ -597,10 +593,76 @@ class Main
     }
 
 
-
     public function showRubriquesAction()
     {
         return DAO::get('Rubrique')->getAll();
+    }
+
+    private function reinitialiser()
+    {
+        $this->render('passwordReset.html.twig');
+    }
+
+    private function resetRequest()
+    {
+        $reset_token = uniqid();
+        $userDAO     = new MySQLUtilisateurDAO();
+        try {
+            if ($user = $userDAO->getByMail($_POST['mail'])) {
+                $userDAO->updateReset($_POST['mail'], $reset_token);
+                mail($_POST['mail'], 'Demande de nouveau mot de passe', "   Vous avez demandé bla bla, si c\'est pas vous bli bli, mais sinon http://annonces/?action=confirmReset&param=$reset_token&mail=" . $_POST['mail']);
+                $this->render('passwordReset.html.twig', [
+                    'message' => "Un email vous a été envoyé pour réinitialiser votre mot de passe. Le lien de ce mail sera valide x heures à partir de maintenant.",
+                    'type'    => 'info'
+                ]);
+            } else {
+                $this->render('passwordReset.html.twig', [
+                    'message' => "Ce mail ne correspond pas.",
+                    'type'    => 'warning'
+                ]);
+            }
+        } catch (DAOException $e) {
+            $this->render('passwordReset.html.twig', [
+                'message' => "Ce mail ne correspond pas.",
+                'type'    => 'warning'
+            ]);
+        }
+        var_dump($_POST);
+
+    }
+
+    private function confirmResetForm()
+    {
+        $userDAO = new MySQLUtilisateurDAO();
+        try {
+            $user = $userDAO->getByMail($_GET['mail']);
+            if (/*$user = $userDAO->getByMail($_GET['mail']) && */$user->getResetToken() == $this->param) {
+                $this->render('resetPWDForm.html.twig', ['user' => $user]);
+            }
+
+        } catch (DAOException $e) {
+            $this->render('404.html.twig', ['message' => $e->getMessage()]);
+        }
+    }
+
+    private function updatePassword()
+    {
+        if ($_POST['passwordUp'] === $_POST['confirmPasswordUp']){
+            $userDAO = new MySQLUtilisateurDAO();
+            try {
+                $user = $userDAO->getByName($_POST['nom']);
+                if($user->getConfirmedAt()){
+                $user->setMotDePasse($_POST['passwordUp']);
+                $userDAO->update($user);
+                $this->render('resetPWDForm.html.twig', ['message' => 'Votre mot de passe a bien été réinitialisé.', 'type' => 'success']);
+                }else{
+                    $this->render('resetPWDForm.html.twig', ['message' => "Ce compte n'a pas été confirmé.", 'type' =>
+                    'warning']);
+                }
+            } catch (DAOException $e) {
+                $this->render('404.html.twig', ['message' => $e->getMessage()]);
+            }
+        }
     }
 
 

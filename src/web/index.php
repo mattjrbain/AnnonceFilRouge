@@ -9,7 +9,11 @@ use Main\controllers\Main;
 // Utilisation controller
 $controller = new Main();
 if (!empty($_GET) || !empty($_POST)) {
-    $controller->parseUrl();
+    try {
+        $controller->parseUrl();
+    } catch (Exception $e) {
+        var_dump($e);
+    }
 } else {
     $controller->accueil();
 }
