@@ -60,7 +60,7 @@ class MySQLUtilisateurDAO extends DAO
             $stmt->bindValue(':mail', $utilisateur->getMail());
             $stmt->bindValue(':confirmed_at', $utilisateur->getConfirmedAt()->format('Y-m-d H:i:s'));
             $stmt->bindValue(':id', $utilisateur->getUserId());
-            $stmt->bindValue(':mot_de_passe', $utilisateur->getMotDePasse());
+            $stmt->bindValue(':mot_de_passe', password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT));
             $stmt->execute();
             $count = $stmt->rowCount();
             $this->getCnx()->commit();

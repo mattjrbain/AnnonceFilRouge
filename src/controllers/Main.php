@@ -213,11 +213,13 @@ class Main
 
     /**
      * Calls welcome page
+     * @param string|null $message
+     * @param string|null $type
      */
-    public function accueil()
+    public function accueil(?string $message = null, ?string $type = null)
     {
         $rubs = DAO::get('Rubrique')->getAll();
-        $this->render('accueil.html.twig', ["rubs" => $rubs]);
+        $this->render('accueil.html.twig', ["rubs" => $rubs, "message" => $message, "type" => $type]);
     }
 
     /**
@@ -252,10 +254,10 @@ class Main
                 $userDAO->identifier($user);
                 header('Location: ?action=connection');
             } catch (/*DAOException*/ Throwable $e) {
-                $this->render('connection.html.twig', [/*'session' => $_SESSION, */ 'errorPass' => true, 'message' => $e->getMessage()]);
+                $this->render('connection.html.twig', ['errorPass' => true, 'message' => $e->getMessage()]);
             }
         } else {
-            $this->render('connection.html.twig', [/*'session' => $_SESSION, */ '']);
+            $this->render('connection.html.twig', ['']);
         }
     }
 
@@ -471,7 +473,8 @@ class Main
                 $obsoleteDate = $user->getCreatedAt()->add(new DateInterval('P2D'));
 //                if ($user->getConfirmedAt() > $user->getCreatedAt()->add(new DateInterval('P2D'))) {
                 if ($confirm < $obsoleteDate) {
-                    $user->setConfirmedAt(new DateTime());
+                    $now = new DateTime();
+                    $user->setConfirmedAt($now->format('Y-m-d H:i:s'));
                     $userDAO->update($user);
                     $this->render(
                         'signup.html.twig', [
@@ -654,13 +657,17 @@ class Main
                 if($user->getConfirmedAt()){
                 $user->setMotDePasse($_POST['passwordUp']);
                 $userDAO->update($user);
-                $this->render('resetPWDForm.html.twig', ['message' => 'Votre mot de passe a bien été réinitialisé.', 'type' => 'success']);
+//                $this->render('connection.html.twig', ['message' => 'Votre mot de passe a bien été réinitialisé.', 'type' => 'success']);
+                $this->accueil('Votre mot de passe a bien été réinitialisé.', 'success');
                 }else{
                     $this->render('resetPWDForm.html.twig', ['message' => "Ce compte n'a pas été confirmé.", 'type' =>
                     'warning']);
                 }
             } catch (DAOException $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
+            } catch (Exception $e) {
+                $this->render('404.html.twig', ['message' => $e->getMessage()]);
+
             }
         }
     }

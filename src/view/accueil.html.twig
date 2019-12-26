@@ -5,6 +5,19 @@
         {% block rubActive %}active{% endblock %}
     {% endembed %}
     <div class="container mb-4">
+        {% if message %}
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{ message }}</strong>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="row ">
 
 

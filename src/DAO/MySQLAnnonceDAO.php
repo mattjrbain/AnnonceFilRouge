@@ -59,7 +59,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
 
     /**
      * @param Entity $annonce
-     * @return string|null
+     * @return Annonce|null
      * @throws DAOException
      */
     public function insert(Entity $annonce)
