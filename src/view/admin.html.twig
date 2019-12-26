@@ -176,7 +176,9 @@
                                         {% else %}
                                             N
                                         {% endif %}</td>
-                                    <td></td>
+                                    <td>{% if user.resetToken and not user.resetAt %}
+                                            Demandé
+                                        {% endif %}</td>
                                     <td><a id="" class="btn btn-primary" href="#" role="button">Réinitialiser</a></td>
                                 </tr>
                             {% endfor %}

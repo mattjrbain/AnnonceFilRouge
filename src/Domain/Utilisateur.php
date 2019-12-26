@@ -196,9 +196,9 @@ class Utilisateur extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getResetToken(): string
+    public function getResetToken(): ?string
     {
         return $this->reset_token;
     }
