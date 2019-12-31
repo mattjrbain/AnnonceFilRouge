@@ -1,9 +1,12 @@
 {% extends 'template.html.twig' %}
 {% block title %}Annonces {{ session.user }}{% endblock %}
-{% block body %}
+{% block header %}
     {% embed 'header.html.twig' %}
         {% block annPublishActive %}active{% endblock %}
     {% endembed %}
+{% endblock %}
+
+{% block body %}
     <div class="container mb-4">
         <div class="row justify-content-center">
             {#                        {{ dump(annonces) }}#}
@@ -23,14 +26,15 @@
             {% endif %}
             {% if annonces %}
                 {% for annonce in annonces %}
-{#                    {{ dump(annonce.annonceId) }}#}
+                    {#                    {{ dump(annonce.annonceId) }}#}
                     <div class="col-md-6 mb-3">
                         <div class="card mb-3 bg-light shadow h-100" style="max-width: 540px;">
                             <div class="row {#no-gutters#} m-auto">
                                 <div class="col-md-4">
                                     {#                                    <img src="../web/img/forest-4605204_640.jpg" class="card-img img-fluid" alt="...">#}
                                     {% if annonce.imgs|first %}
-                                        <img src="{{ annonce.imgs|first }}" class="card-img h-100{#img-fluid#}" alt="..."
+                                        <img src="{{ annonce.imgs|first }}" class="card-img h-100{#img-fluid#}"
+                                             alt="..."
                                              style="max-height: 500px">
                                     {% else %}
                                         <img src="img/600px-No_image_available.svg.png" class="card-img img-fluid"
@@ -54,7 +58,8 @@
                                                 Supprimer
                                             </button>
                                         </p>
-                                        <div class="modal fade" id="exampleModalCenterTest{{ annonce.annonceId }}" tabindex="-1" role="dialog"
+                                        <div class="modal fade" id="exampleModalCenterTest{{ annonce.annonceId }}"
+                                             tabindex="-1" role="dialog"
                                              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
                                             <div class="modal-dialog modal-dialog-centered" role="document">

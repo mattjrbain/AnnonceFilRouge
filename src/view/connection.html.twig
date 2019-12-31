@@ -1,9 +1,15 @@
 {% extends 'template.html.twig' %}
 {% block title %}Connection {{ rub.libelle }}{% endblock %}
-{% block body %}
+{% block header %}
     {% embed 'header.html.twig' %}
         {% block connectActive %}active{% endblock %}
     {% endembed %}
+{% endblock %}
+
+{% block body %}
+{#    {% embed 'header.html.twig' %}#}
+{#        {% block connectActive %}active{% endblock %}#}
+{#    {% endembed %}#}
 
     <div class="container mb-4">
         <div class="row justify-content-center">
@@ -21,18 +27,18 @@
                             <div class="alert alert-info" role="alert">
                                 <strong>Vous n'êtes pas connecté</strong>
                             </div>
-                        {% if errorPass %}
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <strong>{{ message }}{#Nom d'utilisateur ou mot de passe erroné.#}</strong>
-                            </div>
+{#                        {% if errorPass %}#}
+{#                            <div class="alert alert-danger alert-dismissible fade show" role="alert">#}
+{#                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
+{#                                    <span aria-hidden="true">&times;</span>#}
+{#                                </button>#}
+{#                                <strong>{{ message }}#}{#Nom d'utilisateur ou mot de passe erroné.#}{#</strong>#}
+{#                            </div>#}
 
-                            <script>
-                                $(".alert").alert();
-                            </script>
-                        {% endif %}
+{#                            <script>#}
+{#                                $(".alert").alert();#}
+{#                            </script>#}
+{#                        {% endif %}#}
                         {% if message %}
                             <div class="row justify-content-center">
                                 <div class="col-md-12">

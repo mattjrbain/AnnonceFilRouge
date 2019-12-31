@@ -153,7 +153,7 @@ class Main
                     $this->updatePassword();
                     break;
                 default :
-                    echo "Page inexistante";
+                    $this->render('404.html.twig', ['message' => "Page inexistante"]);
             }
         } else $this->accueil();
     }
@@ -254,7 +254,7 @@ class Main
                 $userDAO->identifier($user);
                 header('Location: ?action=connection');
             } catch (/*DAOException*/ Throwable $e) {
-                $this->render('connection.html.twig', ['errorPass' => true, 'message' => $e->getMessage()]);
+                $this->render('connection.html.twig', [/*'errorPass' => true, */'message' => $e->getMessage(), 'type' => 'danger']);
             }
         } else {
             $this->render('connection.html.twig', ['']);
@@ -656,7 +656,7 @@ class Main
                 $user = $userDAO->getByName($_POST['nom']);
                 if($user->getConfirmedAt()){
                 $user->setMotDePasse($_POST['passwordUp']);
-                $userDAO->update($user);
+                $userDAO->updatePWD($user);
 //                $this->render('connection.html.twig', ['message' => 'Votre mot de passe a bien été réinitialisé.', 'type' => 'success']);
                 $this->accueil('Votre mot de passe a bien été réinitialisé.', 'success');
                 }else{

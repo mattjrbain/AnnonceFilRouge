@@ -1,7 +1,10 @@
 {% extends 'template.html.twig' %}
 {% block title %}Annonce "{{ annonce.entete }}"{% endblock %}
-{% block body %}
+{% block header %}
     {% include 'header.html.twig' %}
+{% endblock %}
+
+{% block body %}
     <div class="container mb-4">
         <div class="row justify-content-center mb-2">
             <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary shadow-sm">Page précédente</a>

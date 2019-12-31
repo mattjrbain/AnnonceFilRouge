@@ -1,7 +1,10 @@
 {% extends 'template.html.twig' %}
 {% block title %}Modifier annonce {{ session.user }}{% endblock %}
-{% block body %}
+{% block header %}
     {% include 'header.html.twig' %}
+{% endblock %}
+
+{% block body %}
     <div class="container mb-4">
         <div class="row justify-content-center">
             {% if message %}
@@ -22,7 +25,8 @@
                 <div class="card-block m-3">
                     <h3 class="card-title text-center">Modifier annonce</h3>
                     <hr>
-                    <form action="?action=updateAnnonce&param={{ annonce.annonceId }}" method="post" enctype="multipart/form-data" id="addAnnonce"
+                    <form action="?action=updateAnnonce&param={{ annonce.annonceId }}" method="post"
+                          enctype="multipart/form-data" id="addAnnonce"
                           class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="">Rubrique</label>
@@ -68,7 +72,8 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ image.imageSrc }}</h5>
                                                 <p>
-                                                    <a type="button" class="btn btn-danger shadow-sm" data-toggle="modal"
+                                                    <a type="button" class="btn btn-danger shadow-sm"
+                                                       data-toggle="modal"
                                                        data-target="#exampleModalCenter{{ image.imageId }}">
                                                         Supprimer
                                                     </a>
@@ -113,7 +118,9 @@
                                 <label for="photo">Ajouter une image</label>
                                 <input type="file" class="form-control-file photo" id="photo" name="photo0" value="">
                             </div>
-                            <button type="button" class="btn btn-info shadow-sm" id="ajoutImage">Ajouter une autre image</button>
+                            <button type="button" class="btn btn-info shadow-sm" id="ajoutImage">Ajouter une autre
+                                image
+                            </button>
                         </div>
                     </form>
                 </div>

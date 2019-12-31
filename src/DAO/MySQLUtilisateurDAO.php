@@ -72,6 +72,32 @@ class MySQLUtilisateurDAO extends DAO
     }
 
     /**
+     * @param Utilisateur $utilisateur
+     * @return int
+     * @throws DAOException
+     */
+    public function updatePWD(Utilisateur $utilisateur)
+    {
+        try {
+            $this->getCnx()->beginTransaction();
+            $stmt = $this->getCnx()->prepare(
+                'UPDATE utilisateur 
+                            SET mot_de_passe = :mot_de_passe
+                                /*reset_at = NOW() */
+                            WHERE user_id = :id');
+            $stmt->bindValue(':id', $utilisateur->getUserId());
+            $stmt->bindValue(':mot_de_passe', password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT));
+            $stmt->execute();
+            $count = $stmt->rowCount();
+            $this->getCnx()->commit();
+            return $count;
+        } catch (Exception $e) {
+            $this->getCnx()->rollBack();
+            throw new DAOException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
      * @param Utilisateur $user
      * @return string identified user id
      * @throws DAOException
@@ -183,7 +209,7 @@ class MySQLUtilisateurDAO extends DAO
             $data = $stmt->fetchAll();
             $this->getCnx()->commit();
 //            return $data;
-            $users   = array();
+            $users = array();
 //            $users[] = $this->hydrate($data, "Utilisateur");
             foreach ($data as $datum) {
                 $users[] = $this->userFromArray($datum);
