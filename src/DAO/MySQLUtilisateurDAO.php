@@ -53,14 +53,14 @@ class MySQLUtilisateurDAO extends DAO
                 'UPDATE utilisateur 
                             SET nom = :nom,
                                 mail = :mail,
-                                confirmed_at = :confirmed_at,
-                                mot_de_passe = :mot_de_passe
+                                confirmed_at = :confirmed_at
                                                         WHERE user_id = :id');
             $stmt->bindValue(':nom', $utilisateur->getNom());
             $stmt->bindValue(':mail', $utilisateur->getMail());
             $stmt->bindValue(':confirmed_at', $utilisateur->getConfirmedAt()->format('Y-m-d H:i:s'));
-            $stmt->bindValue(':id', $utilisateur->getUserId());
-            $stmt->bindValue(':mot_de_passe', password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT));
+            $stmt->bindValue(':id', $utilisateur->getUserId(), PDO::PARAM_INT);
+//            $stmt->bindValue(':mot_de_passe', password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT));
+//            $stmt->bindValue(':mot_de_passe', $utilisateur->getMotDePasse());
             $stmt->execute();
             $count = $stmt->rowCount();
             $this->getCnx()->commit();

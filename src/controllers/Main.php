@@ -254,7 +254,7 @@ class Main
                 $userDAO->identifier($user);
                 header('Location: ?action=connection');
             } catch (/*DAOException*/ Throwable $e) {
-                $this->render('connection.html.twig', [/*'errorPass' => true, */'message' => $e->getMessage(), 'type' => 'danger']);
+                $this->render('connection.html.twig', [/*'errorPass' => true, */ 'message' => $e->getMessage(), 'type' => 'danger']);
             }
         } else {
             $this->render('connection.html.twig', ['']);
@@ -300,12 +300,9 @@ class Main
 
     private function submitAnnonce()
     {
-        $user = DAO::get('Utilisateur')->getByName($this->param);
-//        $userDAO = new MySQLUtilisateurDAO();
-//        $user = $userDAO->getByName($this->param);
-        $rub     = DAO::get('Rubrique')->getByName($_POST['rubrique']);
-        $annonce = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
-//        $retAnnonce = DAO::get('Annonce')->insert($annonce);
+        $user       = DAO::get('Utilisateur')->getByName($this->param);
+        $rub        = DAO::get('Rubrique')->getByName($_POST['rubrique']);
+        $annonce    = new Annonce($user, $rub, $_POST['entete'], $_POST['corps']);
         $annonceDAO = new MySQLAnnonceDAO();
         try {
             $retAnnonce = $annonceDAO->insert($annonce);
@@ -322,7 +319,6 @@ class Main
         } catch (/*DAOException*/ Throwable $e) {
             $this->render('404.html.twig', ['message' => $e->getMessage()]);
         }
-        //print_r($_POST);
     }
 
     /**
@@ -340,8 +336,8 @@ class Main
                 // Testons si le fichier n'est pas trop gros
                 if ($_FILES['photo' . $i]['size'] <= 1000000) {
                     // Testons si l'extension est autorisée
-                    $infosfichier          = pathinfo($_FILES['photo' . $i]['name']);
-                    $extension_upload      = $infosfichier['extension'];
+                    $infosFichier          = pathinfo($_FILES['photo' . $i]['name']);
+                    $extension_upload      = $infosFichier['extension'];
                     $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
                     if (in_array($extension_upload, $extensions_autorisees)) {
                         // On peut valider le fichier et le stocker définitivement
@@ -441,23 +437,24 @@ class Main
     private function createAccount()
     {
         $confirmation_token = uniqid();
-        $user               = new Utilisateur($_POST['nom'], $_POST['password'], $_POST['mail'], $confirmation_token);
+        $user               = new Utilisateur($_POST['nom'], $_POST['password'], $_POST['mail'],
+                                              $confirmation_token);
         $userDAO            = new MySQLUtilisateurDAO();
         try {
             $inserted = $userDAO->insert($user);
             $userId   = $inserted->getUserId();
-            $link     = "<a href=\"http://annonces/?action=confirm&param=$confirmation_token&userId=$userId\">ce lien</a>";
+            $link     = "<a href=\"http://annonces/?action=confirm&ampparam=$confirmation_token&ampuserId=$userId\">ce lien</a>";
 
             mail($user->getMail(), "Confirmez votre adresse", "Pour terminer la création de votre compte, merci de cliquer sur $link :  ");
             $this->render(
                 'signup.html.twig', [
-                'message' => 'Bienvenue, ' . $_POST['nom'] . ', votre compte est bien crée.' . "\n" . ' Un mail de confirmation vous a été envoyé.',
+                'message' => 'Bienvenue, ' . $user->getNom() . ', votre compte est bien crée.' . "\n" . ' Un mail de confirmation vous a été envoyé.',
                 'type'    => 'success'
             ]);
         } catch (/*DAOException*/ Throwable $e) {
             $this->render(
                 'signup.html.twig', [
-                'message' => 'Le nom "' . $_POST['nom'] . '" est déjà utilisé.',
+                'message' => 'Le nom "' . $user->getNom() . '" est déjà utilisé.',
                 'type'    => 'warning'
             ]);
         }
@@ -610,6 +607,7 @@ class Main
     {
         $reset_token = uniqid();
         $userDAO     = new MySQLUtilisateurDAO();
+
         try {
             if ($user = $userDAO->getByMail($_POST['mail'])) {
                 $userDAO->updateReset($_POST['mail'], $reset_token);
@@ -639,7 +637,7 @@ class Main
         $userDAO = new MySQLUtilisateurDAO();
         try {
             $user = $userDAO->getByMail($_GET['mail']);
-            if (/*$user = $userDAO->getByMail($_GET['mail']) && */$user->getResetToken() == $this->param) {
+            if (/*$user = $userDAO->getByMail($_GET['mail']) && */ $user->getResetToken() == $this->param) {
                 $this->render('resetPWDForm.html.twig', ['user' => $user]);
             }
 
@@ -650,18 +648,18 @@ class Main
 
     private function updatePassword()
     {
-        if ($_POST['passwordUp'] === $_POST['confirmPasswordUp']){
+        if ($_POST['passwordUp'] === $_POST['confirmPasswordUp']) {
             $userDAO = new MySQLUtilisateurDAO();
             try {
                 $user = $userDAO->getByName($_POST['nom']);
-                if($user->getConfirmedAt()){
-                $user->setMotDePasse($_POST['passwordUp']);
-                $userDAO->updatePWD($user);
+                if ($user->getConfirmedAt()) {
+                    $user->setMotDePasse($_POST['passwordUp']);
+                    $userDAO->updatePWD($user);
 //                $this->render('connection.html.twig', ['message' => 'Votre mot de passe a bien été réinitialisé.', 'type' => 'success']);
-                $this->accueil('Votre mot de passe a bien été réinitialisé.', 'success');
-                }else{
+                    $this->accueil('Votre mot de passe a bien été réinitialisé.', 'success');
+                } else {
                     $this->render('resetPWDForm.html.twig', ['message' => "Ce compte n'a pas été confirmé.", 'type' =>
-                    'warning']);
+                        'warning']);
                 }
             } catch (DAOException $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);

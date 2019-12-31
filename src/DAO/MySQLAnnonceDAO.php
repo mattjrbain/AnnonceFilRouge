@@ -76,11 +76,9 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $limite   = $nowclone->add(new DateInterval('P' . self::VALIDITE_MAX_PHP . 'D'));
             $now->setTimezone(new DateTimeZone(self::TIMEZONE));
             $stmt->bindValue(
-                ':user_id', $annonce->getUser()
-                                    ->getUserId());
+                ':user_id', $annonce->getUser()->getUserId(), PDO::PARAM_INT);
             $stmt->bindValue(
-                ':rubrique_id', $annonce->getRubrique()
-                                        ->getRubriqueId());
+                ':rubrique_id', $annonce->getRubrique()->getRubriqueId(), PDO::PARAM_INT);
             $stmt->bindValue(':en_tete', $annonce->getEnTete());
             $stmt->bindValue(':corps', $annonce->getCorps());
             $stmt->bindValue(':date_creation', $now->format('Y-m-d H:i:s'), PDO::PARAM_STR);
@@ -93,8 +91,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                  ->commit();
 //            return $lastId;
             return $this->getById($lastId);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
 //            echo $e->getMessage() . "\n";
 //            echo (int)$e->getCode() . "\n";
             $this->getCnx()
@@ -132,8 +129,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $this->getCnx()
                  ->commit();
             return $this->annonceFromArray($data);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
@@ -150,7 +146,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
 //        $created_at = DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']) ?? null;
         $created_at = $data['created_at'] ? DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']) : null;
 //        $confirmed_at = $data['confirmed_at'] ? DateTime::createFromFormat('Y-m-d H:i:s', $data['confirmed_at']) : null;
-        $user     = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['confirmation_token'],$created_at,$data['est_admin'], $data['user_id']/*, $confirmed_at*/);
+        $user     = new Utilisateur($data['nom'], $data['mdp'], $data['mail'], $data['confirmation_token'], $created_at, $data['est_admin'], $data['user_id']/*, $confirmed_at*/);
         $rub      = new Rubrique($data['libelle'], $data['r_id']);
         $imgs     = explode(',', $data['images']);
         $dateCrea = DateTime::createFromFormat('Y-m-d H:i:s', $data['crea']);
@@ -179,8 +175,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                  ->commit();
             return $count;
 
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
 //            echo $e->getMessage() . "\n";
 //            echo (int)$e->getCode() . "\n";
             $this->getCnx()
@@ -224,8 +219,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $this->getCnx()
                  ->commit();
             return $count;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
@@ -254,8 +248,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $this->getCnx()
                  ->commit();
             return $count;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
@@ -285,8 +278,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $this->getCnx()
                  ->commit();
             return $count;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
@@ -328,8 +320,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                 $annonces[] = $annonce;
             }
             return $annonces;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
@@ -373,8 +364,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                 $annonces[] = $annonce;
             }
             return $annonces;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
@@ -404,8 +394,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $this->getCnx()
                  ->commit();
             return $count;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
@@ -426,8 +415,7 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Annonce');
             $data = $stmt->fetchAll();
             return $data;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();
             throw new DAOException($e->getMessage());
