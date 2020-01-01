@@ -1,51 +1,62 @@
 /* https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=009688&secondary.color=7C4DFF */
+:root {
+    --my-teal: #00796b;
+    --my-teal-light: #48a999;
+    --my-teal-dark: #004c40;
+    --my-blue: #00e5ff;
+    --my-blue-light: #6effff;
+    --my-blue-dark: #00b2cc;
+}
 
-.signup-alert{
+.signup-alert {
     display: none;
 }
 
 /*Background hover */
 
 /*noinspection CssUnusedSymbol*/
-.bg-darkblue:hover{
+.bg-darkblue:hover {
     background-color: darkblue;
 }
-.bg-lightblue:hover{
+
+.bg-lightblue:hover {
     background-color: #74bec9;
 }
 
 /*noinspection CssUnusedSymbol*/
-.bg-lightyellow:hover{
+.bg-lightyellow:hover {
     background-color: yellow;
 }
 
 /*noinspection CssUnusedSymbol*/
-.bg-lightgreen:hover{
+.bg-lightgreen:hover {
     background-color: darkseagreen;
 }
 
 /*noinspection CssUnusedSymbol*/
-.bg-green:hover{
+.bg-green:hover {
     background-color: forestgreen;
 }
 
-.bg-lightblue:active{
+.bg-lightblue:active {
     background-color: darkblue;
 }
 
 
 /*Font Awesome*/
-.fa-user{
+.fa-user {
     color: wheat;
 }
-.fa-user:hover{
+
+.fa-user:hover {
     color: #D0B27A;
 }
-.fa-user:active{
+
+.fa-user:active {
     color: #FFFAF1;
 }
 
-.card-img-top{
+.card-img-top {
     object-fit: cover;
 }
 
@@ -56,42 +67,74 @@
     background-size: cover;
     background: #fff url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg) no-repeat center center;
     display: inline-block;
-    box-shadow:0 -3px 6px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 -3px 6px 2px rgba(0, 0, 0, 0.2);
 }
-.btn-primary
-{
-    display:block;
-    border-radius:0;
-    box-shadow:0 4px 6px 2px rgba(0,0,0,0.2);
-    margin-top:-5px;
+
+/*.btn-primary*/
+/*{*/
+/*    display:block;*/
+/*    border-radius:0;*/
+/*    box-shadow:0 4px 6px 2px rgba(0,0,0,0.2);*/
+/*    margin-top:-5px;*/
+/*}*/
+.imgUp {
+    margin-bottom: 15px;
 }
-.imgUp
-{
-    margin-bottom:15px;
+
+.del {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
 }
-.del
-{
-    position:absolute;
-    top:0;
-    right:15px;
-    width:30px;
-    height:30px;
-    text-align:center;
-    line-height:30px;
-    background-color:rgba(255,255,255,0.6);
-    cursor:pointer;
+
+.imgAdd {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #4bd7ef;
+    color: #fff;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    line-height: 30px;
+    margin-top: 0;
+    cursor: pointer;
+    font-size: 15px;
 }
-.imgAdd
-{
-    width:30px;
-    height:30px;
-    border-radius:50%;
-    background-color:#4bd7ef;
-    color:#fff;
-    box-shadow:0 0 2px 1px rgba(0,0,0,0.2);
-    text-align:center;
-    line-height:30px;
-    margin-top:0;
-    cursor:pointer;
-    font-size:15px;
+
+.bgMain {
+    background-color: var(--my-teal);
+}
+
+.bgMainLight{
+    background-color: var(--my-teal-light);
+}
+
+.bgMainDark{
+    background-color: var(--my-teal-dark);
+}
+
+.bgSecondary {
+    background-color: var(--my-blue);
+}
+
+.bgSecondaryLight{
+    background-color: var(--my-blue-light);
+}
+
+.bgSecondaryDark{
+    background-color: var(--my-blue-dark);
+}
+
+.textMainLight{
+    color: var(--my-teal-light);
+}
+
+.btn-primary{
+    background-color: var(--my-blue-dark);
 }
