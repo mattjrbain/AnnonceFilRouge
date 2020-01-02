@@ -135,6 +135,21 @@
     color: var(--my-teal-light);
 }
 
-.btn-primary{
+.btn-myprimary{
+    background-color: var(--my-blue);
+    border-color: var(--my-blue);
+}
+
+.btn-myprimary:hover{
+    background-color: var(--my-blue-dark);
+    border-color: var(--my-blue-dark);
+}
+
+.cardHome:hover {
+    background-color: var(--my-blue);
+}
+.cardHome:active {
     background-color: var(--my-blue-dark);
 }
+
+

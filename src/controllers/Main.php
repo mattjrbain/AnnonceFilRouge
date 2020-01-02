@@ -152,6 +152,9 @@ class Main
                 case "updatePassword";
                     $this->updatePassword();
                     break;
+                case "deleteOutDated";
+                    $this->deleteOutDated();
+                    break;
                 default :
                     $this->render('404.html.twig', ['message' => "Page inexistante"]);
             }
@@ -254,7 +257,8 @@ class Main
                 $userDAO->identifier($user);
                 header('Location: ?action=connection');
             } catch (/*DAOException*/ Throwable $e) {
-                $this->render('connection.html.twig', [/*'errorPass' => true, */ 'message' => $e->getMessage(), 'type' => 'danger']);
+                $this->render('connection.html.twig', ['message' => $e->getMessage(), 'type' => 'danger', 'is_valid'
+                                                                 => 'is-invalid']);
             }
         } else {
             $this->render('connection.html.twig', ['']);
@@ -517,15 +521,18 @@ class Main
     private function admin()
     {
         if (isset($_SESSION['isAdmin'])) {
-            $rubDAO  = new MySQLRubriqueDAO();
-            $userDAO = new MySQLUtilisateurDAO();
+            $rubDAO     = new MySQLRubriqueDAO();
+            $userDAO    = new MySQLUtilisateurDAO();
+            $annonceDAO = new MySQLAnnonceDAO();
             try {
                 $rubriques = $rubDAO->getAll();
                 $users     = $userDAO->getAll();
+                $annonces  = $annonceDAO->getAll();
                 $this->render(
                     'admin.html.twig', [
                     'rubriques' => $rubriques,
-                    'users'     => $users
+                    'users'     => $users,
+                    'annonces'  => $annonces
                 ]);
             } catch (/*DAOException*/ Throwable $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
@@ -667,6 +674,21 @@ class Main
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
 
             }
+        }
+    }
+
+    private function deleteOutDated()
+    {
+        if (isset($_SESSION['isAdmin'])) {
+            $annonceDAO = new MySQLAnnonceDAO();
+            try {
+                $annonceDAO->deletePerimees();
+                header('Location: ?action=admin');
+            } catch (Exception $e) {
+                $this->render('404.html.twig', ['message' => $e->getMessage()]);
+            }
+        }else{
+            $this->render('404.html.twig', ['message' => "Vous n'avez pas les droits pour faire cette opération."]);
         }
     }
 

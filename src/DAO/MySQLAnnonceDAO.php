@@ -379,13 +379,15 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
     public function deletePerimees()
     {
 
+    //WHERE DATE_ADD(date_creation, INTERVAL ' . self::VALIDITE_MAX . ') <= :now');
+
         try {
             $this->getCnx()
                  ->beginTransaction();
             $stmt = $this->getCnx()
                          ->prepare(
                              'DELETE FROM annonce 
-                            WHERE DATE_ADD(date_creation, INTERVAL ' . self::VALIDITE_MAX . ') <= :now');
+                            WHERE date_limite < :now');
             $now  = new DateTime();
             $now->setTimezone(new DateTimeZone(self::TIMEZONE));
             $stmt->bindValue(':now', $now->format('Y-m-d H:i:s'), PDO::PARAM_STR);
@@ -411,10 +413,24 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             $this->getCnx()
                  ->beginTransaction();
             $stmt = $this->getCnx()
-                         ->query('SELECT * FROM annonce');
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Annonce');
+                         ->query('SELECT a.annonce_id as a_id, a.en_tete, a.corps, a.date_creation as crea, 
+                                                        a.date_modif as modif, a.date_limite as dlimit, a.visites as visit,
+                                                        group_concat(image_src) AS images,
+                                                        u.user_id, nom, mot_de_passe as mdp, mail, est_admin, confirmation_token, created_at,
+                                                        r.rubrique_id as r_id, libelle
+                                                FROM annonce AS a
+                                                INNER JOIN image i ON a.annonce_id = i.annonce_id
+                                                INNER JOIN utilisateur u ON a.user_id = u.user_id
+                                                INNER JOIN rubrique r ON a.rubrique_id = r.rubrique_id
+                                                GROUP BY a.annonce_id');
+//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Annonce');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $data = $stmt->fetchAll();
-            return $data;
+            $annonces = array();
+            foreach ($data as $datum) {
+                $annonces[] = $this->annonceFromArray($datum);
+            }
+            return $annonces;
         } catch (Exception $e) {
             $this->getCnx()
                  ->rollBack();

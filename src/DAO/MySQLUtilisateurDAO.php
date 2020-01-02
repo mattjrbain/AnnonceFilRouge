@@ -212,7 +212,8 @@ class MySQLUtilisateurDAO extends DAO
             $users = array();
 //            $users[] = $this->hydrate($data, "Utilisateur");
             foreach ($data as $datum) {
-                $users[] = $this->userFromArray($datum);
+//                $users[] = $this->userFromArray($datum);
+                $users[] = $this->hydrate($datum, 'Utilisateur');
             }
             return $users;
 
