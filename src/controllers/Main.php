@@ -155,6 +155,9 @@ class Main
                 case "deleteOutDated";
                     $this->deleteOutDated();
                     break;
+                case "listerAjax1";
+                    $this->listerAjax1();
+                    break;
                 default :
                     $this->render('404.html.twig', ['message' => "Page inexistante"]);
             }
@@ -635,7 +638,6 @@ class Main
                 'type'    => 'warning'
             ]);
         }
-        var_dump($_POST);
 
     }
 
@@ -687,8 +689,30 @@ class Main
             } catch (Exception $e) {
                 $this->render('404.html.twig', ['message' => $e->getMessage()]);
             }
-        }else{
+        } else {
             $this->render('404.html.twig', ['message' => "Vous n'avez pas les droits pour faire cette opération."]);
+        }
+    }
+
+    private function listerAjax1()
+    {
+        $rubDAO     = new MySQLRubriqueDAO();
+        $annonceDAO = new MySQLAnnonceDAO();
+        if (!empty($_GET['rub'])) {
+            try {
+                $rub = $rubDAO->getById($_GET['rub']);
+                $annonces = $annonceDAO->getByRub($rub);
+                $this->render('listerAnnoncesAjax2.html.twig', ['annonces' => $annonces]);
+            } catch (DAOException $e) {
+                throw new DAOException($e->getMessage());
+            }
+        } else {
+            try {
+                $rubs = $rubDAO->getAll();
+            } catch (DAOException $e) {
+                throw new DAOException($e->getMessage());
+            }
+            $this->render('listerAnnoncesAjax1.html.twig', ['rubs' => $rubs]);
         }
     }
 

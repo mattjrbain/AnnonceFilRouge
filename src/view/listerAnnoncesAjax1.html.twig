@@ -1,0 +1,52 @@
+{% extends 'template.html.twig' %}
+{% block title %}Connection {{ rub.libelle }}{% endblock %}
+{% block header %}
+    {% embed 'header.html.twig' %}
+        {% block connectActive %}active{% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+            <div class="card col-md-5  bg-light shadow">
+                <div class="card-block m-3">
+                    <h3 class="card-title text-center">Rubriques</h3>
+                    <hr>
+                    <form action="" id="#" method="post" class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <label for="rubrique">Sélectionner la rubrique:</label>
+                            <select
+                                    class="form-control" id="rubrique" name="id_rubrique">
+                                {% for rub in rubs %}
+                                    <option value="{{ rub.rubriqueId }}">{{ rub.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="retourServeur"></div>
+
+    </div>
+
+{% endblock %}
+{% block additionnalJS %}
+    <script src="js/validationAjout.js"></script>
+    <script>
+        $("#rubrique").change(function () {
+            // let id_rubrique;
+            $.ajax({
+                url: '#',
+                method: 'GET',
+                data: {action: 'listerAjax1', rub: $('select').val()},/*$('select').val()},*/
+                success: function(reponse){
+                    console.log(reponse);
+                    $("#retourServeur").html(reponse);
+                }
+            });
+        })
+    </script>
+{% endblock %}

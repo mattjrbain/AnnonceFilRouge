@@ -90,7 +90,7 @@ class MySQLRubriqueDAO extends DAO
     {
         try {
             $this->getCnx()->beginTransaction();
-            $stmt = $this->getCnx()->query('SELECT * FROM rubrique');
+            $stmt = $this->getCnx()->query('SELECT * FROM rubrique ORDER BY libelle');
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Rubrique');
             $data = $stmt->fetchAll();
             $this->getCnx()->commit();
