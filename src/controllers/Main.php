@@ -47,12 +47,18 @@ class Main
      * @var Environment
      */
     private $twig;
+    /**
+     * @var Container
+     */
+    private $container;
 
     /**
      * Main constructor.
+     * @param Container $container
      */
-    public function __construct()
+    public function __construct(Container $container)
     {
+        $this->container = $container;
         //$this->request = $request;
         if (!empty($_GET['action'])) {
             $this->actionGet = $_GET['action'];
