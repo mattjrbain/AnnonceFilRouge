@@ -3,8 +3,9 @@
 
 namespace Main\Domain;
 
+use JsonSerializable;
 
-abstract class Entity
+abstract class Entity implements JsonSerializable
 {
 
 }

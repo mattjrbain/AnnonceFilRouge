@@ -54,11 +54,13 @@ class Utilisateur extends Entity
      * @param string $nom
      * @param string $mot_de_passe
      * @param string $mail
-     * @param DateTime|null $created_at
      * @param string $confirmation_token
-     * @param DateTime|null $confirmed_at
+     * @param DateTime|null $created_at
      * @param bool $est_admin
      * @param int $user_id
+     * @param DateTime|null $confirmed_at
+     * @param DateTime|null $reset_at
+     * @param string|null $reset_token
      */
     public function __construct(
         string $nom = "",
@@ -68,8 +70,10 @@ class Utilisateur extends Entity
         DateTime $created_at = null,
         bool $est_admin = false,
         int $user_id = -1,
-        DateTime $confirmed_at = null
-        )
+        DateTime $confirmed_at = null,
+        DateTime $reset_at = null,
+        string $reset_token = null
+    )
     {
         $this->user_id            = $user_id;
         $this->nom                = $nom;
@@ -79,6 +83,8 @@ class Utilisateur extends Entity
         $this->created_at         = $created_at;
         $this->est_admin          = $est_admin;
         $this->confirmed_at       = $confirmed_at;
+        $this->reset_at           = $reset_at;
+        $this->reset_token        = $reset_token;
     }
 
 
@@ -90,6 +96,13 @@ class Utilisateur extends Entity
         return $this->user_id;
     }
 
+    /**
+     * @param int $user_id
+     */
+    public function setUserId(int $user_id): void
+    {
+        $this->user_id = $user_id;
+    }
 
     /**
      * @return string
@@ -124,7 +137,6 @@ class Utilisateur extends Entity
         $this->mot_de_passe = $mot_de_passe;
     }
 
-
     /**
      * @return bool
      */
@@ -157,6 +169,8 @@ class Utilisateur extends Entity
         $this->mail = $mail;
     }
 
+    //todo: fix so that never false
+
     /**
      * @return string
      */
@@ -165,7 +179,14 @@ class Utilisateur extends Entity
         return $this->confirmation_token;
     }
 
-    //todo: fix so that never false
+    /**
+     * @param string $confirmation_token
+     */
+    public function setConfirmationToken(string $confirmation_token): void
+    {
+        $this->confirmation_token = $confirmation_token;
+    }
+
     public function getConfirmedAt()/*: ?DateTime*/
     {
         return $this->confirmed_at;
@@ -227,24 +248,18 @@ class Utilisateur extends Entity
         $this->reset_at = DateTime::createFromFormat('Y-m-d H:i:s', $reset_at);
     }
 
-    /**
-     * @param int $user_id
-     */
-    public function setUserId(int $user_id): void
-    {
-        $this->user_id = $user_id;
-    }
 
     /**
-     * @param string $confirmation_token
+     * @inheritDoc
      */
-    public function setConfirmationToken(string $confirmation_token): void
+    public function jsonSerialize()
     {
-        $this->confirmation_token = $confirmation_token;
+        return [
+            'user' => [
+                'id'   => $this->user_id,
+                'nom'  => $this->nom,
+                'mail' => $this->mail
+            ]
+        ];
     }
-
-
-
-
-
 }

@@ -20,7 +20,7 @@ class Rubrique extends Entity
      * @param int $rubrique_id
      * @param string $libelle
      */
-    public function __construct(string $libelle = "",int $rubrique_id = -1)
+    public function __construct(string $libelle = "", int $rubrique_id = -1)
     {
         $this->rubrique_id = $rubrique_id;
         $this->libelle     = $libelle;
@@ -43,6 +43,11 @@ class Rubrique extends Entity
         $this->rubrique_id = $rubrique_id;
     }
 
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+
     /**
      * @return string
      */
@@ -59,11 +64,16 @@ class Rubrique extends Entity
         $this->libelle = $libelle;
     }
 
-    public function __toString()
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
     {
-        return $this->getLibelle();
+        return [
+            'rubrique' => [
+                'id'      => $this->rubrique_id,
+                'libelle' => $this->libelle
+            ]
+        ];
     }
-
-
-
 }

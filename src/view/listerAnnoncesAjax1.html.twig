@@ -37,11 +37,15 @@
     <script src="js/validationAjout.js"></script>
     <script>
         $("#rubrique").change(function () {
-            // let id_rubrique;
             $.ajax({
                 url: '#',
                 method: 'GET',
-                data: {action: 'listerAjax1', rub: $('select').val()},/*$('select').val()},*/
+                // dataType: 'JSON',
+                // mimeType: 'contentType',
+                // error: function(){
+                //     console.log('erreur');
+                // },
+                data: {action: 'listerAjax1', rub: $('select').val()},
                 success: function(reponse){
                     console.log(reponse);
                     $("#retourServeur").html(reponse);

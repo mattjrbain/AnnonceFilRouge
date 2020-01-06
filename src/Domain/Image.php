@@ -33,22 +33,6 @@ class Image extends Entity
     }
 
     /**
-     * @return string
-     */
-    public function getImageSrc(): string
-    {
-        return $this->imageSrc;
-    }
-
-    /**
-     * @param string $imageSrc
-     */
-    public function setImageSrc(string $imageSrc): void
-    {
-        $this->imageSrc = $imageSrc;
-    }
-
-    /**
      * @return int
      */
     public function getAnnonceId(): int
@@ -85,7 +69,33 @@ class Image extends Entity
         return $this->getImageSrc();
     }
 
+    /**
+     * @return string
+     */
+    public function getImageSrc(): string
+    {
+        return $this->imageSrc;
+    }
 
+    /**
+     * @param string $imageSrc
+     */
+    public function setImageSrc(string $imageSrc): void
+    {
+        $this->imageSrc = $imageSrc;
+    }
 
-
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'image' => [
+                'id'        => $this->imageId,
+                'annonceId' => $this->annonceId,
+                'src'       => $this->imageSrc
+            ]
+        ];
+    }
 }

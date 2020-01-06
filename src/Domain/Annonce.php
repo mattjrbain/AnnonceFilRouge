@@ -27,14 +27,6 @@ class Annonce extends Entity
      * @var int
      */
     private $annonce_id;
-//    /**
-//     * @var int
-//     */
-//    private $user_id;
-//    /**
-//     * @var int
-//     */
-//    private $rubrique_id;
     /**
      * @var string
      */
@@ -59,10 +51,6 @@ class Annonce extends Entity
      * @var int
      */
     private $nb_visites;
-//    /**
-//     * @var MySQLAnnonceDAO
-//     */
-//    private $dao;
     /**
      * @var array
      */
@@ -255,4 +243,24 @@ class Annonce extends Entity
     }
 
 
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'annonce' => [
+                'id'        => $this->annonce_id,
+                'user'      => $this->user,
+                'rub'       => $this->rubrique,
+                'entete'    => $this->en_tete,
+                'corps'     => $this->corps,
+                'dateLim'   => $this->date_limite,
+                'dateModif' => $this->date_modif,
+                'dateCrea'  => $this->date_creation,
+                'visite'    => $this->nb_visites,
+                'imgs'      => $this->imgs
+            ]
+        ];
+    }
 }

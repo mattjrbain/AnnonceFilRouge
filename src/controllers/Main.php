@@ -708,7 +708,12 @@ class Main
             try {
                 $rub = $rubDAO->getById($_GET['rub']);
                 $annonces = $annonceDAO->getByRub($rub);
-                $this->render('listerAnnoncesAjax2.html.twig', ['annonces' => $annonces]);
+                $annoncesJSON = array();
+                foreach ($annonces as $annonce) {
+                    $annoncesJSON[] = json_encode($annonce->jsonSerialize(), JSON_UNESCAPED_UNICODE);
+                }
+                var_dump($annoncesJSON);
+//                $this->render('listerAnnoncesAjax2.html.twig', ['annonces' => $annonces, 'annonceJSON' => $annoncesJSON]);
             } catch (DAOException $e) {
                 throw new DAOException($e->getMessage());
             }
