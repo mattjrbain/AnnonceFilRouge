@@ -27,8 +27,6 @@ abstract class DAO
             $this->cnx = MySQLConnexion::getConnexion();
         }
         catch (PDOException $e) {
-//            echo($e->getMessage()."\n");
-//            echo ((int)$e->getCode()."\n");
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }

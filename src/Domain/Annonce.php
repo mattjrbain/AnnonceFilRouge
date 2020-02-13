@@ -85,7 +85,6 @@ class Annonce extends Entity
         $this->annonce_id    = $annonce_id;
         $this->imgs          = $imgs;
         $this->nb_visites    = $nb_visites;
-        //$this->dao           = new MySQLAnnonceDAO();
     }
 
 

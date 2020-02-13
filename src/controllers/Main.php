@@ -71,15 +71,13 @@ class Main
         $loader     = new FilesystemLoader(dirname(__DIR__) . "\\view");
         $this->twig = new Environment(
             $loader, [
-            'debug' => true
-            /*'cache' => __DIR__ . "/../view/cache"*/
+            'debug' => true,
+            'cache' => __DIR__ . "/../view/cache"
         ]);
         $this->twig->addExtension(new DebugExtension());
         $this->twig->addGlobal('session', $_SESSION);
-//        $this->twig->addFunction('asset');
     }
 
-//TODO: remettre cache après test
 
     /**
      * Parses actionGet variable and calls corresponding function
@@ -171,6 +169,9 @@ class Main
     }
 
 
+    /**
+     * @throws Exception
+     */
     private function ajouterRubrique()
     {
         if (isset($_SESSION['isAdmin'])) {
@@ -298,6 +299,9 @@ class Main
         }
     }
 
+    /**
+     *
+     */
     private function annoncesPublisher()
     {
         $user     = DAO::get('Utilisateur')->getByName($this->param);
@@ -305,12 +309,18 @@ class Main
         $this->render('listeAnnoncesPublisher.html.twig', [/*'session' => $_SESSION, */ 'annonces' => $annonces]);
     }
 
+    /**
+     *
+     */
     private function ajoutAnnonce()
     {
         $rubs = DAO::get('Rubrique')->getAll();
         $this->render("ajoutAnnonce.html.twig", [/*'session' => $_SESSION, */ 'rubs' => $rubs]);
     }
 
+    /**
+     * @throws Exception
+     */
     private function submitAnnonce()
     {
         $user       = DAO::get('Utilisateur')->getByName($this->param);
@@ -370,6 +380,9 @@ class Main
 
     }
 
+    /**
+     *
+     */
     private function modifierAnnonce()
     {
         $annonce = DAO::get('Annonce')->getById($this->param);
@@ -384,6 +397,9 @@ class Main
         ]);
     }
 
+    /**
+     *
+     */
     private function updateAnnonce()
     {
         try {
@@ -414,6 +430,9 @@ class Main
 
     }
 
+    /**
+     * @throws Exception
+     */
     private function supprimerAnnonce()
     {
         $annonceDAO = new MySQLAnnonceDAO();
@@ -447,6 +466,9 @@ class Main
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function createAccount()
     {
         $confirmation_token = uniqid();
@@ -473,6 +495,9 @@ class Main
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function confirm()
     {
         $userDAO = new MySQLUtilisateurDAO();
@@ -503,6 +528,9 @@ class Main
 
     }
 
+    /**
+     *
+     */
     private function supprimerImage()
     {
         try {
@@ -527,6 +555,9 @@ class Main
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function admin()
     {
         if (isset($_SESSION['isAdmin'])) {
@@ -581,6 +612,9 @@ class Main
 
     }
 
+    /**
+     * @throws Exception
+     */
     private function updateRub()
     {
         if (isset($_SESSION['isAdmin'])) {
@@ -609,16 +643,25 @@ class Main
     }
 
 
+    /**
+     * @return mixed
+     */
     public function showRubriquesAction()
     {
         return DAO::get('Rubrique')->getAll();
     }
 
+    /**
+     *
+     */
     private function reinitialiser()
     {
         $this->render('passwordReset.html.twig');
     }
 
+    /**
+     * @throws Exception
+     */
     private function resetRequest()
     {
         $reset_token = uniqid();
@@ -647,6 +690,9 @@ class Main
 
     }
 
+    /**
+     * @throws Exception
+     */
     private function confirmResetForm()
     {
         $userDAO = new MySQLUtilisateurDAO();
@@ -661,6 +707,9 @@ class Main
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function updatePassword()
     {
         if ($_POST['passwordUp'] === $_POST['confirmPasswordUp']) {
@@ -670,7 +719,6 @@ class Main
                 if ($user->getConfirmedAt()) {
                     $user->setMotDePasse($_POST['passwordUp']);
                     $userDAO->updatePWD($user);
-//                $this->render('connection.html.twig', ['message' => 'Votre mot de passe a bien été réinitialisé.', 'type' => 'success']);
                     $this->accueil('Votre mot de passe a bien été réinitialisé.', 'success');
                 } else {
                     $this->render('resetPWDForm.html.twig', ['message' => "Ce compte n'a pas été confirmé.", 'type' =>
@@ -685,6 +733,9 @@ class Main
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function deleteOutDated()
     {
         if (isset($_SESSION['isAdmin'])) {
@@ -700,6 +751,9 @@ class Main
         }
     }
 
+    /**
+     * @throws DAOException
+     */
     private function listerAjax1()
     {
         $rubDAO     = new MySQLRubriqueDAO();
@@ -708,11 +762,11 @@ class Main
             try {
                 $rub = $rubDAO->getById($_GET['rub']);
                 $annonces = $annonceDAO->getByRub($rub);
-                $annoncesJSON = array();
-                foreach ($annonces as $annonce) {
-                    $annoncesJSON[] = json_encode($annonce->jsonSerialize(), JSON_UNESCAPED_UNICODE);
-                }
-                var_dump($annoncesJSON);
+//                $annoncesJSON = array();
+//                foreach ($annonces as $annonce) {
+//                    $annoncesJSON[] = json_encode($annonce, JSON_UNESCAPED_UNICODE);
+//                }
+                echo json_encode($annonces, JSON_UNESCAPED_UNICODE);
 //                $this->render('listerAnnoncesAjax2.html.twig', ['annonces' => $annonces, 'annonceJSON' => $annoncesJSON]);
             } catch (DAOException $e) {
                 throw new DAOException($e->getMessage());

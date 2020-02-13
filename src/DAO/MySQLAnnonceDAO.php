@@ -295,7 +295,6 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
         try {
             $this->getCnx()
                  ->beginTransaction();
-//            $stmt = $this->getCnx()->prepare('SELECT * FROM annonce WHERE annonce_id = :id');
             $stmt = $this->getCnx()
                          ->prepare(
                              'SELECT a.annonce_id as a_id, a.en_tete, a.corps, a.date_creation as crea, 
@@ -379,8 +378,6 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
     public function deletePerimees()
     {
 
-    //WHERE DATE_ADD(date_creation, INTERVAL ' . self::VALIDITE_MAX . ') <= :now');
-
         try {
             $this->getCnx()
                  ->beginTransaction();
@@ -423,7 +420,6 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
                                                 INNER JOIN utilisateur u ON a.user_id = u.user_id
                                                 INNER JOIN rubrique r ON a.rubrique_id = r.rubrique_id
                                                 GROUP BY a.annonce_id');
-//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Annonce');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $data = $stmt->fetchAll();
             $annonces = array();
@@ -437,27 +433,5 @@ class MySQLAnnonceDAO extends DAO implements CrudInterface
             throw new DAOException($e->getMessage());
         }
     }
-//    /**
-//     * @param array $annonces
-//     * @return Annonce[]
-//     * @throws Exception
-//     */
-//    public function hydrateAnnonce(array $annonces)
-//    {
-//        $annoncesTab = array();
-//        foreach ($annonces as $datum) {
-//            $annonce = new Annonce();
-//            foreach ($datum as $key => $value) {
-//                $key    = ucwords($key, "_");
-//                $key    = preg_replace("/_/", "", $key);
-//                $method = "set" . $key;
-//                if (method_exists($annonce, $method)) {
-//                    $annonce->$method($value);
-//                }
-//            }
-//            $annoncesTab[] = $annonce;
-//        }
-//        return $annoncesTab;
-//    }
 
 }
