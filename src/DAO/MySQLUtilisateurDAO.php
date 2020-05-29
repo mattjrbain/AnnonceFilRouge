@@ -59,8 +59,6 @@ class MySQLUtilisateurDAO extends DAO
             $stmt->bindValue(':mail', $utilisateur->getMail());
             $stmt->bindValue(':confirmed_at', $utilisateur->getConfirmedAt()->format('Y-m-d H:i:s'));
             $stmt->bindValue(':id', $utilisateur->getUserId(), PDO::PARAM_INT);
-//            $stmt->bindValue(':mot_de_passe', password_hash($utilisateur->getMotDePasse(), PASSWORD_BCRYPT));
-//            $stmt->bindValue(':mot_de_passe', $utilisateur->getMotDePasse());
             $stmt->execute();
             $count = $stmt->rowCount();
             $this->getCnx()->commit();
@@ -108,15 +106,10 @@ class MySQLUtilisateurDAO extends DAO
             $this->getCnx()->beginTransaction();
             $stmt = $this->getCnx()->prepare(
                 'SELECT * FROM utilisateur WHERE nom = :nom');
-//            $nom = $user->getNom();
             $stmt->bindValue(':nom', $user->getNom(), PDO::PARAM_STR);
             $stmt->execute();
-//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
-//            if ($data = $this->userFromArray($stmt->fetch())) {
             if ($userArray = $stmt->fetch()) {
-//                $truc = $stmt->fetch();
-//                $userFromDB = $this->userFromArray($userArray);
                 $userFromDB = $this->hydrate($userArray, 'Utilisateur');
                 if (password_verify($user->getMotDePasse(), $userFromDB->getMotDePasse())) {
                     if ($userFromDB->getConfirmedAt() != null || $userFromDB->getConfirmedAt() != false) {
@@ -130,8 +123,6 @@ class MySQLUtilisateurDAO extends DAO
 
                     }
                 } else {
-//                    $_SESSION['errorPass'] = "Mauvais mot de passe";
-//                    header('Location: ?action=connection');
                     throw new DAOException("Nom d'utilisateur ou mot de passe erroné.");
                 }
             } else {
@@ -149,30 +140,20 @@ class MySQLUtilisateurDAO extends DAO
      * @throws DAOException
      */
     public function getByName(string $name)
-    {//todo: make userDAO again considering dates
+    {
         try {
             $this->getCnx()->beginTransaction();
             $stmt = $this->getCnx()->prepare('SELECT * FROM utilisateur WHERE nom = :nom');
             $stmt->bindParam(':nom', $name);
             $stmt->execute();
-//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $user = $stmt->fetch();
             $this->getCnx()->commit();
-//            return $this->userFromArray($user);
             return $this->hydrate($user, 'Utilisateur');
         } catch (Exception $e) {
             $this->getCnx()->rollBack();
             throw new DAOException($e->getMessage(), $e->getCode());
         }
-    }
-
-    public function userFromArray(array $data)
-    {
-        $created_at   = DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']) ?? null;
-        $confirmed_at = $data['confirmed_at'] ? DateTime::createFromFormat('Y-m-d H:i:s', $data['confirmed_at']) : null;
-        return new Utilisateur($data['nom'], $data['mot_de_passe'], $data['mail'], $data['confirmation_token'],
-                               $created_at, $data['est_admin'], $data['user_id'], $confirmed_at);
     }
 
     /**
@@ -187,11 +168,9 @@ class MySQLUtilisateurDAO extends DAO
             $stmt = $this->getCnx()->prepare('SELECT * FROM utilisateur WHERE user_id = :id');
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $user = $stmt->fetch();
             $this->getCnx()->commit();
-//            return $this->userFromArray($user);
             return $this->hydrate($user, 'Utilisateur');
         } catch (Exception $e) {
             $this->getCnx()->rollBack();
@@ -199,20 +178,20 @@ class MySQLUtilisateurDAO extends DAO
         }
     }
 
+    /**
+     * @return array
+     * @throws DAOException
+     */
     public function getAll()
     {
         try {
             $this->getCnx()->beginTransaction();
             $stmt = $this->getCnx()->query('SELECT * FROM utilisateur');
-//            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Main\Domain\Utilisateur');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $data = $stmt->fetchAll();
             $this->getCnx()->commit();
-//            return $data;
             $users = array();
-//            $users[] = $this->hydrate($data, "Utilisateur");
             foreach ($data as $datum) {
-//                $users[] = $this->userFromArray($datum);
                 $users[] = $this->hydrate($datum, 'Utilisateur');
             }
             return $users;
@@ -223,6 +202,12 @@ class MySQLUtilisateurDAO extends DAO
         }
     }
 
+    /**
+     * @param $mail
+     * @param $token
+     * @return int
+     * @throws DAOException
+     */
     public function updateReset($mail, $token)
     {
         try {
@@ -259,7 +244,6 @@ class MySQLUtilisateurDAO extends DAO
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             if ($user = $stmt->fetch()) {
                 $this->getCnx()->commit();
-//                return $this->userFromArray($user);
                 return $this->hydrate($user, 'Utilisateur');
             } else {
                 throw new DAOException("Ce mail n'est pas dans notre bdd.");
@@ -270,6 +254,11 @@ class MySQLUtilisateurDAO extends DAO
         }
     }
 
+    /**
+     * @param array $array
+     * @param string $object
+     * @return mixed
+     */
     public function hydrate(array $array, string $object)
     {
         $object = "Main\Domain\\" . $object;
