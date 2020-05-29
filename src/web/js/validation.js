@@ -9,7 +9,7 @@
             let confirmPassword = document.getElementById('confirmPassword');
             let password = document.getElementById("password");
             let confirmAlert = $("#confirmAlert");
-            function validatePassword() {
+            function validatePassword(event) {
                 if (password.value !== confirmPassword.value) {
                     confirmPassword.setCustomValidity("Les mots de passe doivent être identiques.");
                     confirmAlert.text("Les mots de passe doivent être identiques.").show();

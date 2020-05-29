@@ -345,7 +345,7 @@ class Main
         // Source : OpenClassrooms
         // Testons si le fichier a bien été envoyé et s'il n'y a pas d'erreur
         for ($i = 0; $i < count($_FILES); $i++) {
-            if (isset($_FILES['photo' . $i]) AND $_FILES['photo' . $i]['error'] == 0) {
+            if (isset($_FILES['photo' . $i]) and $_FILES['photo' . $i]['error'] == 0) {
                 // Testons si le fichier n'est pas trop gros
                 if ($_FILES['photo' . $i]['size'] <= 1000000) {
                     // Testons si l'extension est autorisée
@@ -706,8 +706,8 @@ class Main
         $annonceDAO = new MySQLAnnonceDAO();
         if (!empty($_GET['rub'])) {
             try {
-                $rub = $rubDAO->getById($_GET['rub']);
-                $annonces = $annonceDAO->getByRub($rub);
+                $rub          = $rubDAO->getById($_GET['rub']);
+                $annonces     = $annonceDAO->getByRub($rub);
                 $annoncesJSON = array();
                 foreach ($annonces as $annonce) {
                     $annoncesJSON[] = json_encode($annonce->jsonSerialize(), JSON_UNESCAPED_UNICODE);

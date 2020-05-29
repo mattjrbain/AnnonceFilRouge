@@ -40,15 +40,15 @@
             $.ajax({
                 url: '#',
                 method: 'GET',
-                // dataType: 'JSON',
-                // mimeType: 'contentType',
+                dataType: 'JSON',
+                mimeType: 'contentType',
                 // error: function(){
                 //     console.log('erreur');
                 // },
                 data: {action: 'listerAjax1', rub: $('select').val()},
                 success: function(reponse){
                     console.log(reponse);
-                    $("#retourServeur").html(reponse);
+                    $("#retourServeur").text(reponse);
                 }
             });
         })
